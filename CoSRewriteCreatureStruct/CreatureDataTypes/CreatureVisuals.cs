@@ -20,6 +20,9 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 
 		[LuauField]
 		public AnimationsInfo Animations { get; set; } = new AnimationsInfo();
+		
+		[LuauField]
+		public SoundsInfo Sounds { get; set; } = new SoundsInfo();
 
 		#region Class Defs
 
@@ -184,6 +187,22 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 			}
 
 			#endregion
+
+		}
+
+		public class SoundsInfo : LuauRepresentable {
+
+			[LuauField("typeof(DEFAULT_SOUND)", ValueAsLiteral = "table.shallowCopy(DEFAULT_SOUND)")]
+			public Instance? Broadcast { get; set; }
+
+			[LuauField("typeof(DEFAULT_SOUND)", ValueAsLiteral = "table.shallowCopy(DEFAULT_SOUND)")]
+			public Instance? Friendly { get; set; }
+
+			[LuauField("typeof(DEFAULT_SOUND)", ValueAsLiteral = "table.shallowCopy(DEFAULT_SOUND)")]
+			public Instance? Aggressive { get; set; }
+
+			[LuauField("typeof(DEFAULT_SOUND)", ValueAsLiteral = "table.shallowCopy(DEFAULT_SOUND)")]
+			public Instance? Speak { get; set; }
 
 		}
 
