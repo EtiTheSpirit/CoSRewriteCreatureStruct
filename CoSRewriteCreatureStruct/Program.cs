@@ -17,6 +17,7 @@ local ReplicatedStorage = game:GetService(""ReplicatedStorage"")
 local SonariaConstants = require(ReplicatedStorage.CoreData.SonariaConstants)
 local EtiLibs = ReplicatedStorage.EtiLibs
 local table = require(EtiLibs.Extension.Table)
+local string = require(EtiLibs.Extension.String)
 
 local function NULL(objType: string): any
 	local obj = Instance.new(objType)

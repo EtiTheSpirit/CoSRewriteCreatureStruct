@@ -20,7 +20,7 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 
 		[LuauField]
 		public AnimationsInfo Animations { get; set; } = new AnimationsInfo();
-		
+
 		[LuauField]
 		public SoundsInfo Sounds { get; set; } = new SoundsInfo();
 
@@ -90,88 +90,88 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 
 			public class ActionsInfo : LuauRepresentable {
 
-				[LuauField("Animation?", ValueAsLiteral = "NULL(\"Animation\")"), PluginStringLimit(true, true)]
+				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true)]
 				public string Bite { get; set; } = string.Empty;
 
-				[LuauField("Animation?", ValueAsLiteral = "NULL(\"Animation\")"), PluginStringLimit(true, true)]
+				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true)]
 				public string Aggression { get; set; } = string.Empty;
 
-				[LuauField("Animation?", ValueAsLiteral = "NULL(\"Animation\")"), PluginStringLimit(true, true)]
+				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true)]
 				public string Cower { get; set; } = string.Empty;
 
-				[LuauField("Animation?", ValueAsLiteral = "NULL(\"Animation\")"), PluginStringLimit(true, true)]
+				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true)]
 				public string Lay { get; set; } = string.Empty;
 
-				[LuauField("Animation?", ValueAsLiteral = "NULL(\"Animation\")"), PluginStringLimit(true, true)]
+				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true)]
 				public string Sit { get; set; } = string.Empty;
 
-				[LuauField("Animation?", ValueAsLiteral = "NULL(\"Animation\")"), PluginStringLimit(true, true)]
+				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true)]
 				public string Eat { get; set; } = string.Empty;
 
-				[LuauField("Animation?", ValueAsLiteral = "NULL(\"Animation\")"), PluginStringLimit(true, true)]
+				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true)]
 				public string Drink { get; set; } = string.Empty;
 
-				[LuauField("Animation?", ValueAsLiteral = "NULL(\"Animation\")"), PluginStringLimit(true, true)]
+				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true)]
 				public string MudRoll { get; set; } = string.Empty;
 
-				[LuauField("Animation?", ValueAsLiteral = "NULL(\"Animation\")"), PluginStringLimit(true, true)]
+				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true)]
 				public string WallGrab { get; set; } = string.Empty;
 
-				[LuauField("Animation?", ValueAsLiteral = "NULL(\"Animation\")"), PluginStringLimit(true, true)]
+				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true)]
 				public string CustomizationPose { get; set; } = string.Empty;
 
 			}
 
 			public class AerialInfo : LuauRepresentable {
 
-				[LuauField("Animation?", ValueAsLiteral = "NULL(\"Animation\")"), PluginStringLimit(true, true)]
+				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true)]
 				public string Dive { get; set; } = string.Empty;
 
-				[LuauField("Animation?", ValueAsLiteral = "NULL(\"Animation\")"), PluginStringLimit(true, true)]
+				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true)]
 				public string Flap { get; set; } = string.Empty;
 
-				[LuauField("Animation?", ValueAsLiteral = "NULL(\"Animation\")"), PluginStringLimit(true, true)]
+				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true)]
 				public string FlyForward { get; set; } = string.Empty;
 
-				[LuauField("Animation?", ValueAsLiteral = "NULL(\"Animation\")"), PluginStringLimit(true, true)]
+				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true)]
 				public string FlyIdle { get; set; } = string.Empty;
 
-				[LuauField("Animation?", ValueAsLiteral = "NULL(\"Animation\")"), PluginStringLimit(true, true)]
+				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true)]
 				public string Glide { get; set; } = string.Empty;
 
-				[LuauField("Animation?", ValueAsLiteral = "NULL(\"Animation\")"), PluginStringLimit(true, true)]
+				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true)]
 				public string Takeoff { get; set; } = string.Empty;
 
 			}
 
 			public class AquaticInfo : LuauRepresentable {
 
-				[LuauField("Animation?", ValueAsLiteral = "NULL(\"Animation\")"), PluginStringLimit(true, true)]
+				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true)]
 				public string Swim { get; set; } = string.Empty;
 
-				[LuauField("Animation?", ValueAsLiteral = "NULL(\"Animation\")"), PluginStringLimit(true, true)]
+				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true)]
 				public string SwimFast { get; set; } = string.Empty;
 
-				[LuauField("Animation?", ValueAsLiteral = "NULL(\"Animation\")"), PluginStringLimit(true, true)]
+				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true)]
 				public string SwimIdle { get; set; } = string.Empty;
 
 			}
 
 			public class LandInfo : LuauRepresentable {
 
-				[LuauField("Animation?", ValueAsLiteral = "NULL(\"Animation\")"), PluginStringLimit(true, true)]
+				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true)]
 				public string Idle { get; set; } = string.Empty;
 
-				[LuauField("Animation?", ValueAsLiteral = "NULL(\"Animation\")"), PluginStringLimit(true, true)]
+				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true)]
 				public string Walk { get; set; } = string.Empty;
 
-				[LuauField("Animation?", ValueAsLiteral = "NULL(\"Animation\")"), PluginStringLimit(true, true)]
+				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true)]
 				public string Run { get; set; } = string.Empty;
 
-				[LuauField("Animation?", ValueAsLiteral = "NULL(\"Animation\")"), PluginStringLimit(true, true)]
+				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true)]
 				public string Jump { get; set; } = string.Empty;
 
-				[LuauField("Animation?", ValueAsLiteral = "NULL(\"Animation\")"), PluginStringLimit(true, true)]
+				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true)]
 				public string Fall { get; set; } = string.Empty;
 
 			}
