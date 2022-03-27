@@ -56,7 +56,7 @@ namespace CoSRewriteCreatureStruct {
 
 		public string ToType() {
 			StringBuilder sb = new StringBuilder();
-			sb.AppendLine("export type Species = {");
+			sb.AppendLine("export type CreatureData = {");
 			foreach (ExportableField field in GetExportableFields()) {
 				field.AppendToType(sb, 1);
 			}

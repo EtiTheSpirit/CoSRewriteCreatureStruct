@@ -50,6 +50,22 @@ local DEFAULT_SOUND = {
 };
 ";
 
+		public const string CLOSING_STRING =
+@"export type Flags = typeof(CreatureObjectPluginData.Specifications.Attributes)
+export type SoundInfo = typeof(DEFAULT_SOUND)
+export type AnimationConfiguration = typeof(CreatureObjectPluginData.CreatureVisuals.Animations.Settings)
+export type LandAnimations = typeof(CreatureObjectPluginData.CreatureVisuals.Animations.Land)
+export type AerialAnimations = typeof(CreatureObjectPluginData.CreatureVisuals.Animations.Aerial)
+export type AquaticAnimations = typeof(CreatureObjectPluginData.CreatureVisuals.Animations.Aquatic)
+export type ActionAnimations = typeof(CreatureObjectPluginData.CreatureVisuals.Animations.Actions)
+export type CreaturePalette = typeof(DEFAULT_PALETTE)
+export type CreatureOffensiveAilmentStats = typeof(CreatureObjectPluginData.Specifications.MainInfo.Stats.MeleeAilments.__CDV2_PLUGIN_TEMPLATE)
+export type CreatureDefensiveAilmentStats = typeof(CreatureObjectPluginData.Specifications.MainInfo.Stats.DefensiveAilments.__CDV2_PLUGIN_TEMPLATE)
+export type CreatureResistanceStats = typeof(CreatureObjectPluginData.Specifications.MainInfo.Stats.AilmentResistances.__CDV2_PLUGIN_TEMPLATE)
+export type CreatureAreaAilmentStats = typeof(CreatureObjectPluginData.Specifications.MainInfo.Stats.AreaAilments.__CDV2_PLUGIN_TEMPLATE)
+export type CreatureSpecs = typeof(CreatureObjectPluginData.Specifications)
+";
+
 
 		// This serves as a means to create the template (as the plugin data and default values for use in the game)
 		// as well as the Luau type definition
@@ -67,6 +83,7 @@ local DEFAULT_SOUND = {
 			result.AppendLine(asLuaObject);
 			result.AppendLine(asPluginObject);
 			result.AppendLine(asType);
+			result.AppendLine(CLOSING_STRING);
 			result.Append("return {CreatureObjectTemplate::any; CreatureObjectPluginData::any}");
 
 			File.WriteAllText("./ProcGen.lua", result.ToString());
