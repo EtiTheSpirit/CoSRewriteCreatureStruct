@@ -18,6 +18,7 @@ namespace CoSRewriteCreatureStruct.Attributes {
 		/// <summary>
 		/// Whether or not this field is allowed in the copy of the data intended for the character. True by default.
 		/// </summary>
+		[Obsolete("This is manually defined for now (see Program.cs) and so this property does nothing.")]
 		public bool AllowInCharacterCopy { get; set; } = true;
 		
 		/// <summary>

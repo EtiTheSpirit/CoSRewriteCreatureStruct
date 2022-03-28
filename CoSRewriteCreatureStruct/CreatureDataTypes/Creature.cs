@@ -34,35 +34,7 @@ namespace CoSRewriteCreatureStruct {
 		[LuauField]
 		public CreatureVisuals CreatureVisuals { get; set; } = new CreatureVisuals();
 
-		public string ToLuaObject() {
-			StringBuilder sb = new StringBuilder();
-			sb.AppendLine("local CreatureObjectTemplate = {");
-			foreach (ExportableField field in GetExportableFields()) {
-				field.AppendToCodeTable(sb, 1);
-			}
-			sb.AppendLine("}");
-			return sb.ToString();
-		}
-
-		public string ToPluginObject() {
-			StringBuilder sb = new StringBuilder();
-			sb.AppendLine("local CreatureObjectPluginData = {");
-			foreach (ExportableField field in GetExportableFields()) {
-				field.AppendToPluginData(sb, 1);
-			}
-			sb.AppendLine("}");
-			return sb.ToString();
-		}
-
-		public string ToType() {
-			StringBuilder sb = new StringBuilder();
-			sb.AppendLine("export type CreatureData = {");
-			foreach (ExportableField field in GetExportableFields()) {
-				field.AppendToType(sb, 1);
-			}
-			sb.AppendLine("}");
-			return sb.ToString();
-		}
+		
 
 	}
 }

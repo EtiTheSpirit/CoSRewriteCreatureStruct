@@ -32,6 +32,52 @@ namespace CoSRewriteCreatureStruct {
 			return result.ToArray();
 		}
 
+		public string ToLuaObject() {
+			StringBuilder sb = new StringBuilder();
+			sb.AppendLine("local CreatureObjectTemplate = {");
+			foreach (ExportableField field in GetExportableFields()) {
+				field.AppendToCodeTable(sb, 1);
+			}
+			sb.AppendLine("}");
+			return sb.ToString();
+		}
+
+		public string ToPluginObject() {
+			StringBuilder sb = new StringBuilder();
+			sb.AppendLine("local CreatureObjectPluginData = {");
+			foreach (ExportableField field in GetExportableFields()) {
+				field.AppendToPluginData(sb, 1);
+			}
+			sb.AppendLine("}");
+			return sb.ToString();
+		}
+
+		public string ToType() {
+			StringBuilder sb = new StringBuilder();
+			sb.AppendLine("export type CreatureData = {");
+			foreach (ExportableField field in GetExportableFields()) {
+				field.AppendToType(sb, 1);
+			}
+			sb.AppendLine("}");
+			return sb.ToString();
+		}
+
+		public string ToInstanceType() {
+			StringBuilder sb = new StringBuilder();
+			sb.AppendLine("export type SpecificationsInstance = {");
+			foreach (ExportableField field in GetExportableFields()) {
+				field.AppendToInstanceType(sb, 1);
+			}
+			sb.AppendLine(
+@"	Runtime: Instance & {
+		State: Instance;
+		StatusEffects: {[string]: Instance};
+	};"
+			);
+			sb.AppendLine("}");
+			return sb.ToString();
+		}
+
 		public class ExportableField {
 
 			public string Name { get; }
@@ -45,6 +91,8 @@ namespace CoSRewriteCreatureStruct {
 			public string? Documentation { get; }
 
 			public bool IsSpecialPluginStatus { get; }
+
+			public bool IsInstanceObject { get; }
 
 			private static string GetLuauTypeOf(object? value) {
 				if (value == null) return "nil";
@@ -69,6 +117,7 @@ namespace CoSRewriteCreatureStruct {
 
 				IsSpecialPluginStatus = prop.GetCustomAttribute<PluginIsSpecialAilmentTemplate>() != null;
 				Documentation = prop.GetCustomAttribute<DocumentationAttribute>()?.Documentation;
+				IsInstanceObject = prop.GetCustomAttribute<RepresentedByInstanceAttribute>() != null;
 			}
 
 			public void AppendToCodeTable(StringBuilder builder, int indents = 1) {
@@ -240,6 +289,36 @@ namespace CoSRewriteCreatureStruct {
 						builder.AppendLine("Color3;");
 					}
 				}
+			}
+
+			public void AppendToInstanceType(StringBuilder builder, int indents = 1) {
+				LuauRepresentable? luauObject = DefaultValue as LuauRepresentable;
+				if ((DefaultValue is Array || luauObject != null) && IsInstanceObject) {
+					string prefix = string.Empty;
+					if (indents > 0) {
+						prefix = new string('\t', indents);
+					}
+
+					builder.Append(prefix);
+					builder.Append(Name);
+					builder.Append(": ");
+					builder.Append("Instance");
+					StringBuilder sub = new StringBuilder();
+					if (luauObject != null) {
+						foreach (ExportableField field in luauObject.GetExportableFields()) {
+							field.AppendToInstanceType(sub, indents + 1);
+						}
+					}
+					if (sub.Length > 0) {
+						builder.AppendLine(" & {");
+						builder.Append(sub);
+						builder.Append(prefix);
+						builder.AppendLine("};");
+					} else {
+						builder.AppendLine(";");
+					}
+				}
+				
 			}
 
 			private static string EscapeString(string str) {

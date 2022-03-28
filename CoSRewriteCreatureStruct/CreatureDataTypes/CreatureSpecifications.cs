@@ -12,10 +12,10 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 		[LuauField(AllowInCharacterCopy = false)]
 		public AttributesInfo Attributes { get; set; } = new AttributesInfo();
 
-		[LuauField]
+		[LuauField, RepresentedByInstance]
 		public MobilityInfo Mobility { get; set; } = new MobilityInfo();
 
-		[LuauField]
+		[LuauField, RepresentedByInstance]
 		public MainInfoCtr MainInfo { get; set; } = new MainInfoCtr();
 
 		#region Class Defs
@@ -86,16 +86,16 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 
 		public class MainInfoCtr : LuauRepresentable {
 
-			[LuauField]
+			[LuauField, RepresentedByInstance]
 			public DietInfo Diet { get; set; } = new DietInfo();
 
-			[LuauField]
+			[LuauField, RepresentedByInstance]
 			public SizeInfo Size { get; set; } = new SizeInfo();
 
-			[LuauField]
+			[LuauField, RepresentedByInstance]
 			public StatsInfo Stats { get; set; } = new StatsInfo();
 
-			[LuauField]
+			[LuauField, RepresentedByInstance]
 			public CapabilitiesInfo Capabilities { get; set; } = new CapabilitiesInfo();
 
 			#region Class Defs
@@ -148,21 +148,22 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 				[LuauField, PluginNumericLimit(1, 4), Documentation("Nightvision is a measure of how visible the game is at night. It controls how close a blinding fog is to the camera. Nightvision 4 represents being a nightstalker, which removes all limits of the night and improves its brightness.")]
 				public double Nightvision { get; set; } = 1;
 
+				[LuauField, RepresentedByInstance]
 				public AttackInfo Attack { get; set; } = new AttackInfo();
 
-				[LuauField, PluginIsSpecialAilmentTemplate]
+				[LuauField, RepresentedByInstance, PluginIsSpecialAilmentTemplate]
 				public AoEAilmentsInfo[] AreaAilments { get; set; } = Util.One<AoEAilmentsInfo>();
 
-				[LuauField, PluginIsSpecialAilmentTemplate]
+				[LuauField, RepresentedByInstance, PluginIsSpecialAilmentTemplate]
 				public OffensiveAilmentsInfo[] MeleeAilments { get; set; } = Util.One<OffensiveAilmentsInfo>();
 
-				[LuauField, PluginIsSpecialAilmentTemplate]
+				[LuauField, RepresentedByInstance, PluginIsSpecialAilmentTemplate]
 				public DefensiveAilmentsInfo[] DefensiveAilments { get; set; } = Util.One<DefensiveAilmentsInfo>();
 
-				[LuauField, PluginIsSpecialAilmentTemplate]
+				[LuauField, RepresentedByInstance, PluginIsSpecialAilmentTemplate]
 				public AilmentResistancesInfo[] AilmentResistances { get; set; } = Util.One<AilmentResistancesInfo>();
 
-				[LuauField]
+				[LuauField, RepresentedByInstance]
 				public UniversalResistancesInfo UniversalAttackTypeResistances { get; set; } = new UniversalResistancesInfo();
 
 				#region Class Defs
@@ -285,10 +286,10 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 
 			public class CapabilitiesInfo : LuauRepresentable {
 
-				[LuauField]
+				[LuauField, RepresentedByInstance]
 				public AbilityInfo Abilities { get; set; } = new AbilityInfo();
 
-				[LuauField]
+				[LuauField, RepresentedByInstance]
 				public PassiveInfo Passive { get; set; } = new PassiveInfo();
 
 				#region Class Defs
@@ -339,10 +340,10 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 
 		public class MobilityInfo : LuauRepresentable {
 
-			[LuauField]
+			[LuauField, RepresentedByInstance]
 			public AgilityInfo Agility { get; set; } = new AgilityInfo();
 
-			[LuauField]
+			[LuauField, RepresentedByInstance]
 			public EnduranceInfo Endurance { get; set; } = new EnduranceInfo();
 			
 			#region Class Defs
@@ -384,6 +385,7 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 			}
 			#endregion
 		}
+
 		#endregion
 
 	}
