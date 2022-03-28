@@ -152,7 +152,7 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 				public AttackInfo Attack { get; set; } = new AttackInfo();
 
 				
-				[LuauField("CreatureAoEAilmentStats"), RepresentedByInstance, PluginIsSpecialAilmentTemplate]
+				[LuauField("CreatureAreaAilmentStats"), RepresentedByInstance, PluginIsSpecialAilmentTemplate]
 				public AoEAilmentsInfo[] AreaAilments { get; set; } = Util.One<AoEAilmentsInfo>();
 
 				[LuauField("CreatureOffensiveAilmentStats"), RepresentedByInstance, PluginIsSpecialAilmentTemplate]
