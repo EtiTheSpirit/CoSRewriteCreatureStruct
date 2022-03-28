@@ -78,12 +78,24 @@ namespace CoSRewriteCreatureStruct.PluginMenuTypes {
 			return null;
 		}
 
-		public override string ToLuaTable(string? includeDocsLiteral) {
+		public override StringKeyTable ToLuaTable() {
+			StringKeyTable tbl = new StringKeyTable();
+			tbl.Add("LimitType", "NumericLimit");
+			tbl.AddLiteral("GeneralLimit", Vector2(AdvisedMinimum, AdvisedMaximum));
+			tbl.AddLiteral("AbsoluteLimit", Vector2(AbsoluteMinimum, AbsoluteMaximum));
+			tbl.Add("IsInt", IsInteger);
+			return tbl;
+			/*
 			if (includeDocsLiteral == null) {
 				return $"{{LimitType=\"NumericLimit\"; GeneralLimit=Vector2.new({DoubleToString(AdvisedMinimum)}, {DoubleToString(AdvisedMaximum)}); AbsoluteLimit=Vector2.new({DoubleToString(AbsoluteMinimum)}, {DoubleToString(AbsoluteMaximum)}); IsInt={IsInteger.ToString().ToLower()}}}";
 			} else {
 				return $"{{LimitType=\"NumericLimit\"; GeneralLimit=Vector2.new({DoubleToString(AdvisedMinimum)}, {DoubleToString(AdvisedMaximum)}); AbsoluteLimit=Vector2.new({DoubleToString(AbsoluteMinimum)}, {DoubleToString(AbsoluteMaximum)}); IsInt={IsInteger.ToString().ToLower()}; Documentation = {includeDocsLiteral}}}";
 			}
+			*/
+		}
+
+		private static string Vector2(double x, double y) {
+			return $"Vector2.new({DoubleToString(x)}, {DoubleToString(y)})";
 		}
 
 		public static string DoubleToString(double value) {

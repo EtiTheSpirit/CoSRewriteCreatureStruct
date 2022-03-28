@@ -28,16 +28,16 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 
 		public class ModelsInfo : LuauRepresentable {
 
-			[LuauField("Model?", RuntimeOnly = true, ValueAsLiteral = "NULL(\"Model\")")]
+			[LuauField("Model", RuntimeOnly = true), CopyFromV0("Child", CustomConversionCallback = CopyBehavior.CopyCharacterModel)]
 			public Instance? Child { get; set; }
 
-			[LuauField("Model?", RuntimeOnly = true, ValueAsLiteral = "NULL(\"Model\")")]
+			[LuauField("Model", RuntimeOnly = true), CopyFromV0("Teen", CustomConversionCallback = CopyBehavior.CopyCharacterModel)]
 			public Instance? Teen { get; set; }
 
-			[LuauField("Model?", RuntimeOnly = true, ValueAsLiteral = "NULL(\"Model\")")]
+			[LuauField("Model", RuntimeOnly = true), CopyFromV0("Adult", CustomConversionCallback = CopyBehavior.CopyCharacterModel)]
 			public Instance? Adult { get; set; }
 
-			[LuauField("Model?", RuntimeOnly = true, ValueAsLiteral = "NULL(\"Model\")")]
+			[LuauField("Model", RuntimeOnly = true), CopyFromV0("AdultCustomizer", CustomConversionCallback = CopyBehavior.CopyCharacterModel)]
 			public Instance? AdultCustomizer { get; set; }
 
 		}
@@ -45,10 +45,10 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 		public class PalettesInfo : LuauRepresentable {
 
 
-			[LuauField("typeof(DEFAULT_PALETTE)", ValueAsLiteral = "table.shallowCopy(DEFAULT_PALETTE)")]
+			[LuauField("typeof(DEFAULT_PALETTE)", ValueAsLiteral = "table.shallowCopy(DEFAULT_PALETTE)"), CopyFromV0("Palette1", CustomConversionCallback = CopyBehavior.CopyPalette)]
 			public Instance? Palette1 { get; set; }
 
-			[LuauField("typeof(DEFAULT_PALETTE)", ValueAsLiteral = "table.shallowCopy(DEFAULT_PALETTE)")]
+			[LuauField("typeof(DEFAULT_PALETTE)", ValueAsLiteral = "table.shallowCopy(DEFAULT_PALETTE)"), CopyFromV0("Palette2", CustomConversionCallback = CopyBehavior.CopyPalette)]
 			public Instance? Palette2 { get; set; }
 
 		}
@@ -58,13 +58,13 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 			[LuauField]
 			public bool HasBlood { get; set; } = true;
 
-			[LuauField]
+			[LuauField, CopyFromV0("BloodColor")]
 			public Color3 BloodColor { get; set; } = new Color3(117, 0, 0);
 
-			[LuauField]
+			[LuauField, CopyFromV0("BloodColor")]
 			public Color3 BloodDropColor { get; set; } = new Color3(86, 36, 36);
 
-			[LuauField("Enum.Material", ValueAsLiteral = "Enum.Material.Plastic"), PluginCustomEnum(IsRobloxEnum = true, Key = "Material")]
+			[LuauField("Enum.Material", ValueAsLiteral = "Enum.Material.Plastic"), PluginCustomEnum(IsRobloxEnum = true, Key = "Material"), CopyFromV0("BloodMaterial")]
 			public string BloodMaterial { get; set; } = "Plastic";
 
 		}
@@ -90,53 +90,53 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 
 			public class ActionsInfo : LuauRepresentable {
 
-				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true)]
+				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true), CopyFromV0("Bite", CustomConversionCallback = CopyBehavior.GetAnimationID)]
 				public string Bite { get; set; } = string.Empty;
 
-				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true)]
+				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true), CopyFromV0("Aggression", CustomConversionCallback = CopyBehavior.GetAnimationID)]
 				public string Aggression { get; set; } = string.Empty;
 
-				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true)]
+				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true), CopyFromV0("Cower", CustomConversionCallback = CopyBehavior.GetAnimationID)]
 				public string Cower { get; set; } = string.Empty;
 
-				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true)]
+				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true), CopyFromV0("Lay", CustomConversionCallback = CopyBehavior.GetAnimationID)]
 				public string Lay { get; set; } = string.Empty;
 
-				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true)]
+				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true), CopyFromV0("Sit", CustomConversionCallback = CopyBehavior.GetAnimationID)]
 				public string Sit { get; set; } = string.Empty;
 
-				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true)]
+				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true), CopyFromV0("Eat", CustomConversionCallback = CopyBehavior.GetAnimationID)]
 				public string Eat { get; set; } = string.Empty;
 
-				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true)]
+				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true), CopyFromV0("Drink", CustomConversionCallback = CopyBehavior.GetAnimationID)]
 				public string Drink { get; set; } = string.Empty;
 
-				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true)]
+				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true), CopyFromV0("Mud", CustomConversionCallback = CopyBehavior.GetAnimationID)]
 				public string MudRoll { get; set; } = string.Empty;
 
-				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true)]
+				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true), CopyFromV0("WallGrab", CustomConversionCallback = CopyBehavior.GetAnimationID)]
 				public string WallGrab { get; set; } = string.Empty;
 
-				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true)]
+				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true), CopyFromV0("CustomizePose", CustomConversionCallback = CopyBehavior.GetAnimationID)]
 				public string CustomizationPose { get; set; } = string.Empty;
 
 			}
 
 			public class AerialInfo : LuauRepresentable {
 
-				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true)]
+				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true), CopyFromV0("Dive", CustomConversionCallback = CopyBehavior.GetAnimationID)]
 				public string Dive { get; set; } = string.Empty;
 
-				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true)]
+				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true), CopyFromV0("Flap", CustomConversionCallback = CopyBehavior.GetAnimationID)]
 				public string Flap { get; set; } = string.Empty;
 
-				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true)]
+				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true), CopyFromV0("FlyForward", CustomConversionCallback = CopyBehavior.GetAnimationID)]
 				public string FlyForward { get; set; } = string.Empty;
 
-				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true)]
+				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true), CopyFromV0("FlyIdle", CustomConversionCallback = CopyBehavior.GetAnimationID)]
 				public string FlyIdle { get; set; } = string.Empty;
 
-				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true)]
+				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true), CopyFromV0("Glide", CustomConversionCallback = CopyBehavior.GetAnimationID)]
 				public string Glide { get; set; } = string.Empty;
 
 				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true)]
@@ -146,26 +146,26 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 
 			public class AquaticInfo : LuauRepresentable {
 
-				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true)]
+				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true), CopyFromV0("Swim", CustomConversionCallback = CopyBehavior.GetAnimationID)]
 				public string Swim { get; set; } = string.Empty;
 
-				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true)]
+				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true), CopyFromV0("SwimFast", CustomConversionCallback = CopyBehavior.GetAnimationID)]
 				public string SwimFast { get; set; } = string.Empty;
 
-				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true)]
+				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true), CopyFromV0("SwimIdle", CustomConversionCallback = CopyBehavior.GetAnimationID)]
 				public string SwimIdle { get; set; } = string.Empty;
 
 			}
 
 			public class LandInfo : LuauRepresentable {
 
-				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true)]
+				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true), CopyFromV0("Idle", CustomConversionCallback = CopyBehavior.GetAnimationID)]
 				public string Idle { get; set; } = string.Empty;
 
-				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true)]
+				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true), CopyFromV0("Walk", CustomConversionCallback = CopyBehavior.GetAnimationID)]
 				public string Walk { get; set; } = string.Empty;
 
-				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true)]
+				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true), CopyFromV0("Run", CustomConversionCallback = CopyBehavior.GetAnimationID)]
 				public string Run { get; set; } = string.Empty;
 
 				[LuauField("Animation?", ValueAsLiteral = "(string.Empty::any)"), PluginStringLimit(true, true)]
@@ -178,10 +178,10 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 
 			public class SettingsInfo : LuauRepresentable {
 
-				[LuauField, PluginNumericLimit(0, AdvisedMaximum = 3)]
+				[LuauField, PluginNumericLimit(0, AdvisedMaximum = 3), CopyFromV0("WalkAnimationSpeed")]
 				public double WalkAnimationSpeed { get; set; } = 1;
 
-				[LuauField, PluginNumericLimit(0, AdvisedMaximum = 3)]
+				[LuauField, PluginNumericLimit(0, AdvisedMaximum = 3), CopyFromV0("RunAnimationSpeed")]
 				public double RunAnimationSpeed { get; set; } = 1;
 
 			}
@@ -192,16 +192,16 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 
 		public class SoundsInfo : LuauRepresentable {
 
-			[LuauField("typeof(DEFAULT_SOUND)", ValueAsLiteral = "table.shallowCopy(DEFAULT_SOUND)")]
+			[LuauField("typeof(DEFAULT_SOUND)", ValueAsLiteral = "table.shallowCopy(DEFAULT_SOUND)"), CopyFromV0("1", Container = "Sounds", CustomConversionCallback = CopyBehavior.CreateSound)]
 			public Instance? Broadcast { get; set; }
 
-			[LuauField("typeof(DEFAULT_SOUND)", ValueAsLiteral = "table.shallowCopy(DEFAULT_SOUND)")]
+			[LuauField("typeof(DEFAULT_SOUND)", ValueAsLiteral = "table.shallowCopy(DEFAULT_SOUND)"), CopyFromV0("2", Container = "Sounds", CustomConversionCallback = CopyBehavior.CreateSound)]
 			public Instance? Friendly { get; set; }
 
-			[LuauField("typeof(DEFAULT_SOUND)", ValueAsLiteral = "table.shallowCopy(DEFAULT_SOUND)")]
+			[LuauField("typeof(DEFAULT_SOUND)", ValueAsLiteral = "table.shallowCopy(DEFAULT_SOUND)"), CopyFromV0("3", Container = "Sounds", CustomConversionCallback = CopyBehavior.CreateSound)]
 			public Instance? Aggressive { get; set; }
 
-			[LuauField("typeof(DEFAULT_SOUND)", ValueAsLiteral = "table.shallowCopy(DEFAULT_SOUND)")]
+			[LuauField("typeof(DEFAULT_SOUND)", ValueAsLiteral = "table.shallowCopy(DEFAULT_SOUND)"), CopyFromV0("4", Container = "Sounds", CustomConversionCallback = CopyBehavior.CreateSound)]
 			public Instance? Speak { get; set; }
 
 		}

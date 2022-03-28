@@ -31,16 +31,16 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 
 			public class ForShowInfo : LuauRepresentable {
 
-				[LuauField, Documentation("If enabled, this creature is classified as a reward for Beta Testers. Currently only Aolenus and Keruku should have this enabled.")]
+				[LuauField, CopyFromV0("Badge", true), Documentation("If enabled, this creature is classified as a reward for Beta Testers. Currently only Aolenus and Keruku should have this enabled.")]
 				public bool BetaTesterReward { get; set; }
 
-				[LuauField, Documentation("If enabled, this creature is one representing a developer, either present or past.")]
+				[LuauField, CopyFromV0("DevSupporter", true), Documentation("If enabled, this creature is one representing a developer, either present or past.")]
 				public bool DevCreature { get; set; }
 
-				[LuauField, Documentation("If enabled, this creature is currently (as in right now at this moment in time) unable to be acquired in a means other than trading.")]
+				[LuauField, CopyFromV0("NowUnobtainable", true), Documentation("If enabled, this creature is currently (as in right now at this moment in time) unable to be acquired in a means other than trading.")]
 				public bool NowUnobtainable { get; set; }
 
-				[LuauField, Documentation("If enabled, this creature classifies as a reward for a mission or quest.")]
+				[LuauField, CopyFromV0("Mission"), Documentation("If enabled, this creature classifies as a reward for a mission or quest.")]
 				public bool MissionReward { get; set; }
 
 				[LuauField, PluginCustomEnum(ReferencesSonariaConstants = true, Key = "Holidays", AllowNone = true), Documentation("The holiday this creature is associated with. <b>THIS DOES NOT CONTROL WHETHER OR NOT IT APPEARS IN ANY SHOPS</b>.")]
@@ -53,16 +53,16 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 				[LuauField, Documentation("If true, this species cannot be traded. Stored instances can still be traded however.")]
 				public bool Untradeable { get; set; }
 
-				[LuauField, Documentation("If true, this species will not receive glimmer. This can be used to hide the \"Glimmer Coming Soon!\" display tag.")]
+				[LuauField, CopyFromV0("ForceHideGlimmerComingSoon", true), Documentation("If true, this species will not receive glimmer. This can be used to hide the \"Glimmer Coming Soon!\" display tag.")]
 				public bool WillNeverGetGlimmer { get; set; }
 
-				[LuauField, Documentation("If true, this species is only usable by developers. Attempting to spawn as this species without being a developer will result in the spawn attempt being rejected.")]
+				[LuauField, CopyFromV0("DevOnly", true), Documentation("If true, this species is only usable by developers. Attempting to spawn as this species without being a developer will result in the spawn attempt being rejected.")]
 				public bool DeveloperUseOnly { get; set; }
 
-				[LuauField, Documentation("If true, this species goes in the limited gacha. Overrides ForcedGachaList.")]
+				[LuauField, CopyFromV0("Limited", true), Documentation("If true, this species goes in the limited gacha. Overrides ForcedGachaList.")]
 				public bool InLimitedGacha { get; set; }
 
-				[LuauField, Documentation("If true, the game enforces that players who do not own this species are male, increases the cost in the Shoom shop by 50%, prevents trading stored versions unless the species is owned, and prevents it from showing in gachas.")]
+				[LuauField, CopyFromV0("GamepassCreature", true), Documentation("If true, the game enforces that players who do not own this species are male, increases the cost in the Shoom shop by 50%, prevents trading stored versions unless the species is owned, and prevents it from showing in gachas.")]
 				public bool HasPaidContentLimits { get; set; }
 
 				[LuauField, Documentation("If true, this creature is not allowed to use any plushies that change its breath.")]
@@ -110,42 +110,43 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 				[LuauField, Documentation("Whether or not this creature is able to drink water.")]
 				public bool CanDrinkWater { get; set; } = true;
 
-				[LuauField, PluginNumericLimit(1, AdvisedMinimum = 15), Documentation("The maximum amount of food this creature is able to eat.")]
+				[LuauField, CopyFromV0("Appetite"), PluginNumericLimit(1, AdvisedMinimum = 15), Documentation("The maximum amount of food this creature is able to eat.")]
 				public double Appetite { get; set; }
 
-				[LuauField, PluginNumericLimit(1, AdvisedMinimum = 15), Documentation("The maximum amount of water this creature is able to drink. Generally it is a good idea to have the same value as Appetite.")]
+				// Yes, use appetite here
+				[LuauField, CopyFromV0("Appetite"), PluginNumericLimit(1, AdvisedMinimum = 15), Documentation("The maximum amount of water this creature is able to drink. Generally it is a good idea to have the same value as Appetite.")]
 				public double ThirstAppetite { get; set; }
 
 			}
 
 			public class SizeInfo : LuauRepresentable {
 
-				[LuauField, PluginNumericLimit(1, AdvisedMaximum = 225000), Documentation("Creature weight determines some damage scaling mechanics.")]
+				[LuauField, CopyFromV0("Weight"), PluginNumericLimit(1, AdvisedMaximum = 225000), Documentation("Creature weight determines damage scaling mechanics, the lower and uper extremes being 50% and 300%.")]
 				public double Weight { get; set; }
 
-				[LuauField, PluginNumericLimit(1, AdvisedMaximum = 225000), Documentation("Creature pickup weight determines which creatures it can carry vs. be carried by. Creatures with larger pickup weights can pick up those with equal or smaller weights.")]
+				[LuauField, CopyFromV0("Weight"), PluginNumericLimit(1, AdvisedMaximum = 225000), Documentation("Creature pickup weight determines which creatures it can carry vs. be carried by. Creatures with larger pickup weights can pick up those with equal or smaller weights.")]
 				public double PickupWeight { get; set; }
 
-				[LuauField(AllowInCharacterCopy = false), PluginNumericLimit(1, 5, true), Documentation("Tier is a general descriptor of creature size. It has no mechanical functions minus shop price, and mostly exists for the players.")]
+				[LuauField(AllowInCharacterCopy = false), CopyFromV0("Tier"), PluginNumericLimit(1, 5, true), Documentation("Tier is a general descriptor of creature size. It has no mechanical functions minus shop price, and mostly exists for the players.")]
 				public double Tier { get; set; }
 
-				[LuauField(AllowInCharacterCopy = false), PluginNumericLimit(1, AdvisedMaximum = 120), Documentation("The amount of minutes it takes to get from age 1 to age 100.")]
+				[LuauField(AllowInCharacterCopy = false), CopyFromV0("GrowthRate", CustomConversionCallback = CopyBehavior.CalcTimeToGrow), PluginNumericLimit(1, AdvisedMaximum = 120), Documentation("The amount of minutes it takes to get from age 1 to age 100.")]
 				public double MinutesToGrow { get; set; }
 
 			}
 
 			public class StatsInfo : LuauRepresentable {
 
-				[LuauField, PluginNumericLimit(1, AdvisedMinimum = 100, AdvisedMaximum = 75000), Documentation("The amount of health this creature has.")]
+				[LuauField, CopyFromV0("Health"), PluginNumericLimit(1, AdvisedMinimum = 100, AdvisedMaximum = 75000), Documentation("The amount of health this creature has.")]
 				public double Health { get; set; } = 100;
 
-				[LuauField, PluginNumericLimit(0.01, 100, AdvisedMaximum = 12), Documentation("How much health this creature regains in a second. <b>PROGRAMMER NOTE: This is a percentage in the range of 0 to 100, but will tend to have values &lt;1!</b>")]
+				[LuauField, CopyFromV0("HealPercent", CustomConversionCallback = CopyBehavior.ConvHealRate, Percentage = PercentType.Scale0To100), PluginNumericLimit(0.01, 100, AdvisedMaximum = 12), Documentation("How much health this creature regains in a second. <b>PROGRAMMER NOTE: This is a percentage in the range of 0 to 100, but will tend to have values &lt;1!</b>")]
 				public double HealPercentPerSecond { get; set; } = 10;
 
-				[LuauField, PluginNumericLimit(100, 1000, IsPercent = true, AdvisedMaximum = 200), Documentation("If this value is over 100%, this creature can ambush, which causes it to run in a straight line at this % of its normal speed.")]
+				[LuauField, CopyFromV0("AmbushMultiplier", Percentage = PercentType.Scale0To1), PluginNumericLimit(100, 1000, IsPercent = true, AdvisedMaximum = 200), Documentation("If this value is over 100%, this creature can ambush, which causes it to run in a straight line at this % of its normal speed.")]
 				public double AmbushSpeedMultiplier { get; set; } = 100;
 
-				[LuauField, PluginNumericLimit(1, 4), Documentation("Nightvision is a measure of how visible the game is at night. It controls how close a blinding fog is to the camera. Nightvision 4 represents being a nightstalker, which removes all limits of the night and improves its brightness.")]
+				[LuauField, CopyFromV0("Nightvision"), PluginNumericLimit(1, 4), Documentation("Nightvision is a measure of how visible the game is at night. It controls how close a blinding fog is to the camera. Nightvision 4 represents being a nightstalker, which removes all limits of the night and improves its brightness.")]
 				public double Nightvision { get; set; } = 1;
 
 				[LuauField, RepresentedByInstance]
@@ -185,11 +186,20 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 				#region Class Defs
 				public class AttackInfo : LuauRepresentable {
 
-					[LuauField, PluginNumericLimit(double.NegativeInfinity, double.PositiveInfinity), Documentation("The amount of unscaled damage this creature does when it attacks another. This can be set to a negative value for melee medics.")]
+					[LuauField, CopyFromV0("Damage"), PluginNumericLimit(double.NegativeInfinity, double.PositiveInfinity), Documentation("The amount of unscaled damage this creature does when it attacks another. This can be set to a negative value for melee medics.")]
 					public double Damage { get; set; } = 10;
 
-					[LuauField, PluginCustomEnum(ReferencesSonariaConstants = false, Key = "BreathRegistry", AllowNone = true), Documentation("The type of breath this creature has, if applicable.")]
+					[LuauField, CopyFromV0("Breath", CustomConversionCallback = CopyBehavior.GetBreathIfString), PluginCustomEnum(ReferencesSonariaConstants = false, Key = "BreathRegistry", AllowNone = true), Documentation("The type of breath this creature has, if applicable.")]
 					public string BreathType { get; set; } = string.Empty;
+
+					[LuauField, PluginNumericLimit(0, AdvisedMaximum = 15), Documentation("If this value is <b>not zero</b>, it will override the fuel (in seconds) that the creature has when using a breath. Inputting 0 will use the breath's default.")]
+					public double BreathFuelOverride { get; set; } = 0;
+
+					[LuauField, PluginNumericLimit(0, AdvisedMaximum = 15), Documentation("If this value is <b>not zero</b>, it will override the time (in seconds) that the creature has to wait without firing until their fuel will start to regenerate. Inputting 0 will use the breath's default.")]
+					public double BreathRegenDelayOverride { get; set; } = 0;
+
+					[LuauField, PluginNumericLimit(0, AdvisedMaximum = 15), Documentation("If this value is <b>not zero</b>, it will override the rate (in fuel per second) that the breath will regenerate fuel after not firing for the amount of time of the regen delay. Inputting 0 will use the breath's default.")]
+					public double BreathRegenRateOverride { get; set; } = 0;
 
 					[LuauField, PluginNumericLimit(0.05, AdvisedMinimum = 0.2, AdvisedMaximum = 2.4), Documentation("The amount of time that must be waited between melee attacks from this species. Lower values means faster attacks. It is measured in seconds.")]
 					public double AttackDelaySeconds { get; set; } = 0.8;
@@ -312,7 +322,7 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 					[LuauField, PluginCustomEnum(ReferencesSonariaConstants = false, Key = "AbilityRegistry", AllowNone = true), Documentation("The name of the ability this creature has. It should be one of the registered abilities.")]
 					public string AbilityName { get; set; } = string.Empty;
 
-					[LuauField, PluginNumericLimit(0, 100, IsPercent = true), Documentation("If this ability makes use of RNG, it will index this value to determine the chance to apply in whichever way it sees appropriate.")]
+					[LuauField, CopyFromV0("DefensiveParalyze", Percentage = PercentType.Scale0To100), PluginNumericLimit(0, 100, IsPercent = true), Documentation("If this ability makes use of RNG, it will index this value to determine the chance to apply in whichever way it sees appropriate.")]
 					public double ChanceIfApplicable { get; set; }
 
 					[LuauField, PluginNumericLimit(0, 100, IsPercent = true), Documentation("If this ability is an area of effect, this is its range.")]
@@ -322,25 +332,25 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 
 				public class PassiveInfo : LuauRepresentable {
 
-					[LuauField(ValueAsLiteral = "SonariaConstants.AquaAffinity.Terrestrial"), PluginCustomEnum(ReferencesSonariaConstants = true, Key = "AquaAffinity", AllowNone = false), Documentation("The affinity to water that this creature has, which determines where it can live.")]
+					[LuauField(ValueAsLiteral = "SonariaConstants.AquaAffinity.Terrestrial"), CopyFromV0(null, CustomConversionCallback = CopyBehavior.GetAquaAffinity), PluginCustomEnum(ReferencesSonariaConstants = true, Key = "AquaAffinity", AllowNone = false), Documentation("The affinity to water that this creature has, which determines where it can live.")]
 					public string AquaAffinity { get; set; } = "Terrestrial";
 
-					[LuauField, Documentation("If true, then this creature is is only capable of gliding, not powered flight. Does nothing if the creature is not a flier.")]
+					[LuauField, CopyFromV0("Glider", true), Documentation("If true, then this creature is is only capable of gliding, not powered flight. Does nothing if the creature is not a flier.")]
 					public bool OnlyGlide { get; set; } = false;
 
-					[LuauField, Documentation("If greater than zero, this creature is a passive healer.")]
+					[LuauField, CopyFromV0(null, CustomConversionCallback = CopyBehavior.GetHealRadiusValuesForSpecies), Documentation("If greater than zero, this creature is a passive healer.")]
 					public double PassiveHealingRange { get; set; } = 0;
 
-					[LuauField, Documentation("This is the percentage of nearby players' health that increases per second.")]
+					[LuauField, CopyFromV0(null, CustomConversionCallback = CopyBehavior.GetHealRadiusValuesForSpecies), Documentation("This is the percentage of nearby players' health that increases per second.")]
 					public double PassiveHealingPerSecond { get; set; } = 0;
 
-					[LuauField, Documentation("If true, players nearby will only heal if this creature is resting.")]
+					[LuauField, CopyFromV0(null, CustomConversionCallback = CopyBehavior.GetHealRadiusValuesForSpecies), Documentation("If true, players nearby will only heal if this creature is resting.")]
 					public bool PassiveHealWhenRestingOnly { get; set; } = true;
 
-					[LuauField, Documentation("If true, the passive healing only applies to packmates.")]
-					public bool IsPassiveHealingPackOnly { get; set; } = true;
+					[LuauField, CopyFromV0(null, CustomConversionCallback = CopyBehavior.GetHealRadiusValuesForSpecies), Documentation("If true, the passive healing only applies to packmates.")]
+					public bool PassiveHealingPackOnly { get; set; } = true;
 
-					[LuauField, Documentation("If true, players using this species can see a healthbar over other creatures.")]
+					[LuauField, CopyFromV0("KeenObserver", true), Documentation("If true, players using this species can see a healthbar over other creatures.")]
 					public bool SeeHealth { get; set; } = false;
 					
 
@@ -363,37 +373,41 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 			#region Class Defs
 			public class AgilityInfo : LuauRepresentable {
 
-				[LuauField, PluginNumericLimit(0, AdvisedMaximum = 60), Documentation("The speed, measured in studs per second, that this creature moves at whilst walking.")]
+				[LuauField, CopyFromV0("Speed", CustomConversionCallback = CopyBehavior.GetDegradedSpeedForClass), PluginNumericLimit(0, AdvisedMaximum = 60), Documentation("The speed, measured in studs per second, that this creature moves at whilst walking.")]
 				public double WalkSpeed { get; set; } = 10;
 
-				[LuauField, PluginNumericLimit(0, AdvisedMaximum = 150), Documentation("The speed, measured in studs per second, that this creature moves at whilst sprinting.")]
+				[LuauField, CopyFromV0("SprintSpeed", CustomConversionCallback = CopyBehavior.GetDegradedSpeedForClass), PluginNumericLimit(0, AdvisedMaximum = 150), Documentation("The speed, measured in studs per second, that this creature moves at whilst sprinting.")]
 				public double SprintSpeed { get; set; } = 20;
 
-				[LuauField, PluginNumericLimit(0, AdvisedMaximum = 325), Documentation("The speed, measured in studs per second, that this creature can achieve at maximum flight speed.")]
+				[LuauField, CopyFromV0("FlySpeed", CustomConversionCallback = CopyBehavior.ConvFlySpeed), PluginNumericLimit(0, AdvisedMaximum = 325), Documentation("The speed, measured in studs per second, that this creature can achieve at maximum flight speed.")]
 				public double FlySpeed { get; set; } = 0;
 
-				[LuauField, PluginNumericLimit(0, AdvisedMaximum = 50), Documentation("The speed, measured in studs per second, at which this creature swims.")]
+				[LuauField, CopyFromV0("Speed", CustomConversionCallback = CopyBehavior.GetDegradedSpeedForClass), PluginNumericLimit(0, AdvisedMaximum = 50), Documentation("The speed, measured in studs per second, at which this creature swims.")]
 				public double SwimSpeed { get; set; } = 10;
 
-				[LuauField, PluginNumericLimit(0, AdvisedMaximum = 100), Documentation("The speed, measured in studs per second, at which this creature swims whilst sprinting in water.")]
+				[LuauField, CopyFromV0("SprintSpeed", CustomConversionCallback = CopyBehavior.GetDegradedSpeedForClass), PluginNumericLimit(0, AdvisedMaximum = 100), Documentation("The speed, measured in studs per second, at which this creature swims whilst sprinting in water.")]
 				public double SwimFastSpeed { get; set; } = 20;
 
-				[LuauField, PluginNumericLimit(0, 7), Documentation("An arbitrary value representing a predefined turn radius. A radius of 0 provides zero point turning, whereas a radius of 7 provides about a 120 stud wide circle (very large).")]
-				public double TurnRadius { get; set; } = 1;
+				[LuauField, CopyFromV0("TurnRadius", CustomConversionCallback = CopyBehavior.GetStudTurnRadius), PluginNumericLimit(0, 7), Documentation("An arbitrary value representing a predefined turn radius. A radius of 0 provides zero point turning, whereas a radius of 7 provides about a 120 stud wide circle (very large).")]
+				public double StudTurnRadius { get; set; } = 7;
+
+				[LuauField, PluginNumericLimit(0, 1000), Documentation("The upward velocity applied when this creature jumps. This determines its jump height.")]
+				public double JumpImpulsePower { get; set; } = 50;
+
 			}
 
 			public class EnduranceInfo : LuauRepresentable {
 
-				[LuauField, PluginNumericLimit(1, AdvisedMaximum = 450), Documentation("This creature's stamina, which is used whilst running or speed-swimming, and in flight.")]
+				[LuauField, CopyFromV0("Stamina"), PluginNumericLimit(1, AdvisedMaximum = 450), Documentation("This creature's stamina, which is used whilst running or speed-swimming, and in flight.")]
 				public double Stamina { get; set; } = 50;
 
-				[LuauField, PluginNumericLimit(1, 1200, AdvisedMinimum = 15, AdvisedMaximum = 240), Documentation("The number of seconds that this creature can stay underwater before they begin to drown.")]
+				[LuauField, CopyFromV0("Stamina"), PluginNumericLimit(1, 1200, AdvisedMinimum = 15, AdvisedMaximum = 240), Documentation("The number of seconds that this creature can stay underwater before they begin to drown.")]
 				public double Air { get; set; } = 100;
 
-				[LuauField, PluginNumericLimit(1, AdvisedMaximum = 5), Documentation("The <b>ABSOLUTE AMOUNT</b> of seconds this user regains whilst above water.")]
-				public double AirRegenPerSecond { get; set; }
+				[LuauField, CopyFromV0("StaminaRegen"), PluginNumericLimit(1, AdvisedMaximum = 5), Documentation("The <b>ABSOLUTE AMOUNT</b> of seconds this user regains whilst above water.")]
+				public double AirRegenPerSecond { get; set; } = 1;
 
-				[LuauField, PluginNumericLimit(1, AdvisedMaximum = 100), Documentation("The <b>ABSOLUTE AMOUNT</b> of stamina that this creature regains per second.")]
+				[LuauField, CopyFromV0("StaminaRegen"), PluginNumericLimit(1, AdvisedMaximum = 100), Documentation("The <b>ABSOLUTE AMOUNT</b> of stamina that this creature regains per second.")]
 				public double StaminaRegenPerSecond { get; set; } = 3;
 
 			}

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using static CoSRewriteCreatureStruct.Util;
 
 namespace CoSRewriteCreatureStruct {
 
@@ -94,6 +95,8 @@ namespace CoSRewriteCreatureStruct {
 
 			public bool IsInstanceObject { get; }
 
+			public CopyFromV0Attribute? CopyFromV0 { get; }
+
 			private static string GetLuauTypeOf(object? value) {
 				if (value == null) return "nil";
 				if (value.GetType() == typeof(double)) return "number";
@@ -118,6 +121,7 @@ namespace CoSRewriteCreatureStruct {
 				IsSpecialPluginStatus = prop.GetCustomAttribute<PluginIsSpecialAilmentTemplate>() != null;
 				Documentation = prop.GetCustomAttribute<DocumentationAttribute>()?.Documentation;
 				IsInstanceObject = prop.GetCustomAttribute<RepresentedByInstanceAttribute>() != null;
+				CopyFromV0 = prop.GetCustomAttribute<CopyFromV0Attribute>();
 			}
 
 			public void AppendToCodeTable(StringBuilder builder, int indents = 1) {
@@ -192,6 +196,7 @@ namespace CoSRewriteCreatureStruct {
 				builder.Append(FieldInfo.KeyAsLiteral ?? Name);
 				builder.Append(" = ");
 
+				StringKeyTable data = new StringKeyTable();
 				if (Limit is null) {
 					if (DefaultValue is LuauRepresentable luauObject) {
 						builder.AppendLine("{");
@@ -203,8 +208,11 @@ namespace CoSRewriteCreatureStruct {
 						builder.AppendLine("};");
 						return;
 					} else {
-						if (Documentation != null) {
-							builder.AppendLine($"{{Documentation={EscapeLiteral(Documentation)}}};");
+						if (CopyFromV0 != null) CopyFromV0.AppendToLuaTable(data.GetOrCreateTable("DataUpgradeInfo"));
+						if (Documentation != null) data.GetOrCreateTable("PluginInfo").Add("Documentation", Documentation);
+						if (!data.Empty) {
+							data.AppendToBuilder(builder, indents);
+							builder.AppendLine(";");
 						} else {
 							builder.AppendLine("nil;");
 						}
@@ -214,13 +222,22 @@ namespace CoSRewriteCreatureStruct {
 
 				if (DefaultValue is string) {
 					if (Limit is PluginCustomEnum || Limit is PluginStringLimit) {
-						builder.Append(Limit.ToLuaTable(EscapeLiteral(Documentation)));
+						data.Add("PluginInfo", Limit.ToLuaTable());
+						if (CopyFromV0 != null) 
+							CopyFromV0.AppendToLuaTable(data.GetOrCreateTable("DataUpgradeInfo"));
+						if (Documentation != null) data.GetOrCreateTable("PluginInfo").Add("Documentation", Documentation);
+						data.AppendToBuilder(builder, indents);
+
 					} else {
 						throw new InvalidOperationException($"Attempt to apply invalid {Limit.GetType().Name} to string value.");
 					}
 				} else if (DefaultValue is double) {
 					if (Limit is PluginNumericLimit) {
-						builder.Append(Limit.ToLuaTable(EscapeLiteral(Documentation)));
+						data.Add("PluginInfo", Limit.ToLuaTable());
+						if (CopyFromV0 != null) CopyFromV0.AppendToLuaTable(data.GetOrCreateTable("DataUpgradeInfo"));
+						if (Documentation != null) data.GetOrCreateTable("PluginInfo").Add("Documentation", Documentation);
+						data.AppendToBuilder(builder, indents);
+
 					} else {
 						throw new InvalidOperationException($"Attempt to apply invalid {Limit.GetType().Name} to number value.");
 					}
@@ -323,15 +340,6 @@ namespace CoSRewriteCreatureStruct {
 					}
 				}
 				
-			}
-
-			private static string EscapeString(string str) {
-				return str.Replace("\\", "\\\\").Replace("\"", "\\\"").Replace("\n", "\\n").Replace("\r", "\\r").Replace("\t", "\\t");
-			}
-
-			private static string? EscapeLiteral(string? str) {
-				if (str == null) return null;
-				return "\"" + EscapeString(str.ToString()) + "\"";
 			}
 
 		}

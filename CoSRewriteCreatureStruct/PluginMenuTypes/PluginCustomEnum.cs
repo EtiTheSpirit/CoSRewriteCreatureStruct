@@ -38,12 +38,21 @@ namespace CoSRewriteCreatureStruct.PluginMenuTypes {
 
 		public override string? ValidateData() => null;
 
-		public override string ToLuaTable(string? includeDocsLiteral) {
+		public override StringKeyTable ToLuaTable() {
+			StringKeyTable tbl = new StringKeyTable();
+			tbl.Add("LimitType", "CustomEnum");
+			tbl.Add("IsSonariaConstant", ReferencesSonariaConstants);
+			tbl.Add("IsRobloxEnum", IsRobloxEnum);
+			tbl.Add("AllowNone", AllowNone);
+			tbl.Add("Key", Key);
+			return tbl;
+			/*
 			if (includeDocsLiteral == null) {
 				return $"{{LimitType=\"CustomEnum\"; IsSonariaConstant={ReferencesSonariaConstants.ToString().ToLower()}; IsRobloxEnum={IsRobloxEnum.ToString().ToLower()}; AllowNone={AllowNone.ToString().ToLower()}; Key=\"{Key}\"}}";
 			} else {
 				return $"{{LimitType=\"CustomEnum\"; IsSonariaConstant={ReferencesSonariaConstants.ToString().ToLower()}; IsRobloxEnum={IsRobloxEnum.ToString().ToLower()}; AllowNone={AllowNone.ToString().ToLower()}; Key=\"{Key}\"; Documentation = {includeDocsLiteral}}}";
 			}
+			*/
 		}
 	}
 }
