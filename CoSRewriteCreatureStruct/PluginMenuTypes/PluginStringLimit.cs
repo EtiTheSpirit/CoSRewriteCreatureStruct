@@ -24,8 +24,12 @@ namespace CoSRewriteCreatureStruct.PluginMenuTypes {
 
 		public override string? ValidateData() => null;
 
-		public override string ToLuaTable() {
-			return $"{{LimitType=\"StringLimit\"; IsRobloxAsset={IsRobloxAsset.ToString().ToLower()}; AllowEmpty={AllowEmpty.ToString().ToLower()}}}";
+		public override string ToLuaTable(string? includeDocsLiteral) {
+			if (includeDocsLiteral == null) {
+				return $"{{LimitType=\"StringLimit\"; IsRobloxAsset={IsRobloxAsset.ToString().ToLower()}; AllowEmpty={AllowEmpty.ToString().ToLower()}}}";
+			} else {
+				return $"{{LimitType=\"StringLimit\"; IsRobloxAsset={IsRobloxAsset.ToString().ToLower()}; AllowEmpty={AllowEmpty.ToString().ToLower()}; Documentation = {includeDocsLiteral}}}";
+			}
 		}
 	}
 }

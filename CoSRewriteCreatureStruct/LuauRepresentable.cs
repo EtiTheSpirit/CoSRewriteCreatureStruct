@@ -42,6 +42,8 @@ namespace CoSRewriteCreatureStruct {
 
 			public PluginMenuLimiterAttribute? Limit { get; }
 
+			public string? Documentation { get; }
+
 			public bool IsSpecialPluginStatus { get; }
 
 			private static string GetLuauTypeOf(object? value) {
@@ -66,6 +68,7 @@ namespace CoSRewriteCreatureStruct {
 				}
 
 				IsSpecialPluginStatus = prop.GetCustomAttribute<PluginIsSpecialAilmentTemplate>() != null;
+				Documentation = prop.GetCustomAttribute<DocumentationAttribute>()?.Documentation;
 			}
 
 			public void AppendToCodeTable(StringBuilder builder, int indents = 1) {
@@ -151,20 +154,24 @@ namespace CoSRewriteCreatureStruct {
 						builder.AppendLine("};");
 						return;
 					} else {
-						builder.AppendLine("nil;");
+						if (Documentation != null) {
+							builder.AppendLine($"{{Documentation={EscapeLiteral(Documentation)}}};");
+						} else {
+							builder.AppendLine("nil;");
+						}
 						return;
 					}
 				}
 
 				if (DefaultValue is string) {
 					if (Limit is PluginCustomEnum || Limit is PluginStringLimit) {
-						builder.Append(Limit.ToLuaTable());
+						builder.Append(Limit.ToLuaTable(EscapeLiteral(Documentation)));
 					} else {
 						throw new InvalidOperationException($"Attempt to apply invalid {Limit.GetType().Name} to string value.");
 					}
 				} else if (DefaultValue is double) {
 					if (Limit is PluginNumericLimit) {
-						builder.Append(Limit.ToLuaTable());
+						builder.Append(Limit.ToLuaTable(EscapeLiteral(Documentation)));
 					} else {
 						throw new InvalidOperationException($"Attempt to apply invalid {Limit.GetType().Name} to number value.");
 					}
@@ -237,6 +244,11 @@ namespace CoSRewriteCreatureStruct {
 
 			private static string EscapeString(string str) {
 				return str.Replace("\\", "\\\\").Replace("\"", "\\\"").Replace("\n", "\\n").Replace("\r", "\\r").Replace("\t", "\\t");
+			}
+
+			private static string? EscapeLiteral(string? str) {
+				if (str == null) return null;
+				return "\"" + EscapeString(str.ToString()) + "\"";
 			}
 
 		}

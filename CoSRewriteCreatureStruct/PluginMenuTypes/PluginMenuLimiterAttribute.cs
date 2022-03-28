@@ -20,7 +20,7 @@ namespace CoSRewriteCreatureStruct.PluginMenuTypes {
 		/// </summary>
 		/// <param name="premadeDefault">The default value already formatted as string to put into the table.</param>
 		/// <returns></returns>
-		public abstract string ToLuaTable();
+		public abstract string ToLuaTable(string? includeDocsLiteral);
 
 	}
 }

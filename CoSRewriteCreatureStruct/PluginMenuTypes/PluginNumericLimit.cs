@@ -78,8 +78,12 @@ namespace CoSRewriteCreatureStruct.PluginMenuTypes {
 			return null;
 		}
 
-		public override string ToLuaTable() {
-			return $"{{LimitType=\"NumericLimit\"; GeneralLimit=Vector2.new({DoubleToString(AdvisedMinimum)}, {DoubleToString(AdvisedMaximum)}); AbsoluteLimit=Vector2.new({DoubleToString(AbsoluteMinimum)}, {DoubleToString(AbsoluteMaximum)}); IsInt={IsInteger.ToString().ToLower()}}}";
+		public override string ToLuaTable(string? includeDocsLiteral) {
+			if (includeDocsLiteral == null) {
+				return $"{{LimitType=\"NumericLimit\"; GeneralLimit=Vector2.new({DoubleToString(AdvisedMinimum)}, {DoubleToString(AdvisedMaximum)}); AbsoluteLimit=Vector2.new({DoubleToString(AbsoluteMinimum)}, {DoubleToString(AbsoluteMaximum)}); IsInt={IsInteger.ToString().ToLower()}}}";
+			} else {
+				return $"{{LimitType=\"NumericLimit\"; GeneralLimit=Vector2.new({DoubleToString(AdvisedMinimum)}, {DoubleToString(AdvisedMaximum)}); AbsoluteLimit=Vector2.new({DoubleToString(AbsoluteMinimum)}, {DoubleToString(AbsoluteMaximum)}); IsInt={IsInteger.ToString().ToLower()}; Documentation = {includeDocsLiteral}}}";
+			}
 		}
 
 		public static string DoubleToString(double value) {

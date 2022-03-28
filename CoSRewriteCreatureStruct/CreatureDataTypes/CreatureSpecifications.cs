@@ -31,45 +31,48 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 
 			public class ForShowInfo : LuauRepresentable {
 
-				[LuauField]
+				[LuauField, Documentation("If enabled, this creature is classified as a reward for Beta Testers. Currently only Aolenus and Keruku should have this enabled.")]
 				public bool BetaTesterReward { get; set; }
 
-				[LuauField]
+				[LuauField, Documentation("If enabled, this creature is one representing a developer, either present or past.")]
 				public bool DevCreature { get; set; }
 
-				[LuauField]
+				[LuauField, Documentation("If enabled, this creature is currently (as in right now at this moment in time) unable to be acquired in a means other than trading.")]
 				public bool NowUnobtainable { get; set; }
 
-				[LuauField]
+				[LuauField, Documentation("If enabled, this creature classifies as a reward for a mission or quest.")]
 				public bool MissionReward { get; set; }
 
-				[LuauField]
+				[LuauField, PluginCustomEnum(ReferencesSonariaConstants = true, Key = "Holidays", AllowNone = true), Documentation("The holiday this creature is associated with. <b>THIS DOES NOT CONTROL WHETHER OR NOT IT APPEARS IN ANY SHOPS</b>.")]
 				public string Holiday { get; set; } = string.Empty;
 
 			}
 
 			public class ForFunctionInfo : LuauRepresentable {
 				
-				[LuauField]
+				[LuauField, Documentation("If true, this species cannot be traded. Stored instances can still be traded however.")]
 				public bool Untradeable { get; set; }
 
-				[LuauField]
+				[LuauField, Documentation("If true, this species will not receive glimmer. This can be used to hide the \"Glimmer Coming Soon!\" display tag.")]
 				public bool WillNeverGetGlimmer { get; set; }
 
-				[LuauField]
+				[LuauField, Documentation("If true, this species is only usable by developers. Attempting to spawn as this species without being a developer will result in the spawn attempt being rejected.")]
 				public bool DeveloperUseOnly { get; set; }
 
-				[LuauField]
+				[LuauField, Documentation("If true, this species goes in the limited gacha. Overrides ForcedGachaList.")]
 				public bool InLimitedGacha { get; set; }
 
-				[LuauField]
+				[LuauField, Documentation("If true, the game enforces that players who do not own this species are male, increases the cost in the Shoom shop by 50%, prevents trading stored versions unless the species is owned, and prevents it from showing in gachas.")]
 				public bool HasPaidContentLimits { get; set; }
 
-				[LuauField]
+				[LuauField, Documentation("If true, this creature is not allowed to use any plushies that change its breath.")]
 				public bool PreventPlushieBreathSwaps { get; set; }
 
-				[LuauField]
+				[LuauField, Documentation("If defined, this will override the gacha this creature appears in (overrides its default gacha). If this creature has paid content limits, this will override it and cause it to show in this gacha anyway.")]
 				public string ForcedGachaList { get; set; } = string.Empty;
+
+				[LuauField, PluginNumericLimit(1, 100), Documentation("If the gacha this is being placed into supports weighted selections, this is the chance that this, as an individual item, will be selected.")]
+				public double WeightedGachaChance { get; set; } = 100;
 
 				// TODO: Limit for this
 				[LuauField]
@@ -120,6 +123,9 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 				[LuauField, PluginNumericLimit(1, AdvisedMaximum = 225000), Documentation("Creature weight determines some damage scaling mechanics.")]
 				public double Weight { get; set; }
 
+				[LuauField, PluginNumericLimit(1, AdvisedMaximum = 225000), Documentation("Creature pickup weight determines which creatures it can carry vs. be carried by. Creatures with larger pickup weights can pick up those with equal or smaller weights.")]
+				public double PickupWeight { get; set; }
+
 				[LuauField(AllowInCharacterCopy = false), PluginNumericLimit(1, 5, true), Documentation("Tier is a general descriptor of creature size. It has no mechanical functions minus shop price, and mostly exists for the players.")]
 				public double Tier { get; set; }
 
@@ -130,16 +136,16 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 
 			public class StatsInfo : LuauRepresentable {
 
-				[LuauField, PluginNumericLimit(1, AdvisedMinimum = 100, AdvisedMaximum = 75000)]
+				[LuauField, PluginNumericLimit(1, AdvisedMinimum = 100, AdvisedMaximum = 75000), Documentation("The amount of health this creature has.")]
 				public double Health { get; set; } = 100;
 
-				[LuauField, PluginNumericLimit(1, 100, IsPercent = true, AdvisedMaximum = 12)]
+				[LuauField, PluginNumericLimit(1, 100, IsPercent = true, AdvisedMaximum = 12), Documentation("How much health this creature regains in a single long tick. A long tick lasts 10 seconds.")]
 				public double HealPercentPerLongTick { get; set; } = 10;
 
-				[LuauField, PluginNumericLimit(100, 1000, IsPercent = true, AdvisedMaximum = 200)]
+				[LuauField, PluginNumericLimit(100, 1000, IsPercent = true, AdvisedMaximum = 200), Documentation("If this value is over 100%, this creature can ambush, which causes it to run in a straight line at this % of its normal speed.")]
 				public double AmbushSpeedMultiplier { get; set; } = 100;
 
-				[LuauField, PluginNumericLimit(1, 4)]
+				[LuauField, PluginNumericLimit(1, 4), Documentation("Nightvision is a measure of how visible the game is at night. It controls how close a blinding fog is to the camera. Nightvision 4 represents being a nightstalker, which removes all limits of the night and improves its brightness.")]
 				public double Nightvision { get; set; } = 1;
 
 				public AttackInfo Attack { get; set; } = new AttackInfo();
