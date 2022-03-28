@@ -139,8 +139,8 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 				[LuauField, PluginNumericLimit(1, AdvisedMinimum = 100, AdvisedMaximum = 75000), Documentation("The amount of health this creature has.")]
 				public double Health { get; set; } = 100;
 
-				[LuauField, PluginNumericLimit(1, 100, IsPercent = true, AdvisedMaximum = 12), Documentation("How much health this creature regains in a single long tick. A long tick lasts 10 seconds.")]
-				public double HealPercentPerLongTick { get; set; } = 10;
+				[LuauField, PluginNumericLimit(0.01, 100, AdvisedMaximum = 12), Documentation("How much health this creature regains in a second. <b>PROGRAMMER NOTE: This is a percentage in the range of 0 to 100, but will tend to have values &lt;1!</b>")]
+				public double HealPercentPerSecond { get; set; } = 10;
 
 				[LuauField, PluginNumericLimit(100, 1000, IsPercent = true, AdvisedMaximum = 200), Documentation("If this value is over 100%, this creature can ambush, which causes it to run in a straight line at this % of its normal speed.")]
 				public double AmbushSpeedMultiplier { get; set; } = 100;
@@ -151,17 +151,33 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 				[LuauField, RepresentedByInstance]
 				public AttackInfo Attack { get; set; } = new AttackInfo();
 
-				[LuauField, RepresentedByInstance, PluginIsSpecialAilmentTemplate]
+				
+				[LuauField("CreatureAoEAilmentStats"), RepresentedByInstance, PluginIsSpecialAilmentTemplate]
 				public AoEAilmentsInfo[] AreaAilments { get; set; } = Util.One<AoEAilmentsInfo>();
 
-				[LuauField, RepresentedByInstance, PluginIsSpecialAilmentTemplate]
+				[LuauField("CreatureOffensiveAilmentStats"), RepresentedByInstance, PluginIsSpecialAilmentTemplate]
 				public OffensiveAilmentsInfo[] MeleeAilments { get; set; } = Util.One<OffensiveAilmentsInfo>();
 
-				[LuauField, RepresentedByInstance, PluginIsSpecialAilmentTemplate]
+				[LuauField("CreatureDefensiveAilmentStats"), RepresentedByInstance, PluginIsSpecialAilmentTemplate]
 				public DefensiveAilmentsInfo[] DefensiveAilments { get; set; } = Util.One<DefensiveAilmentsInfo>();
 
-				[LuauField, RepresentedByInstance, PluginIsSpecialAilmentTemplate]
+				[LuauField("CreatureResistanceStats"), RepresentedByInstance, PluginIsSpecialAilmentTemplate]
 				public AilmentResistancesInfo[] AilmentResistances { get; set; } = Util.One<AilmentResistancesInfo>();
+				
+
+				/*
+				[LuauField("CreatureAoEAilmentStats"), RepresentedByInstance]
+				public AoEAilmentsInfo AreaAilments { get; set; } = new AoEAilmentsInfo();
+
+				[LuauField("CreatureOffensiveAilmentStats"), RepresentedByInstance]
+				public OffensiveAilmentsInfo MeleeAilments { get; set; } = new OffensiveAilmentsInfo();
+
+				[LuauField("CreatureDefensiveAilmentStats"), RepresentedByInstance]
+				public DefensiveAilmentsInfo DefensiveAilments { get; set; } = new DefensiveAilmentsInfo();
+
+				[LuauField("CreatureResistanceStats"), RepresentedByInstance]
+				public AilmentResistancesInfo AilmentResistances { get; set; } = new AilmentResistancesInfo();
+				*/
 
 				[LuauField, RepresentedByInstance]
 				public UniversalResistancesInfo UniversalAttackTypeResistances { get; set; } = new UniversalResistancesInfo();
@@ -267,8 +283,6 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 				}
 
 				public class UniversalResistancesInfo : LuauRepresentable {
-
-					// TODO: Literal keys or field names, do not use the field name as defined here, allow it to reference SonariaConstants
 
 					[LuauField(KeyAsLiteral = "[SonariaConstants.PlayerDamageType.Melee]"), PluginNumericLimit(-1000, 100, IsPercent = true), Documentation("All damage from melee is reduced by this amount no matter the context. Negative values introduce weakness (additional damage).")]
 					public double Melee { get; set; } = 0;

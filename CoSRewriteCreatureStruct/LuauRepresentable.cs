@@ -32,43 +32,43 @@ namespace CoSRewriteCreatureStruct {
 			return result.ToArray();
 		}
 
-		public string ToLuaObject() {
+		public string ToLuaObject(int indents = 1, bool noHeader = false) {
 			StringBuilder sb = new StringBuilder();
-			sb.AppendLine("local CreatureObjectTemplate = {");
+			if (!noHeader) sb.AppendLine("local CreatureObjectTemplate = {");
 			foreach (ExportableField field in GetExportableFields()) {
-				field.AppendToCodeTable(sb, 1);
+				field.AppendToCodeTable(sb, indents);
 			}
-			sb.AppendLine("}");
+			if (!noHeader) sb.AppendLine("}");
 			return sb.ToString();
 		}
 
-		public string ToPluginObject() {
+		public string ToPluginObject(int indents = 1, bool noHeader = false) {
 			StringBuilder sb = new StringBuilder();
-			sb.AppendLine("local CreatureObjectPluginData = {");
+			if (!noHeader) sb.AppendLine("local CreatureObjectPluginData = {");
 			foreach (ExportableField field in GetExportableFields()) {
-				field.AppendToPluginData(sb, 1);
+				field.AppendToPluginData(sb, indents);
 			}
-			sb.AppendLine("}");
+			if (!noHeader) sb.AppendLine("}");
 			return sb.ToString();
 		}
 
-		public string ToType() {
+		public string ToType(int indents = 1, bool noHeader = false) {
 			StringBuilder sb = new StringBuilder();
-			sb.AppendLine("export type CreatureData = {");
+			if (!noHeader) sb.AppendLine("export type CreatureData = {");
 			foreach (ExportableField field in GetExportableFields()) {
-				field.AppendToType(sb, 1);
+				field.AppendToType(sb, indents);
 			}
-			sb.AppendLine("}");
+			if (!noHeader) sb.AppendLine("}");
 			return sb.ToString();
 		}
 
-		public string ToInstanceType() {
+		public string ToInstanceType(int indents = 1, bool noHeader = false) {
 			StringBuilder sb = new StringBuilder();
-			sb.AppendLine("export type SpecificationsInstance = {");
+			if (!noHeader) sb.AppendLine("export type SpecificationsInstance = {");
 			foreach (ExportableField field in GetExportableFields()) {
-				field.AppendToInstanceType(sb, 1);
+				field.AppendToInstanceType(sb, indents);
 			}
-			sb.AppendLine(
+			if (!noHeader) sb.AppendLine(
 @"	Runtime: Instance & {
 		State: Instance;
 		StatusEffects: {[string]: Instance};
@@ -274,15 +274,19 @@ namespace CoSRewriteCreatureStruct {
 					} else if (DefaultValue is StatLimit) {
 						builder.AppendLine("Vector2;");
 					} else if (DefaultValue is Array array) {
-						builder.Append('{');
+						builder.Append("{[string]: ");
 						object? value = array.GetValue(0);
 						if (value is LuauRepresentable luauObj) {
-							builder.AppendLine("{");
-							foreach (ExportableField field in luauObj.GetExportableFields()) {
-								field.AppendToType(builder, indents + 1);
+							if (type == null) {
+								builder.AppendLine("{");
+								foreach (ExportableField field in luauObj.GetExportableFields()) {
+									field.AppendToType(builder, indents + 1);
+								}
+								builder.Append(prefix);
+								builder.Append('}');
+							} else {
+								builder.Append(type);
 							}
-							builder.Append(prefix);
-							builder.Append('}');
 						}
 						builder.AppendLine("};");
 					} else if (DefaultValue is Color3) {

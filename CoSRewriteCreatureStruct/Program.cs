@@ -60,12 +60,14 @@ export type AerialAnimations = typeof(CreatureObjectTemplate.CreatureVisuals.Ani
 export type AquaticAnimations = typeof(CreatureObjectTemplate.CreatureVisuals.Animations.Aquatic)
 export type ActionAnimations = typeof(CreatureObjectTemplate.CreatureVisuals.Animations.Actions)
 export type CreaturePalette = typeof(DEFAULT_PALETTE)
+export type CreatureSpecs = typeof(CreatureObjectTemplate.Specifications)
+";
+		/*
 export type CreatureOffensiveAilmentStats = typeof(CreatureObjectPluginData.Specifications.MainInfo.Stats.MeleeAilments.__CDV2_PLUGIN_TEMPLATE)
 export type CreatureDefensiveAilmentStats = typeof(CreatureObjectPluginData.Specifications.MainInfo.Stats.DefensiveAilments.__CDV2_PLUGIN_TEMPLATE)
 export type CreatureResistanceStats = typeof(CreatureObjectPluginData.Specifications.MainInfo.Stats.AilmentResistances.__CDV2_PLUGIN_TEMPLATE)
 export type CreatureAreaAilmentStats = typeof(CreatureObjectPluginData.Specifications.MainInfo.Stats.AreaAilments.__CDV2_PLUGIN_TEMPLATE)
-export type CreatureSpecs = typeof(CreatureObjectTemplate.Specifications)
-";
+		*/
 
 
 		public const string PROXY_STRING = @"-- Proxy Section
@@ -99,6 +101,19 @@ end";
 			result.AppendLine(asType);
 			result.AppendLine(PROXY_LOADER);
 			result.AppendLine(CLOSING_STRING);
+			result.AppendLine("export type CreatureAoEAilmentStats = {");
+			result.Append(creature.Specifications.MainInfo.Stats.AreaAilments[0].ToType(noHeader: true));
+			result.AppendLine("}");
+			result.AppendLine("export type CreatureOffensiveAilmentStats = {");
+			result.Append(creature.Specifications.MainInfo.Stats.MeleeAilments[0].ToType(noHeader: true));
+			result.AppendLine("}");
+			result.AppendLine("export type CreatureDefensiveAilmentStats = {");
+			result.Append(creature.Specifications.MainInfo.Stats.DefensiveAilments[0].ToType(noHeader: true));
+			result.AppendLine("}");
+			result.AppendLine("export type CreatureResistanceStats = {");
+			result.Append(creature.Specifications.MainInfo.Stats.AilmentResistances[0].ToType(noHeader: true));
+			result.AppendLine("}");
+			result.AppendLine();
 			result.Append(@"return table.deepFreeze({
 	CreatureObjectTemplate = CreatureObjectTemplate; 
 	PluginTemplate = CreatureObjectPluginData; 
