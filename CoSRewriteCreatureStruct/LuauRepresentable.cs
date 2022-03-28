@@ -64,7 +64,7 @@ namespace CoSRewriteCreatureStruct {
 
 		public string ToInstanceType(int indents = 1, bool noHeader = false) {
 			StringBuilder sb = new StringBuilder();
-			if (!noHeader) sb.AppendLine("export type SpecificationsInstance = {");
+			if (!noHeader) sb.AppendLine("export type SpecificationsInstance = Instance & {");
 			foreach (ExportableField field in GetExportableFields()) {
 				field.AppendToInstanceType(sb, indents);
 			}

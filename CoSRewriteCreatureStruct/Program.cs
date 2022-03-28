@@ -72,6 +72,10 @@ export type CreatureAreaAilmentStats = typeof(CreatureObjectPluginData.Specifica
 
 		public const string PROXY_STRING = @"-- Proxy Section
 local ProcGen = require(script.ProcGen)
+export type CreatureOffensiveAilmentStats = ProcGen.CreatureOffensiveAilmentStats
+export type CreatureDefensiveAilmentStats = ProcGen.CreatureDefensiveAilmentStats
+export type CreatureResistanceStats = ProcGen.CreatureResistanceStats
+export type CreatureAreaAilmentStats = ProcGen.CreatureAreaAilmentStats
 ";
 
 		public const string PROXY_LOADER =
@@ -101,7 +105,7 @@ end";
 			result.AppendLine(asType);
 			result.AppendLine(PROXY_LOADER);
 			result.AppendLine(CLOSING_STRING);
-			result.AppendLine("export type CreatureAoEAilmentStats = {");
+			result.AppendLine("export type CreatureAreaAilmentStats = {");
 			result.Append(creature.Specifications.MainInfo.Stats.AreaAilments[0].ToType(noHeader: true));
 			result.AppendLine("}");
 			result.AppendLine("export type CreatureOffensiveAilmentStats = {");
@@ -116,8 +120,8 @@ end";
 			result.AppendLine();
 			result.Append(@"return table.deepFreeze({
 	CreatureObjectTemplate = CreatureObjectTemplate; 
-	PluginTemplate = CreatureObjectPluginData; 
 	IsolatedSpecifications = IsolatedSpecifications;
+	PluginTemplate = CreatureObjectPluginData; 
 })");
 
 			StringBuilder alt = new StringBuilder(PROXY_STRING);
@@ -135,8 +139,11 @@ end";
 			StringBuilder typeDefsModule = new StringBuilder(File.ReadAllText("./CreatureTypeDefsBase.lua"));
 			typeDefsModule.AppendLine(asInstanceType);
 			typeDefsModule.AppendLine(alt.ToString());
-			typeDefsModule.AppendLine("local retData: {any} = {ProcGen.CreatureObjectTemplate, ProcGen.IsolatedSpecifications, ProcGen.PluginTemplate}");
-			typeDefsModule.AppendLine("table.freeze(retData)");
+			typeDefsModule.AppendLine(@"local retData = table.deepFreeze({
+	CreatureObjectTemplate = ProcGen.CreatureObjectTemplate;
+	IsolatedSpecifications = ProcGen.IsolatedSpecifications;
+	PluginTemplate = ProcGen.PluginTemplate
+})");
 			typeDefsModule.AppendLine("return retData");
 
 			File.WriteAllText("./ProcGen.lua", result.ToString());
