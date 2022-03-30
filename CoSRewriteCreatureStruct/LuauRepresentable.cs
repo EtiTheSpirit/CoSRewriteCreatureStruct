@@ -17,6 +17,11 @@ namespace CoSRewriteCreatureStruct {
 	public abstract class LuauRepresentable {
 
 		/// <summary>
+		/// A singleton anonymous luau-representable object
+		/// </summary>
+		public static readonly LuauRepresentable ANONYMOUS = new @Anonymous();
+
+		/// <summary>
 		/// Returns an array of all exportable Luau fields this object contains via the <see cref="LuauFieldAttribute"/> attribute.
 		/// </summary>
 		/// <returns></returns>
@@ -69,12 +74,14 @@ namespace CoSRewriteCreatureStruct {
 			foreach (ExportableField field in GetExportableFields()) {
 				field.AppendToInstanceType(sb, indents);
 			}
+			/*
 			if (!noHeader) sb.AppendLine(
 @"	Runtime: Instance & {
 		State: Instance;
 		StatusEffects: {[string]: Instance};
 	};"
 			);
+			*/
 			sb.AppendLine("}");
 			return sb.ToString();
 		}
@@ -177,7 +184,7 @@ namespace CoSRewriteCreatureStruct {
 					}
 				}
 
-				if (!string.IsNullOrEmpty(FieldInfo.LuauType)) {
+				if (!string.IsNullOrEmpty(FieldInfo.LuauType) && !IsSpecialPluginStatus) {
 					builder.Append("::");
 					builder.Append(FieldInfo.LuauType);
 				}
@@ -344,6 +351,8 @@ namespace CoSRewriteCreatureStruct {
 
 		}
 
+
+		private class @Anonymous : LuauRepresentable { }
 
 	}
 }

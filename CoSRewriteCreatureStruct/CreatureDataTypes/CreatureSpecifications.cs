@@ -18,6 +18,9 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 		[LuauField, RepresentedByInstance]
 		public MainInfoCtr MainInfo { get; set; } = new MainInfoCtr();
 
+		[LuauField(RuntimeOnly = true), RepresentedByInstance]
+		public RuntimeInfo Runtime { get; set; } = new RuntimeInfo();
+
 		#region Class Defs
 		public class AttributesInfo : LuauRepresentable {
 
@@ -98,7 +101,9 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 			[LuauField, RepresentedByInstance]
 			public CapabilitiesInfo Capabilities { get; set; } = new CapabilitiesInfo();
 
+
 			#region Class Defs
+
 			public class DietInfo : LuauRepresentable {
 
 				[LuauField, Documentation("Whether or not this creature is able to eat meat.")]
@@ -412,6 +417,37 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 
 			}
 			#endregion
+		}
+
+		public class RuntimeInfo : LuauRepresentable {
+
+			[LuauField, RepresentedByInstance]
+			public LuauRepresentable State { get; set; } = ANONYMOUS;
+
+			[LuauField, RepresentedByInstance]
+			public AbilityInfoObject AbilityInfo { get; set; } = new AbilityInfoObject();
+
+			[LuauField, RepresentedByInstance]
+			public LuauRepresentable CombatInfo { get; set; } = ANONYMOUS;
+
+			[LuauField, RepresentedByInstance]
+			public LuauRepresentable StatusEffects { get; set; } = ANONYMOUS;
+
+			[LuauField, RepresentedByInstance]
+			public LuauRepresentable CustomData { get; set; } = ANONYMOUS;
+
+
+			#region Class Defs
+
+			public class AbilityInfoObject : LuauRepresentable {
+
+				[LuauField, RepresentedByInstance]
+				public LuauRepresentable ExtraData { get; set; } = ANONYMOUS;
+
+			}
+
+			#endregion
+
 		}
 
 		#endregion
