@@ -168,6 +168,7 @@ namespace CoSRewriteCreatureStruct {
 				if (value.GetType() == typeof(StatLimit)) return "Vector2";
 				if (value.GetType() == typeof(Color3)) return "Color3";
 				if (value.GetType() == typeof(DumbColorSequence)) return "ColorSequence";
+				if (value.GetType() == typeof(Instance)) return ((Instance)value).Type;
 				return "any";
 			}
 

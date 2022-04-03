@@ -193,16 +193,16 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 		public class SoundsInfo : LuauRepresentable {
 
 			[LuauField("typeof(DEFAULT_SOUND)", ValueAsLiteral = "table.shallowCopy(DEFAULT_SOUND)"), CopyFromV0("1", Container = "Sounds", CustomConversionCallback = CopyBehavior.CreateSound)]
-			public Instance? Broadcast { get; set; }
+			public Instance Broadcast { get; set; } = new Instance("Sound");
 
 			[LuauField("typeof(DEFAULT_SOUND)", ValueAsLiteral = "table.shallowCopy(DEFAULT_SOUND)"), CopyFromV0("2", Container = "Sounds", CustomConversionCallback = CopyBehavior.CreateSound)]
-			public Instance? Friendly { get; set; }
+			public Instance Friendly { get; set; } = new Instance("Sound");
 
 			[LuauField("typeof(DEFAULT_SOUND)", ValueAsLiteral = "table.shallowCopy(DEFAULT_SOUND)"), CopyFromV0("3", Container = "Sounds", CustomConversionCallback = CopyBehavior.CreateSound)]
-			public Instance? Aggressive { get; set; }
+			public Instance Aggressive { get; set; } = new Instance("Sound");
 
 			[LuauField("typeof(DEFAULT_SOUND)", ValueAsLiteral = "table.shallowCopy(DEFAULT_SOUND)"), CopyFromV0("4", Container = "Sounds", CustomConversionCallback = CopyBehavior.CreateSound)]
-			public Instance? Speak { get; set; }
+			public Instance Speak { get; set; } = new Instance("Sound");
 
 		}
 

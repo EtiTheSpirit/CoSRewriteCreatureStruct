@@ -9,5 +9,17 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 	/// <summary>
 	/// A placeholder class representing a Roblox instance.
 	/// </summary>
-	public class Instance { }
+	public class Instance {
+
+		public string Type { get; }
+
+		public Instance() {
+			Type = "Instance";
+		}
+
+		public Instance(string type) {
+			Type = type;
+		}
+
+	}
 }
