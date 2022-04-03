@@ -93,7 +93,7 @@ namespace CoSRewriteCreatureStruct.PluginMenuTypes {
 
 		public void AddToLuaTable(StringKeyTable tbl) {
 			tbl.Add("IsNumberList", true);
-			tbl.AddLiteral("GeneralLimit", Vector2(AdvisedMinimum, AdvisedMaximum));
+			// tbl.AddLiteral("GeneralLimit", Vector2(AdvisedMinimum, AdvisedMaximum));
 			tbl.AddLiteral("AbsoluteLimit", Vector2(AbsoluteMinimum, AbsoluteMaximum));
 			tbl.Add("IsInt", IsInteger);
 		}

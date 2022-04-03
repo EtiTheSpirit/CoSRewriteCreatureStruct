@@ -169,7 +169,6 @@ end";
 			File.WriteAllText("./DEBUG_testplugin.lua", asPluginObject);
 			File.WriteAllText("./DEBUG_testtypedef.lua", asType);
 
-
 			Console.ForegroundColor = ConsoleColor.Green;
 			Console.Write("Done! Would you like to open the files? [Y/N] >");
 			FileInfo procgen = new FileInfo("./ProcGen.lua");
