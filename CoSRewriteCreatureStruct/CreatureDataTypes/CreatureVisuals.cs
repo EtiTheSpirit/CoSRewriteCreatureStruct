@@ -55,16 +55,16 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 
 		public class BloodDisplayInfo : LuauRepresentable {
 
-			[LuauField]
+			[LuauField, Documentation("<b>NOT TO BE USED FOR PLAYER POLICY.</b> Whether or not this creature has a visual blood effect when damaged.")]
 			public bool HasBlood { get; set; } = true;
 
-			[LuauField, CopyFromV0("BloodColor")]
+			[LuauField, CopyFromV0("BloodColor"), Documentation("The color of this creature's blood. This affects the blood when they are damaged as well as the color of their carcass.")]
 			public Color3 BloodColor { get; set; } = new Color3(117, 0, 0);
 
-			[LuauField, CopyFromV0("BloodColor")]
+			[LuauField, CopyFromV0("BloodColor"), Documentation("The color of this creature's blood droplets. This should usually be the same as the blood color, but in some cases benefits from being a different brightness.")]
 			public Color3 BloodDropColor { get; set; } = new Color3(86, 36, 36);
 
-			[LuauField("Enum.Material", ValueAsLiteral = "Enum.Material.Plastic"), PluginCustomEnum(IsRobloxEnum = true, Key = "Material"), CopyFromV0("BloodMaterial")]
+			[LuauField("Enum.Material", ValueAsLiteral = "Enum.Material.Plastic"), PluginCustomEnum(IsRobloxEnum = true, Key = "Material"), CopyFromV0("BloodMaterial"), Documentation("The Roblox material that the blood renders as.")]
 			public string BloodMaterial { get; set; } = "Plastic";
 
 		}

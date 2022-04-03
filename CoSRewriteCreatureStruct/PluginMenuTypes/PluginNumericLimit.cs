@@ -5,6 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace CoSRewriteCreatureStruct.PluginMenuTypes {
+
+
+	[AttributeUsage(AttributeTargets.Property, AllowMultiple = true, Inherited = true)]
 	public class PluginNumericLimit : PluginMenuLimiterAttribute {
 
 		/// <summary>
@@ -84,14 +87,15 @@ namespace CoSRewriteCreatureStruct.PluginMenuTypes {
 			tbl.AddLiteral("GeneralLimit", Vector2(AdvisedMinimum, AdvisedMaximum));
 			tbl.AddLiteral("AbsoluteLimit", Vector2(AbsoluteMinimum, AbsoluteMaximum));
 			tbl.Add("IsInt", IsInteger);
+			tbl.Add("IsPercentage", IsPercent);
 			return tbl;
-			/*
-			if (includeDocsLiteral == null) {
-				return $"{{LimitType=\"NumericLimit\"; GeneralLimit=Vector2.new({DoubleToString(AdvisedMinimum)}, {DoubleToString(AdvisedMaximum)}); AbsoluteLimit=Vector2.new({DoubleToString(AbsoluteMinimum)}, {DoubleToString(AbsoluteMaximum)}); IsInt={IsInteger.ToString().ToLower()}}}";
-			} else {
-				return $"{{LimitType=\"NumericLimit\"; GeneralLimit=Vector2.new({DoubleToString(AdvisedMinimum)}, {DoubleToString(AdvisedMaximum)}); AbsoluteLimit=Vector2.new({DoubleToString(AbsoluteMinimum)}, {DoubleToString(AbsoluteMaximum)}); IsInt={IsInteger.ToString().ToLower()}; Documentation = {includeDocsLiteral}}}";
-			}
-			*/
+		}
+
+		public void AddToLuaTable(StringKeyTable tbl) {
+			tbl.Add("IsNumberList", true);
+			tbl.AddLiteral("GeneralLimit", Vector2(AdvisedMinimum, AdvisedMaximum));
+			tbl.AddLiteral("AbsoluteLimit", Vector2(AbsoluteMinimum, AbsoluteMaximum));
+			tbl.Add("IsInt", IsInteger);
 		}
 
 		private static string Vector2(double x, double y) {

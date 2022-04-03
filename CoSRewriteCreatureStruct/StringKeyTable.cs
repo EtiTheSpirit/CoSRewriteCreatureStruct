@@ -20,7 +20,7 @@ namespace CoSRewriteCreatureStruct {
 		/// <summary>
 		/// Whether or not this table has no entries
 		/// </summary>
-		public bool Empty => InternalData.Count == 0;
+		public bool Empty => InternalData.Count == 0 && SubTables.Count == 0;
 
 		/// <summary>
 		/// Whether or not to pretty print this table, which extends it out onto different lines.

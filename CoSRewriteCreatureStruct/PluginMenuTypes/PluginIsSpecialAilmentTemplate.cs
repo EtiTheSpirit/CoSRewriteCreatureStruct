@@ -5,6 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace CoSRewriteCreatureStruct.PluginMenuTypes {
+
+
+	[AttributeUsage(AttributeTargets.Property, AllowMultiple = true, Inherited = true)]
 	public class PluginIsSpecialAilmentTemplate : PluginMenuLimiterAttribute {
 		public override string? ValidateData() => null;
 

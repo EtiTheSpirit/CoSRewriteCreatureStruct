@@ -1,10 +1,14 @@
-﻿using System;
+﻿#pragma warning disable CS8618
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace CoSRewriteCreatureStruct.PluginMenuTypes {
+
+
+	[AttributeUsage(AttributeTargets.Property, AllowMultiple = true, Inherited = true)]
 	public class PluginCustomEnum : PluginMenuLimiterAttribute {
 
 		/// <summary>

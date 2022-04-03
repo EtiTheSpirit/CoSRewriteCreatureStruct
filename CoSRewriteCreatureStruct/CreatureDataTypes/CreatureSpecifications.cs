@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 	public class CreatureSpecifications : LuauRepresentable {
 
-		[LuauField(AllowInCharacterCopy = false)]
+		[LuauField]
 		public AttributesInfo Attributes { get; set; } = new AttributesInfo();
 
 		[LuauField, RepresentedByInstance]
@@ -53,32 +53,31 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 
 			public class ForFunctionInfo : LuauRepresentable {
 				
-				[LuauField, Documentation("If true, this species cannot be traded. Stored instances can still be traded however.")]
+				[LuauField(Category = "Ownership"), Documentation("If true, this species cannot be traded. Stored instances can still be traded however.")]
 				public bool Untradeable { get; set; }
 
-				[LuauField, CopyFromV0("ForceHideGlimmerComingSoon", true), Documentation("If true, this species will not receive glimmer. This can be used to hide the \"Glimmer Coming Soon!\" display tag.")]
+				[LuauField(Category = "Behavior"), CopyFromV0("ForceHideGlimmerComingSoon", true), Documentation("If true, this species will not receive glimmer. This can be used to hide the \"Glimmer Coming Soon!\" display tag.")]
 				public bool WillNeverGetGlimmer { get; set; }
 
-				[LuauField, CopyFromV0("DevOnly", true), Documentation("If true, this species is only usable by developers. Attempting to spawn as this species without being a developer will result in the spawn attempt being rejected.")]
+				[LuauField(Category = "Behavior"), CopyFromV0("DevOnly", true), Documentation("If true, this species is only usable by developers. Attempting to spawn as this species without being a developer will result in the spawn attempt being rejected.")]
 				public bool DeveloperUseOnly { get; set; }
 
-				[LuauField, CopyFromV0("Limited", true), Documentation("If true, this species goes in the limited gacha. Overrides ForcedGachaList.")]
+				[LuauField(Category = "Gachas"), CopyFromV0("Limited", true), Documentation("If true, this species goes in the limited gacha. Overrides ForcedGachaList.")]
 				public bool InLimitedGacha { get; set; }
 
-				[LuauField, CopyFromV0("GamepassCreature", true), Documentation("If true, the game enforces that players who do not own this species are male, increases the cost in the Shoom shop by 50%, prevents trading stored versions unless the species is owned, and prevents it from showing in gachas.")]
+				[LuauField(Category = "Ownership"), CopyFromV0("GamepassCreature", true), Documentation("If true, the game enforces that players who do not own this species are male, increases the cost in the Shoom shop by 50%, prevents trading stored versions unless the species is owned, and prevents it from showing in gachas.")]
 				public bool HasPaidContentLimits { get; set; }
 
-				[LuauField, Documentation("If true, this creature is not allowed to use any plushies that change its breath.")]
+				[LuauField(Category = "Behavior"), Documentation("If true, this creature is not allowed to use any plushies that change its breath.")]
 				public bool PreventPlushieBreathSwaps { get; set; }
 
-				[LuauField, Documentation("If defined, this will override the gacha this creature appears in (overrides its default gacha). If this creature has paid content limits, this will override it and cause it to show in this gacha anyway.")]
+				[LuauField(Category = "Gachas"), Documentation("If defined, this will override the gacha this creature appears in (overrides its default gacha). If this creature has paid content limits, this will override it and cause it to show in this gacha anyway.")]
 				public string ForcedGachaList { get; set; } = string.Empty;
 
-				[LuauField, PluginNumericLimit(1, 100), Documentation("If the gacha this is being placed into supports weighted selections, this is the chance that this, as an individual item, will be selected.")]
+				[LuauField(Category = "Gachas"), PluginNumericLimit(1, 100), Documentation("If the gacha this is being placed into supports weighted selections, this is the chance that this, as an individual item, will be selected.")]
 				public double WeightedGachaChance { get; set; } = 100;
 
-				// TODO: Limit for this
-				[LuauField]
+				[LuauField(Category = "Behavior"), PluginStringLimit(true, false, true), PluginNumericLimit(0, 255, true)]
 				public string LimitTradingToGroupRanks { get; set; } = string.Empty;
 
 			}
@@ -132,10 +131,10 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 				[LuauField, CopyFromV0("Weight"), PluginNumericLimit(1, AdvisedMaximum = 225000), Documentation("Creature pickup weight determines which creatures it can carry vs. be carried by. Creatures with larger pickup weights can pick up those with equal or smaller weights.")]
 				public double PickupWeight { get; set; }
 
-				[LuauField(AllowInCharacterCopy = false), CopyFromV0("Tier"), PluginNumericLimit(1, 5, true), Documentation("Tier is a general descriptor of creature size. It has no mechanical functions minus shop price, and mostly exists for the players.")]
+				[LuauField, CopyFromV0("Tier"), PluginNumericLimit(1, 5, true), Documentation("Tier is a general descriptor of creature size. It has no mechanical functions minus shop price, and mostly exists for the players.")]
 				public double Tier { get; set; }
 
-				[LuauField(AllowInCharacterCopy = false), CopyFromV0("GrowthRate", CustomConversionCallback = CopyBehavior.CalcTimeToGrow), PluginNumericLimit(1, AdvisedMaximum = 120), Documentation("The amount of minutes it takes to get from age 1 to age 100.")]
+				[LuauField, CopyFromV0("GrowthRate", CustomConversionCallback = CopyBehavior.CalcTimeToGrow), PluginNumericLimit(1, AdvisedMaximum = 120), Documentation("The amount of minutes it takes to get from age 1 to age 100.")]
 				public double MinutesToGrow { get; set; }
 
 			}
@@ -355,7 +354,7 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 					[LuauField, CopyFromV0(null, CustomConversionCallback = CopyBehavior.GetHealRadiusValuesForSpecies), Documentation("If true, the passive healing only applies to packmates.")]
 					public bool PassiveHealingPackOnly { get; set; } = true;
 
-					[LuauField, CopyFromV0("KeenObserver", true), Documentation("If true, players using this species can see a healthbar over other creatures.")]
+					[LuauField, CopyFromV0("KeenObserver", true), Documentation("If true, players using this species can see a healthbar over other creatures at all times, as well as some status effects.")]
 					public bool SeeHealth { get; set; } = false;
 					
 

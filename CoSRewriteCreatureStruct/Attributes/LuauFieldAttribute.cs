@@ -14,12 +14,6 @@ namespace CoSRewriteCreatureStruct.Attributes {
 		/// If this is a Luau primitive or Roblox type, this is the type. Should be <see langword="null"/> otherwise.
 		/// </summary>
 		public string? LuauType { get; } = null;
-
-		/// <summary>
-		/// Whether or not this field is allowed in the copy of the data intended for the character. True by default.
-		/// </summary>
-		[Obsolete("This is manually defined for now (see Program.cs) and so this property does nothing.")]
-		public bool AllowInCharacterCopy { get; set; } = true;
 		
 		/// <summary>
 		/// Whether or not this field is defined during runtime. If true, this will not be included in the template data for the plugin,
@@ -38,6 +32,11 @@ namespace CoSRewriteCreatureStruct.Attributes {
 		/// This makes it possible to reference tables or other variables in the generated script.
 		/// </summary>
 		public string? KeyAsLiteral { get; set; }
+
+		/// <summary>
+		/// The category that this field is a part of in the custom properties browser. Null for default category.
+		/// </summary>
+		public string? Category { get; set; }
 
 		/// <summary>
 		/// Create a new packet of information for a Luau field.

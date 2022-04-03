@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CoSRewriteCreatureStruct.PluginMenuTypes {
 
-	[AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
+	[AttributeUsage(AttributeTargets.Property, AllowMultiple = true, Inherited = true)]
 	public abstract class PluginMenuLimiterAttribute : Attribute {
 
 		/// <summary>

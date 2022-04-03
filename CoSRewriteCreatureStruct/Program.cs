@@ -1,5 +1,6 @@
 ﻿using CoSRewriteCreatureStruct.CreatureDataTypes;
 using System;
+using System.Diagnostics;
 using System.Text;
 
 namespace CoSRewriteCreatureStruct {
@@ -90,14 +91,27 @@ end";
 		// as well as the Luau type definition
 		// You should share this with your peers
 
-		public static void Main(string[] args) {
+		public static void Main() {
+
+			Console.ForegroundColor = ConsoleColor.Green;
+			Console.WriteLine("Generating creature struct...");
+
 			Creature creature = new();
 
+			Console.ForegroundColor = ConsoleColor.DarkGreen;
+			Console.WriteLine("Converting to Luau template object...");
 			string asLuaObject = creature.ToLuaObject();
+
+			Console.WriteLine("Converting to plugin template object...");
 			string asPluginObject = creature.ToPluginObject();
+
+			Console.WriteLine("Generating Luau type definition...");
 			string asType = creature.ToType();
+
+			Console.WriteLine("Generating runtime structure for player characters...");
 			string asInstanceType = creature.Specifications.ToInstanceType();
 
+			Console.WriteLine("Finalizing code generation...");
 			StringBuilder result = new StringBuilder();
 			result.AppendLine(BASE_INFO);
 			result.AppendLine(asLuaObject);
@@ -146,6 +160,7 @@ end";
 })");
 			typeDefsModule.AppendLine("return retData");
 
+			Console.WriteLine("Writing files...");
 			File.WriteAllText("./ProcGen.lua", result.ToString());
 			File.WriteAllText("./CreatureTypeDefs.lua", typeDefsModule.ToString());
 
@@ -153,6 +168,31 @@ end";
 			File.WriteAllText("./DEBUG_testobject.lua", asLuaObject);
 			File.WriteAllText("./DEBUG_testplugin.lua", asPluginObject);
 			File.WriteAllText("./DEBUG_testtypedef.lua", asType);
+
+
+			Console.ForegroundColor = ConsoleColor.Green;
+			Console.Write("Done! Would you like to open the files? [Y/N] >");
+			FileInfo procgen = new FileInfo("./ProcGen.lua");
+			FileInfo ctd = new FileInfo("./CreatureTypeDefs.lua");
+			while (true) {
+				ConsoleKeyInfo key = Console.ReadKey(true);
+				if (key.Key == ConsoleKey.Y) {
+					//Process.Start("notepad++", procgen.FullName);
+					//Process.Start("notepad++", ctd.FullName);
+					Util.OpenDefaultEditor(procgen);
+					Util.OpenDefaultEditor(ctd);
+					break;
+				} else if (key.Key == ConsoleKey.N) {
+					break;
+				} else {
+					Console.Beep(); // no
+				}
+			}
+			/*
+			Console.Write("Done! Press any key to quit...");
+			Console.ReadKey(true);
+			*/
+			Environment.Exit(0);
 		}
 	}
 }
