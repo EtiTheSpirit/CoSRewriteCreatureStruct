@@ -46,10 +46,10 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 
 
 			[LuauField("typeof(DEFAULT_PALETTE)", ValueAsLiteral = "table.shallowCopy(DEFAULT_PALETTE)"), CopyFromV0("Palette1", CustomConversionCallback = CopyBehavior.CopyPalette)]
-			public Instance? Palette1 { get; set; }
+			public Palette Palette1 { get; set; } = new Palette();
 
 			[LuauField("typeof(DEFAULT_PALETTE)", ValueAsLiteral = "table.shallowCopy(DEFAULT_PALETTE)"), CopyFromV0("Palette2", CustomConversionCallback = CopyBehavior.CopyPalette)]
-			public Instance? Palette2 { get; set; }
+			public Palette Palette2 { get; set; } = new Palette();
 
 		}
 

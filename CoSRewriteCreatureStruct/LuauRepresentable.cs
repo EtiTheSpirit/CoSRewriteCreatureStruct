@@ -167,6 +167,7 @@ namespace CoSRewriteCreatureStruct {
 				if (value.GetType() == typeof(bool)) return "boolean";
 				if (value.GetType() == typeof(StatLimit)) return "Vector2";
 				if (value.GetType() == typeof(Color3)) return "Color3";
+				if (value.GetType() == typeof(DumbColorSequence)) return "ColorSequence";
 				return "any";
 			}
 
@@ -262,6 +263,9 @@ namespace CoSRewriteCreatureStruct {
 				builder.Append(" = ");
 
 				StringKeyTable data = new StringKeyTable();
+				StringKeyTable typeInfo = data.GetOrCreateTable("TypeInfo");
+				typeInfo.Add("Type", GetLuauTypeOf(DefaultValue));
+
 				if (PrimaryLimit is null) {
 					if (DefaultValue is LuauRepresentable luauObject) {
 						builder.AppendLine("{");
