@@ -168,7 +168,7 @@ namespace CoSRewriteCreatureStruct {
 				if (value.GetType() == typeof(StatLimit)) return "Vector2";
 				if (value.GetType() == typeof(Color3)) return "Color3";
 				if (value.GetType() == typeof(DumbColorSequence)) return "ColorSequence";
-				if (value.GetType() == typeof(Instance)) return ((Instance)value).Type;
+				if (value.GetType() == typeof(Instance)) return "Instance";
 				return "any";
 			}
 
@@ -184,15 +184,21 @@ namespace CoSRewriteCreatureStruct {
 					throw new InvalidOperationException($"Failed to create field \"{Name}\" in an object of type {ofObject.GetType().FullName} because its limit is not valid: {msg}");
 				}
 
-				Documentation = prop.GetCustomAttribute<DocumentationAttribute>()?.Documentation;
+				DocumentationAttribute? doc = prop.GetCustomAttribute<DocumentationAttribute>();
+				Documentation = doc?.Documentation;
 				IsInstanceObject = prop.GetCustomAttribute<RepresentedByInstanceAttribute>() != null;
 				CopyFromV0 = prop.GetCustomAttribute<CopyFromV0Attribute>();
-				Category = attr.Category;
+				Category = doc?.Category;
 				IsSpecialEffectContainer = prop.GetCustomAttribute<PluginIsSpecialAilmentTemplate>() != null;
+
+				if (attr.RuntimeOnly && attr.PluginOnly) {
+					throw new InvalidOperationException("The LuauField attribute on " + prop.Name + " mandates both Runtime Only and Plugin Only, which contradict eachother. Ensure that at most only one of the two are enabled.");
+				}
 			}
 
 			public void AppendToCodeTable(StringBuilder builder, int indents = 1) {
 				if (FieldInfo.RuntimeOnly) return;
+				if (FieldInfo.PluginOnly) return;
 
 				string prefix = string.Empty;
 				if (indents > 0) {
@@ -234,7 +240,25 @@ namespace CoSRewriteCreatureStruct {
 						builder.Append("nil");
 
 					} else if (DefaultValue is Array array) {
-						builder.Append("{}");
+						/*
+						object? v = array.GetValue(0);
+						if (v is LuauRepresentable representable) {
+							builder.AppendLine("{");
+							builder.Append(prefix);
+							builder.Append('\t');
+							builder.AppendLine("__TEMPLATE = {");
+							foreach (ExportableField subField in representable.GetExportableFields()) {
+								if (subField.FieldInfo.RuntimeOnly) continue;
+								subField.AppendToCodeTable(builder, indents + 2);
+							}
+							builder.Append(prefix);
+							builder.Append('\t');
+							builder.AppendLine("}");
+							builder.Append(prefix);
+							builder.Append('}');
+						} else {*/
+							builder.Append("{}");
+						//}
 
 					} else if (DefaultValue is Color3 color) {
 						builder.Append(color);
@@ -264,8 +288,11 @@ namespace CoSRewriteCreatureStruct {
 				builder.Append(" = ");
 
 				StringKeyTable data = new StringKeyTable();
-				StringKeyTable typeInfo = data.GetOrCreateTable("TypeInfo");
-				typeInfo.Add("Type", GetLuauTypeOf(DefaultValue));
+				data.Add("Type", GetLuauTypeOf(DefaultValue));
+				data.Add("DefaultValue", DefaultValue, lazySkip: true);
+				if (FieldInfo.PluginReflectToProperty != null) {
+					data.Add("ReflectTo", FieldInfo.PluginReflectToProperty);
+				}
 
 				if (PrimaryLimit is null) {
 					if (DefaultValue is LuauRepresentable luauObject) {
@@ -299,6 +326,7 @@ namespace CoSRewriteCreatureStruct {
 						data.Add("PluginInfo", PrimaryLimit.ToLuaTable());
 						if (CopyFromV0 != null) CopyFromV0.AppendToLuaTable(data.GetOrCreateTable("DataUpgradeInfo"));
 						if (Documentation != null) data.GetOrCreateTable("PluginInfo").Add("Documentation", Documentation);
+						if (Category != null) data.GetOrCreateTable("PluginInfo").Add("Category", Category);
 						if (IsSpecialEffectContainer) data.GetOrCreateTable("PluginInfo").Add("IsStatusContainer", true);
 
 						if (PrimaryLimit is PluginStringLimit strLim && strLim.IsList) {
@@ -319,6 +347,7 @@ namespace CoSRewriteCreatureStruct {
 						data.Add("PluginInfo", PrimaryLimit.ToLuaTable());
 						if (CopyFromV0 != null) CopyFromV0.AppendToLuaTable(data.GetOrCreateTable("DataUpgradeInfo"));
 						if (Documentation != null) data.GetOrCreateTable("PluginInfo").Add("Documentation", Documentation);
+						if (Category != null) data.GetOrCreateTable("PluginInfo").Add("Category", Category);
 						if (IsSpecialEffectContainer) data.GetOrCreateTable("PluginInfo").Add("IsStatusContainer", true);
 						data.AppendToBuilder(builder, indents);
 
@@ -350,6 +379,8 @@ namespace CoSRewriteCreatureStruct {
 			}
 
 			public void AppendToType(StringBuilder builder, int indents = 1) {
+				if (FieldInfo.PluginOnly) return;
+
 				string prefix = string.Empty;
 				if (indents > 0) {
 					prefix = new string('\t', indents);
@@ -397,6 +428,8 @@ namespace CoSRewriteCreatureStruct {
 			}
 
 			public void AppendToInstanceType(StringBuilder builder, int indents = 1) {
+				if (FieldInfo.PluginOnly) return;
+
 				LuauRepresentable? luauObject = DefaultValue as LuauRepresentable;
 				if ((DefaultValue is Array || luauObject != null) && IsInstanceObject) {
 					string prefix = string.Empty;

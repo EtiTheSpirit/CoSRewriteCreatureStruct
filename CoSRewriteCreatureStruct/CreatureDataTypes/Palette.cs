@@ -13,14 +13,14 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 		[LuauField(RuntimeOnly = true)]
 		public double Index { get; set; }
 
-		[LuauField, Documentation("Whether or not this palette shows in the customizer if it is unlocked.")]
-		public bool Enabled { get; set; }
+		[LuauField, Documentation("Whether or not this palette shows in the customizer if it is unlocked.", "Palette Usage")]
+		public bool Enabled { get; set; } = true;
 
-		[LuauField, Documentation("If not empty, this contains the instructions on how to unlock this palette.")]
+		[LuauField, Documentation("If not empty, this contains the instructions on how to unlock this palette.", "Palette Usage")]
 		public string UnlockRequirement { get; set; } = string.Empty;
 
-		[LuauField, PluginNumericLimit(1, 12, true), Documentation("The amount of colors in this palette that are used.")]
-		public double NumberOfColorsToUse { get; set; }
+		[LuauField, PluginNumericLimit(1, 12, true), Documentation("The amount of colors in this palette that are used.", "Palette Usage")]
+		public double NumberOfColorsToUse { get; set; } = 12;
 
 		[LuauField]
 		public ColorsInfo Colors { get; set; } = new ColorsInfo();

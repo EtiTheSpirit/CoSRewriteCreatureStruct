@@ -9,5 +9,9 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 	/// <summary>
 	/// A crude representation of a ColorSequence
 	/// </summary>
-	public class DumbColorSequence { }
+	public class DumbColorSequence {
+
+		public override string ToString() => "ColorSequence.new(Color3.new())";
+
+	}
 }

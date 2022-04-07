@@ -37,6 +37,15 @@ namespace CoSRewriteCreatureStruct.Attributes {
 		GetHealRadiusValuesForSpecies
 	}
 
+	/// <summary>
+	/// Unique display behaviors for plugin values. This can be used to disable some properties that stop being applicable when others are set.
+	/// </summary>
+	public enum SpecialDisplayBehavior {
+
+
+
+	}
+
 	public enum PercentType {
 
 		NotPercentage,

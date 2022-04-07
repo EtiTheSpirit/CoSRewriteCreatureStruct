@@ -15,11 +15,17 @@ namespace CoSRewriteCreatureStruct.Attributes {
 		public string Documentation { get; }
 
 		/// <summary>
+		/// The category of this property.
+		/// </summary>
+		public string? Category { get; }
+
+		/// <summary>
 		/// Create a new attribute storing documentation for this element in the plugin. Supports roblox's rich text.
 		/// </summary>
 		/// <param name="documentation"></param>
-		public DocumentationAttribute(string documentation) {
+		public DocumentationAttribute(string documentation, string? category = null) {
 			Documentation = documentation;
+			Category = category;
 		}
 
 	}

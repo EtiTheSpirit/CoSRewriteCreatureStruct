@@ -29,5 +29,9 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 			Max = max;
 		}
 
+		public override string ToString() {
+			return $"Vector2.new({Min}, {Max})";
+		}
+
 	}
 }

@@ -1,4 +1,5 @@
-﻿using CoSRewriteCreatureStruct.PluginMenuTypes;
+﻿using CoSRewriteCreatureStruct.CreatureDataTypes;
+using CoSRewriteCreatureStruct.PluginMenuTypes;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -59,6 +60,32 @@ namespace CoSRewriteCreatureStruct {
 		/// <param name="table"></param>
 		public void Add(string key, StringKeyTable table) {
 			SubTables.Add(key, table);
+		}
+
+		/// <summary>
+		/// Calls the <see langword="string"/>, <see langword="double"/>, <see langword="bool"/>, or <see cref="StringKeyTable"/> Add method based on the input. Supports <see langword="null"/>.
+		/// </summary>
+		/// <param name="key"></param>
+		/// <param name="value"></param>
+		/// <param name="explicitlyAddNil">If true, and if the value is null, a nil index will be added. This has no difference to not defining the value, with the exception of Luau types.</param>
+		/// <param name="lazySkip">If true, instead of raising <see cref="NotSupportedException"/> when an incompatible value is passed in, the call will just do nothing.</param>
+		/// <exception cref="NotSupportedException"></exception>
+		public void Add(string key, object? value, bool explicitlyAddNil = false, bool lazySkip = false) {
+			if (value is null) {
+				if (explicitlyAddNil) AddLiteral(key, "nil");
+			} else if (value is string text) {
+				Add(key, text);
+			} else if (value is double number) {
+				Add(key, number);
+			} else if (value is bool boolean) {
+				Add(key, boolean);
+			} else if (value is StringKeyTable table) {
+				Add(key, table);
+			} else if (value is DumbColorSequence || value is StatLimit || value is Color3) {
+				AddLiteral(key, value.ToString()!);
+			} else {
+				if (!lazySkip) throw new NotSupportedException($"The given value type ({value.GetType().FullName}) cannot be added to a Lua table.");
+			}
 		}
 
 		/// <summary>
