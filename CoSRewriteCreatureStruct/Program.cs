@@ -46,6 +46,7 @@ local DEFAULT_SOUND = {
 	ID = ""rbxassetid://0"";
 	Volume = 0.5;
 	Range = 600;
+	Pitch = 1;
 };
 ";
 
@@ -167,7 +168,7 @@ end";
 			File.WriteAllText("./DEBUG_testtypedef.lua", asType);
 
 			Console.ForegroundColor = ConsoleColor.Green;
-			Console.Write("Done! Would you like to open the files? [Y/N] >");
+			Console.Write("Done! Would you like to open the files? [Y/N] > ");
 			FileInfo procgen = new FileInfo("./ProcGen.lua");
 			FileInfo ctd = new FileInfo("./CreatureTypeDefs.lua");
 			while (true) {

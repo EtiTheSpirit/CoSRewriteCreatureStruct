@@ -14,7 +14,7 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 		public double Index { get; set; }
 
 		[LuauField, Documentation("Whether or not this palette shows in the customizer if it is unlocked.", "Palette Usage")]
-		public bool Enabled { get; set; } = true;
+		public bool Enabled { get; set; } = false;
 
 		[LuauField, Documentation("If not empty, this contains the instructions on how to unlock this palette.", "Palette Usage")]
 		public string UnlockRequirement { get; set; } = string.Empty;

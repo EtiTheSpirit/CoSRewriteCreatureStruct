@@ -8,6 +8,67 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Lua\CopyBehaviors\CalcTimeToGrow.lua" />
+    <None Remove="Lua\CopyBehaviors\CloneObject.lua" />
+    <None Remove="Lua\CopyBehaviors\ConvFlySpeed.lua" />
+    <None Remove="Lua\CopyBehaviors\ConvHealRate.lua" />
+    <None Remove="Lua\CopyBehaviors\CopyCharacterModel.lua" />
+    <None Remove="Lua\CopyBehaviors\CopyPalette.lua" />
+    <None Remove="Lua\CopyBehaviors\CreateSound.lua" />
+    <None Remove="Lua\CopyBehaviors\GetAnimationID.lua" />
+    <None Remove="Lua\CopyBehaviors\GetAquaAffinity.lua" />
+    <None Remove="Lua\CopyBehaviors\GetBreathIfString.lua" />
+    <None Remove="Lua\CopyBehaviors\GetDegradedSpeedForClass.lua" />
+    <None Remove="Lua\CopyBehaviors\GetHealRadiusValuesForSpecies.lua" />
+    <None Remove="Lua\CopyBehaviors\GetStudTurnRadius.lua" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Lua\CopyBehaviors\GetStudTurnRadius.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Lua\CopyBehaviors\CalcTimeToGrow.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Lua\CopyBehaviors\CloneObject.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Lua\CopyBehaviors\ConvFlySpeed.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Lua\CopyBehaviors\ConvHealRate.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Lua\CopyBehaviors\CopyCharacterModel.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Lua\HardCodedCopyBehaviors\CopyPalette.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Lua\HardCodedCopyBehaviors\CreateSound.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Lua\CopyBehaviors\GetAnimationID.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Lua\HardCodedCopyBehaviors\GetAquaAffinity.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Lua\CopyBehaviors\GetBreathIfString.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Lua\CopyBehaviors\GetDegradedSpeedForClass.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Lua\HardCodedCopyBehaviors\GetHealRadiusValuesForSpecies.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
 
@@ -15,6 +76,10 @@
     <None Update="CreatureTypeDefsBase.lua">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Lua\DisplayBehaviors\" />
   </ItemGroup>
 
 </Project>

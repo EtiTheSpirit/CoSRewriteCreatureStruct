@@ -9,6 +9,10 @@ using System.Threading.Tasks;
 namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 	public class CreatureSpecifications : LuauRepresentable {
 
+		public const string LIMIT_DESC = @"
+
+When stacking, the effect will have this value brought up to be <i>at least</i> equal to the left value. Additionally, this creature cannot stack it higher than the right value. If it is already higher, then this does nothing. The maximum can be set to 0 to use the game's global max.";
+
 		[LuauField]
 		public AttributesInfo Attributes { get; set; } = new AttributesInfo();
 
@@ -212,7 +216,7 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 
 				public class StatusEffectBase : LuauRepresentable {
 
-					[LuauField(PluginOnly = true, PluginReflectToProperty = "Name"), Documentation("The status effect that this represents.", "Attributes")]
+					[LuauField(PluginOnly = true, PluginReflectToProperty = "Name"), PluginCustomEnum(AllowNone = false, IsRobloxEnum = false, Key = "StatusEffectRegistry", ReferencesSonariaConstants = false), Documentation("The status effect that this represents.", "Attributes")]
 					public string Effect { get; set; } = string.Empty;
 
 				}
@@ -223,16 +227,16 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 					[LuauField, PluginNumericLimit(1, AdvisedMinimum = 20, AdvisedMaximum = 175), Documentation("The maximum reach of this effect.", "Behavior")]
 					public double Range { get; set; } = 0;
 
-					[LuauField, Documentation("The level stack limits when a victim is at the exact closest possible range of this AoE. Should generally have high values.", "Behavior")]
+					[LuauField, Documentation("The level stack limits when a victim is at the exact closest possible range of this AoE. Should generally have high values." + LIMIT_DESC, "Behavior")]
 					public StatLimit StackLevelsAtClosest { get; set; } = new StatLimit(0, 0);
 
-					[LuauField, Documentation("The level stack limits when a victim is at the exact furthest possible range of this AoE. Should generally have low values.", "Behavior")]
+					[LuauField, Documentation("The level stack limits when a victim is at the exact furthest possible range of this AoE. Should generally have low values." + LIMIT_DESC, "Behavior")]
 					public StatLimit StackLevelsAtFurthest { get; set; } = new StatLimit(0, 0);
 
-					[LuauField, Documentation("The duration stack limits when a victim is at the exact closest possible range of this AoE. Should generally have high values.", "Behavior")]
+					[LuauField, Documentation("The duration stack limits when a victim is at the exact closest possible range of this AoE. Should generally have high values." + LIMIT_DESC, "Behavior")]
 					public StatLimit StackDurationAtClosest { get; set; } = new StatLimit(0, 0);
 
-					[LuauField, Documentation("The duration stack limits when a victim is at the exact furthest possible range of this AoE. Should generally have low values.", "Behavior")]
+					[LuauField, Documentation("The duration stack limits when a victim is at the exact furthest possible range of this AoE. Should generally have low values." + LIMIT_DESC, "Behavior")]
 					public StatLimit StackDurationAtFurthest { get; set; } = new StatLimit(0, 0);
 
 					[LuauField, PluginCustomEnum(ReferencesSonariaConstants = false, Key = "StatusEffectRegistry", AllowNone = false), Documentation("The effect that this creature must have in order for this AoE to activate. This is usually a status effect for the state of the ability.", "Behavior")]
@@ -257,10 +261,10 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 					[LuauField, PluginNumericLimit(0, AdvisedMaximum = 30), Documentation("If stacking is enabled, this is the amount added per occurrence. If it is disabled, this is what the value is set to.", "Limits")]
 					public double Duration { get; set; } = 0;
 
-					[LuauField, Documentation("The stacking limits for the level. The left value, if not zero, denotes the required minimum (this will raise the effect to that level if it is not there already). The right value, if not zero, is the highest this creature can stack the effect. It cannot cause the stack to go higher.", "Limits")]
+					[LuauField, Documentation("The stacking limits for the level." + LIMIT_DESC, "Limits")]
 					public StatLimit StackLevelLimits { get; set; } = new StatLimit();
 
-					[LuauField, Documentation("The stacking limits for the duration. The left value, if not zero, denotes the required minimum (this will raise the effect to that duration if it is not there already). The right value, if not zero, is the highest this creature can stack the effect. It cannot cause the stack to go higher.", "Limits")]
+					[LuauField, Documentation("The stacking limits for the duration." + LIMIT_DESC, "Limits")]
 					public StatLimit StackDurationLimits { get; set; } = new StatLimit();
 
 					[LuauField, PluginNumericLimit(0, 100), Documentation("The chance that this has to apply, or 0 or 100 to always apply.", "Behavior")]
@@ -350,16 +354,19 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 					[LuauField, CopyFromV0("Glider", true), Documentation("If true, then this creature is is only capable of gliding, not powered flight. Does nothing if the creature is not a flier.", "Capabilities")]
 					public bool OnlyGlide { get; set; } = false;
 
-					[LuauField, CopyFromV0(null, CustomConversionCallback = CopyBehavior.GetHealRadiusValuesForSpecies), Documentation("If greater than zero, this creature is a passive healer.", "Passive Healing")]
+					[LuauField, Documentation("If greater than zero, this creature is a passive healer.", "Passive Healing")]
 					public double PassiveHealingRange { get; set; } = 0;
 
-					[LuauField, CopyFromV0(null, CustomConversionCallback = CopyBehavior.GetHealRadiusValuesForSpecies), Documentation("This is the percentage of nearby players' health that increases per second.", "Passive Healing")]
+					[LuauField, Documentation("This is the percentage of nearby players' health that increases per second.", "Passive Healing")]
 					public double PassiveHealingPerSecond { get; set; } = 0;
 
-					[LuauField, CopyFromV0(null, CustomConversionCallback = CopyBehavior.GetHealRadiusValuesForSpecies), Documentation("If true, players nearby will only heal if this creature is resting.", "Passive Healing")]
-					public bool PassiveHealWhenRestingOnly { get; set; } = true;
+					[LuauField, Documentation("If true, the passive healing will only work if this creature is resting. If false, it works always (where allowed).", "Passive Healing")]
+					public bool PassiveHealWhenSelfRest { get; set; } = true;
 
-					[LuauField, CopyFromV0(null, CustomConversionCallback = CopyBehavior.GetHealRadiusValuesForSpecies), Documentation("If true, the passive healing only applies to packmates.", "Passive Healing")]
+					[LuauField, Documentation("If true, the passive healing will only work if the person being healed is resting. If false, it works always (where allowed).", "Passive Healing")]
+					public bool PassiveHealWhenOthersRest { get; set; } = true;
+
+					[LuauField, Documentation("If true, the passive healing only applies to packmates.", "Passive Healing")]
 					public bool PassiveHealingPackOnly { get; set; } = true;
 
 					[LuauField, CopyFromV0("KeenObserver", true), Documentation("If true, players using this species can see a healthbar over other creatures at all times, as well as some status effects.", "Capabilities")]
