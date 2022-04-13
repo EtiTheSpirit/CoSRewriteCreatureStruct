@@ -15,8 +15,8 @@
 		PassiveHealingPackOnly
 	--]]
 
-	local container = newCreature.Specifications.MainInfo.Capabilities.Passive
-	local isPackHealer = legacyCreature.Data.Stats:FindFirstChild("Healer")
+	local container = (newCreature::any).Specifications.MainInfo.Capabilities.Passive
+	local isPackHealer = (legacyCreature::any).Data.Stats:FindFirstChild("Healer")
 	if isPackHealer then
 		-- These values are what the game used in old live if the Healer tag was present.
 		container:SetAttribute("PassiveHealingRange", 20)
@@ -27,7 +27,7 @@
 	elseif legacyCreature.Name == "Ura" then
 		-- These values are what the game used in old live if the species was Ura.
 		container:SetAttribute("PassiveHealingRange", 50)
-		container:SetAttribute("PassiveHealingPerSecond", 0.01) -- Technically this is 5% per 5 seconds. Oh well.
+		container:SetAttribute("PassiveHealingPerSecond", 1) -- Technically this is 5% per 5 seconds. Oh well.
 		container:SetAttribute("PassiveHealWhenSelfRest", true)
 		container:SetAttribute("PassiveHealWhenOthersRest", true)
 		container:SetAttribute("PassiveHealingPackOnly", false)

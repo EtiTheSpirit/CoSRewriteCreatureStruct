@@ -10,7 +10,7 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 	public class CreatureVisuals : LuauRepresentable {
 
 		[LuauField]
-		public ModelsInfo Models { get; set; } = new ModelsInfo();
+		public LuauRepresentable Models { get; set; } = new ModelsInfo();
 
 		[LuauField]
 		public PalettesInfo Palettes { get; set; } = new PalettesInfo();
@@ -28,17 +28,17 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 
 		public class ModelsInfo : LuauRepresentable {
 
-			[LuauField("Model", RuntimeOnly = true), CopyFromV0("Child", CustomConversionCallback = CopyBehavior.CopyCharacterModel)]
-			public Instance? Child { get; set; }
+			[LuauField("Model")]
+			public Instance Child { get; set; } = new Instance();
 
-			[LuauField("Model", RuntimeOnly = true), CopyFromV0("Teen", CustomConversionCallback = CopyBehavior.CopyCharacterModel)]
-			public Instance? Teen { get; set; }
+			[LuauField("Model")]
+			public Instance Teen { get; set; } = new Instance();
 
-			[LuauField("Model", RuntimeOnly = true), CopyFromV0("Adult", CustomConversionCallback = CopyBehavior.CopyCharacterModel)]
-			public Instance? Adult { get; set; }
+			[LuauField("Model")]
+			public Instance Adult { get; set; } = new Instance();
 
-			[LuauField("Model", RuntimeOnly = true), CopyFromV0("AdultCustomizer", CustomConversionCallback = CopyBehavior.CopyCharacterModel)]
-			public Instance? AdultCustomizer { get; set; }
+			[LuauField("Model")]
+			public Instance AdultCustomizer { get; set; } = new Instance();
 
 		}
 

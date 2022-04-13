@@ -9,7 +9,6 @@
 
   <ItemGroup>
     <None Remove="Lua\CopyBehaviors\CalcTimeToGrow.lua" />
-    <None Remove="Lua\CopyBehaviors\CloneObject.lua" />
     <None Remove="Lua\CopyBehaviors\ConvFlySpeed.lua" />
     <None Remove="Lua\CopyBehaviors\ConvHealRate.lua" />
     <None Remove="Lua\CopyBehaviors\CopyCharacterModel.lua" />
@@ -21,6 +20,50 @@
     <None Remove="Lua\CopyBehaviors\GetDegradedSpeedForClass.lua" />
     <None Remove="Lua\CopyBehaviors\GetHealRadiusValuesForSpecies.lua" />
     <None Remove="Lua\CopyBehaviors\GetStudTurnRadius.lua" />
+    <None Remove="Lua\HardCodedCopyBehaviors\ConvertDiet.lua" />
+    <None Remove="Lua\HardCodedCopyBehaviors\CopyCharacterModels.lua" />
+    <None Remove="Lua\HardCodedCopyBehaviors\StatusEffects.lua" />
+    <None Remove="Lua\IntrinsicProperties\IsWarden.lua" />
+    <None Remove="Lua\Templates\AniSpecialBreathLimit.lua" />
+    <None Remove="Lua\Templates\CreatureTypeDefsBase.lua" />
+    <None Remove="Lua\Templates\IntrinsicCommon.lua" />
+    <None Remove="Lua\Templates\PluginBehaviors.lua" />
+    <None Remove="Lua\Templates\ProcGenBase.lua" />
+    <None Remove="Lua\Templates\ProcGenCloser.lua" />
+    <None Remove="Lua\TypeGenerators\GenerateCharacterType.lua" />
+    <None Remove="Lua\TypeGenerators\GenerateSpeciesType.lua" />
+    <None Remove="Lua\TypeGenerators\Resources\CharacterInfoProvider.lua" />
+    <None Remove="Lua\TypeGenerators\Resources\SpeciesInfoProvider.lua" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Lua\HardCodedCopyBehaviors\StatusEffects.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Lua\HardCodedCopyBehaviors\CopyCharacterModels.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Lua\HardCodedCopyBehaviors\ConvertDiet.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Lua\HardCodedCopyBehaviors\AniSpecialBreathLimit.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Lua\Templates\IntrinsicCommon.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Lua\IntrinsicProperties\IsWarden.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -31,9 +74,6 @@
 
   <ItemGroup>
     <Content Include="Lua\CopyBehaviors\CalcTimeToGrow.lua">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Lua\CopyBehaviors\CloneObject.lua">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Lua\CopyBehaviors\ConvFlySpeed.lua">
@@ -66,20 +106,34 @@
     <Content Include="Lua\HardCodedCopyBehaviors\GetHealRadiusValuesForSpecies.lua">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Lua\Templates\CreatureTypeDefsBase.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Lua\Templates\PluginBehaviors.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Lua\Templates\ProcGenBase.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Lua\Templates\ProcGenCloser.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Lua\TypeGenerators\GenerateCharacterType.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Lua\TypeGenerators\GenerateSpeciesType.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Lua\TypeGenerators\Resources\CharacterInfoProvider.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Lua\TypeGenerators\Resources\SpeciesInfoProvider.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="CreatureTypeDefsBase.lua">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Lua\DisplayBehaviors\" />
   </ItemGroup>
 
 </Project>

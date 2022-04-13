@@ -3,8 +3,8 @@
 	-- TEMP: Mimic values
 	if legacyObject then
 		-- May be nil (mainly for FlySpeed)
-		(newObject::Instance):SetAttribute(attrName, (legacyObject::NumberValue).Value)
+		(newObject::Instance):SetAttribute(attrName::string, (legacyObject::NumberValue).Value)
 	else
-		(newObject::Instance):SetAttribute(attrName, 0)
+		(newObject::Instance):SetAttribute(attrName::string, 0)
 	end
 end;

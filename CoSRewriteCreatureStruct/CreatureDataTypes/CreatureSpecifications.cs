@@ -11,7 +11,8 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 
 		public const string LIMIT_DESC = @"
 
-When stacking, the effect will have this value brought up to be <i>at least</i> equal to the left value. Additionally, this creature cannot stack it higher than the right value. If it is already higher, then this does nothing. The maximum can be set to 0 to use the game's global max.";
+When stacking, the effect will have this value brought up to be <i>at least</i> equal to the left value. Additionally, this creature cannot stack it higher than the right value. If it is already higher, then this does nothing. The maximum can be set to 0 to use the game's global max.
+<b>IMPORTANT:</b> When <i>not</i> stacking, then this will attempt to directly set the level or duration to the given value. If the creature already has the effect, and its level or duration is less than the minimum value here, <b>this does NOTHING instead of being ""bumped up"" like it does when stacking.</b> This can be used to skip adding an effect if someone already has it below a certain level.";
 
 		[LuauField]
 		public AttributesInfo Attributes { get; set; } = new AttributesInfo();
@@ -118,6 +119,15 @@ When stacking, the effect will have this value brought up to be <i>at least</i> 
 				[LuauField, Documentation("Whether or not this creature is able to drink water.", "Dietary Capabilities")]
 				public bool CanDrinkWater { get; set; } = true;
 
+				[LuauField, Documentation("Whether or not this creature is able to eat rotten food without the negative side effects.", "Dietary Extras")]
+				public bool CanEatRotten { get; set; } = false;
+
+				[LuauField, PluginNumericLimit(1, AdvisedMinimum = 1, AdvisedMaximum = 5), Documentation("The amount of food this creature loses every food tick.", "Resource Management")]
+				public double HungerDrain { get; set; }
+
+				[LuauField, PluginNumericLimit(1, AdvisedMinimum = 1, AdvisedMaximum = 5), Documentation("The amount of water this creature loses every food tick.", "Resource Management")]
+				public double ThirstDrain { get; set; }
+
 				[LuauField, CopyFromV0("Appetite"), PluginNumericLimit(1, AdvisedMinimum = 15), Documentation("The maximum amount of food this creature is able to eat.", "Resource Management")]
 				public double Appetite { get; set; }
 
@@ -202,6 +212,12 @@ When stacking, the effect will have this value brought up to be <i>at least</i> 
 
 					[LuauField, PluginNumericLimit(0, AdvisedMaximum = 15), Documentation("If this value is <b>not zero</b>, it will override the fuel (in seconds) that the creature has when using a breath. Inputting 0 will use the breath's default.", "Breath Overrides")]
 					public double BreathFuelOverride { get; set; } = 0;
+
+					[LuauField, PluginNumericLimit(-200, 200, AdvisedMinimum = -10, AdvisedMaximum = 10), Documentation("If this value is <b>not zero</b>, it will override the % DPS that this breath does. Inputting 0 will use the breath's default", "Breath Overrides")]
+					public double BreathDamageOverride { get; set; } = 0;
+					
+					[LuauField, PluginNumericLimit(0, AdvisedMaximum = 15), Documentation("If this value is <b>not zero</b>, it will override the cooldown that the creature has when using a breath. This only applies to auto-firing breaths. Inputting 0 will use the breath's default.", "Breath Overrides")]
+					public double BreathCooldownOverride { get; set; } = 0;
 
 					[LuauField, PluginNumericLimit(0, AdvisedMaximum = 15), Documentation("If this value is <b>not zero</b>, it will override the time (in seconds) that the creature has to wait without firing until their fuel will start to regenerate. Inputting 0 will use the breath's default.", "Breath Overrides")]
 					public double BreathRegenDelayOverride { get; set; } = 0;
@@ -338,11 +354,17 @@ When stacking, the effect will have this value brought up to be <i>at least</i> 
 					[LuauField, PluginCustomEnum(ReferencesSonariaConstants = false, Key = "AbilityRegistry", AllowNone = true), Documentation("The name of the ability this creature has. It should be one of the registered abilities.", "Ability Information")]
 					public string AbilityName { get; set; } = string.Empty;
 
-					[LuauField, CopyFromV0("DefensiveParalyze", Percentage = PercentType.Scale0To100), PluginNumericLimit(0, 100, IsPercent = true), Documentation("If this ability makes use of RNG, it will index this value to determine the chance to apply in whichever way it sees appropriate.", "Ability Information")]
+					[LuauField, CopyFromV0("DefensiveParalyze", Percentage = PercentType.Scale0To100), PluginNumericLimit(0, 100, IsPercent = true), Documentation("If this ability makes use of RNG, it will index this value to determine the chance to apply in whichever way it sees appropriate.", "Ability Overrides")]
 					public double ChanceIfApplicable { get; set; }
 
-					[LuauField, PluginNumericLimit(0, 100, IsPercent = true), Documentation("If this ability is an area of effect, this is its range.", "Ability Information")]
+					[LuauField, PluginNumericLimit(0, 100, IsPercent = true), Documentation("If this ability is an area of effect, this is its range. The way the ability uses this range value may change based on the ability.", "Ability Overrides")]
 					public double RangeIfApplicable { get; set; }
+
+					[LuauField, PluginNumericLimit(0, AdvisedMaximum = 180), Documentation("If this value is not 0, this will override the cooldown time (in seconds) for the creature using this ability.", "Ability Overrides")]
+					public double CooldownOverride { get; set; }
+
+					[LuauField, Documentation("If this ability does damage, then this value is used to determine the damage. Whether or not this damage is absolute or percentage based, let alone even used in the first place, depends on the ability this exists for and how it chooses to use this value.", "Ability Overrides")]
+					public double DamageIfApplicable { get; set; }
 
 				}
 
@@ -357,7 +379,7 @@ When stacking, the effect will have this value brought up to be <i>at least</i> 
 					[LuauField, Documentation("If greater than zero, this creature is a passive healer.", "Passive Healing")]
 					public double PassiveHealingRange { get; set; } = 0;
 
-					[LuauField, Documentation("This is the percentage of nearby players' health that increases per second.", "Passive Healing")]
+					[LuauField, PluginNumericLimit(0, AdvisedMaximum = 100, IsPercent = true), Documentation("This is the percentage of nearby players' health that increases per second.", "Passive Healing")]
 					public double PassiveHealingPerSecond { get; set; } = 0;
 
 					[LuauField, Documentation("If true, the passive healing will only work if this creature is resting. If false, it works always (where allowed).", "Passive Healing")]
@@ -371,7 +393,21 @@ When stacking, the effect will have this value brought up to be <i>at least</i> 
 
 					[LuauField, CopyFromV0("KeenObserver", true), Documentation("If true, players using this species can see a healthbar over other creatures at all times, as well as some status effects.", "Capabilities")]
 					public bool SeeHealth { get; set; } = false;
-					
+
+					[LuauField, PluginNumericLimit(0, AdvisedMaximum = 30), Documentation("If this value is not zero, this is the duration of Guilty that this creature applies, granted the person who bit this creature was not provoked.", "Capabilities")]
+					public double CauseGuiltDuration { get; set; } = 0;
+
+					[LuauField, Documentation("Whether or not this creature causes bone break or ligament tear based on its Damage Weight in melee attacks.", "Bone Break and Ligament Tear")]
+					public bool BoneBreaker { get; set; } = false;
+
+					[LuauField, PluginNumericLimit(0, 100, AdvisedMaximum = 90, IsPercent = true), Documentation("If this creature bites a creature whose weight is greater than or equal to this % of this creature's weight, then they cannot be broken by this creature.", "Bone Break and Ligament Tear")]
+					public double MaxBreakOrTearWeight { get; set; } = 0;
+
+					[LuauField, PluginNumericLimit(0, 100, AdvisedMaximum = 65, IsPercent = true), Documentation("If this creature bites a creature whose weight is less than this % of this creature's weight, they will receive a bone break, otherwise they will receive a ligament tear.", "Bone Break and Ligament Tear")]
+					public double BoneBreakLessThanWeight { get; set; } = 0;
+
+					[LuauField, Documentation("The minimum and maximum duration (in seconds) of a bone break or a ligament tear, granted this creature causes either of the two. Weights very close to their limits will be less severe than a huge weight difference.")]
+					public StatLimit BreakMinMaxDuration { get; set; } = new StatLimit(10, 60);
 
 				}
 				#endregion
@@ -428,6 +464,12 @@ When stacking, the effect will have this value brought up to be <i>at least</i> 
 
 				[LuauField, CopyFromV0("StaminaRegen"), PluginNumericLimit(1, AdvisedMaximum = 5), Documentation("The <b>ABSOLUTE AMOUNT</b> of seconds this user regains whilst above water.", "Breath")]
 				public double AirRegenPerSecond { get; set; } = 1;
+
+				[LuauField, PluginNumericLimit(0), Documentation("The <b>ABSOLUTE</b> stamina drain per second when flying.", "Flight")]
+				public double FlightStaminaReductionRate { get; set; } = 0;
+
+				[LuauField, PluginNumericLimit(0), Documentation("The <b>ABSOLUTE</b> stamina drain per second when gliding.", "Flight")]
+				public double GlideStaminaReductionRate { get; set; } = 0;
 
 			}
 			#endregion

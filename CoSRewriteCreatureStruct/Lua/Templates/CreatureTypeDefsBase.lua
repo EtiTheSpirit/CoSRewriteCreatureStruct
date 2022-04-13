@@ -137,3 +137,11 @@ export type PlayerData = {
 -- The Roblox Player type coupled with information universal across Sonaria players.
 export type CoSDataCharacter = Model & {Humanoid: Humanoid}
 
+-- Proxy Section
+local ProcGen = require(script.ProcGen)
+export type CreatureOffensiveAilmentStats = ProcGen.CreatureOffensiveAilmentStats
+export type CreatureDefensiveAilmentStats = ProcGen.CreatureDefensiveAilmentStats
+export type CreatureResistanceStats = ProcGen.CreatureResistanceStats
+export type CreatureAreaAilmentStats = ProcGen.CreatureAreaAilmentStats
+
+-- Specifications => Instance Type

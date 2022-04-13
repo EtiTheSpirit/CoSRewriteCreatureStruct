@@ -2,5 +2,5 @@
 	-- 7 => 62.5
 	local orgTR = (legacyObject::NumberValue).Value
 	local result = math.map(orgTR, 1, 9, 7, 62.5);
-	(newObject::Instance):SetAttribute(attrName, result)
+	(newObject::Instance):SetAttribute(attrName::string, result)
 end;

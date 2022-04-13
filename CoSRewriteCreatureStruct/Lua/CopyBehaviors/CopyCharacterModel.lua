@@ -10,10 +10,10 @@
 			end
 		end
 		warn("Done with collision conversion.")
-		dupe.PrimaryPart = dupe:FindFirstChild("HumanoidRootPart")
+		dupe.PrimaryPart = dupe:FindFirstChild("HumanoidRootPart") :: BasePart
 		dupe.Parent = newObject
 	end
 	local dupe = characterModel:Clone()
-	dupe.PrimaryPart = dupe:FindFirstChild("HumanoidRootPart")
+	dupe.PrimaryPart = dupe:FindFirstChild("HumanoidRootPart") :: BasePart
 	dupe.Parent = newObject
 end;

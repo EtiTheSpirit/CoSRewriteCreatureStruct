@@ -10,8 +10,6 @@ namespace CoSRewriteCreatureStruct.Attributes {
 
 		None,
 
-		CloneObject,
-
 		CopyPalette,
 
 		CreateSound,

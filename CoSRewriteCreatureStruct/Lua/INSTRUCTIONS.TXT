@@ -1,0 +1,8 @@
+﻿If you use Visual Studio (as you should), then adding new .lua files requires some extra attention
+
+#1: Go to View -> Properties Window so that it is visible.
+#2: Click on your .lua file, look at its properties
+#3: Make sure Build Action is set to "Content".
+#4: Make sure Copy to Output Directory is set to "Always Copy".
+
+Not doing this will cause the files to not be included in the generated code.
