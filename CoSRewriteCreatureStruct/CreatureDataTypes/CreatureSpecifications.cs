@@ -51,39 +51,119 @@ When stacking, the effect will have this value brought up to be <i>at least</i> 
 				[LuauField, CopyFromV0("Mission"), Documentation("If enabled, this creature classifies as a reward for a mission or quest.", "Menu Card Display")]
 				public bool MissionReward { get; set; }
 
-				[LuauField, PluginCustomEnum(ReferencesSonariaConstants = true, Key = "Holidays", AllowNone = true), Documentation("The holiday this creature is associated with. <b>THIS DOES NOT CONTROL WHETHER OR NOT IT APPEARS IN ANY SHOPS.</b> This is strictly for its themed card in the menu.", "Menu Card Display")]
+				[LuauField, PluginCustomEnum(ReferencesSonariaConstants = true, Key = "Holidays", AllowNone = true), Documentation($"The holiday this creature is associated with. <b>THIS DOES NOT CONTROL WHETHER OR NOT IT APPEARS IN ANY SHOPS.</b> This is strictly for its themed card in the menu. To control its appearance in the shop, open the {nameof(ForFunction)} container.", "Menu Card Display")]
 				public string Holiday { get; set; } = string.Empty;
 
 			}
 
 			public class ForFunctionInfo : LuauRepresentable {
-				
-				[LuauField, Documentation("If true, this species cannot be traded. Stored instances can still be traded however.", "Ownership")]
-				public bool Untradeable { get; set; }
+
+				/*
+				[LuauField, Documentation("If true, this species cannot be traded to other players <b>AT ALL</b>. To limit who can trade it, consider changing LimitTradingToGroupRanks.", "Ownership")]
+				public bool SpeciesNotTradeable { get; set; }
+
+				[LuauField, Documentation("If true, stored creatures of this species cannot be traded to other players.", "Ownership")]
+				public bool StoredNotTradeable { get; set; }
+				*/
+
+				// TODO: Better solution for limiting which group ranks can trade what creature!
+				// The string list with ; separating elements works best for scripts, but is terrible for people who do not get code.
+				// 1;2;4-192;254;255 makes perfect sense to me, but not to average joe.
+
+				// A list of checkboxes with the names of group ranks could work, but that is not future proof (what if we add new ranks?
+				// what if we change the names of ranks?)
+
+				// CONSIDERATION: A hybrid system - the plugin keeps track of the semicolon-separated list (0;1;2;...) internally,
+				// but the plugin makes the menu have checkboxes for each rank, so that what normal people see is names, but the
+				// code still sees the unchanging values.
+
+				/*
+				[LuauField, PluginStringLimit(true, false, true), Documentation("If defined, this is a list of ranks (or ranges of ranks) in the group that that are allowed to trade this creature. Entries are separated by semicolons (;). To include many ranks at once, a range can be used. An example: <font color=\"#88ffff\">2;127-192;254;255</font> allows rank 2, all ranks 127 through 192, rank 254, and rank 255 to trade this creature.", "Ownership")]
+				public string LimitTradingToGroupRanks { get; set; } = string.Empty;
+				*/
 
 				[LuauField, CopyFromV0("ForceHideGlimmerComingSoon", true), Documentation("If true, this species will not receive glimmer. This can be used to hide the \"Glimmer Coming Soon!\" display tag.", "Limitations")]
 				public bool WillNeverGetGlimmer { get; set; }
 
-				[LuauField, CopyFromV0("DevOnly", true), Documentation("If true, this species is only usable by developers. Attempting to spawn as this species without being a developer will result in the spawn attempt being rejected.", "Ownership")]
+				[LuauField(CustomValidationBehavior = ValidatorBehavior.ManageGachaAttributes), CopyFromV0("DevOnly", true), Documentation("If true, this species is only usable by developers. Attempting to spawn as this species without being a developer will result in the spawn attempt being rejected.", "Ownership")]
 				public bool DeveloperUseOnly { get; set; }
 
-				[LuauField, CopyFromV0("Limited", true), Documentation("If true, this species goes in the limited gacha. Overrides ForcedGachaList.", "Gachas")]
+				[LuauField(CustomValidationBehavior = ValidatorBehavior.ManageGachaAttributes), CopyFromV0("Limited", true), Documentation("If true, this species goes in the limited gacha. Overrides ForcedGachaList.", "Gachas")]
 				public bool InLimitedGacha { get; set; }
 
-				[LuauField, CopyFromV0("GamepassCreature", true), Documentation("If true, the game enforces that players who do not own this species are male, increases the cost in the Shoom shop by 50%, prevents trading stored versions unless the species is owned, and prevents it from showing in gachas.", "Limitations")]
+				[LuauField(CustomValidationBehavior = ValidatorBehavior.ManageGachaAttributes), CopyFromV0("GamepassCreature", true), Documentation("If true, the game enforces that players who do not own this species are male, increases the cost in the Shoom shop by 50%, prevents trading stored versions unless the species is owned, and prevents it from showing in gachas.", "Limitations")]
 				public bool HasPaidContentLimits { get; set; }
 
 				[LuauField, Documentation("If true, this creature is not allowed to use any plushies that change its breath.", "Limitations")]
 				public bool PreventPlushieBreathSwaps { get; set; }
 
-				[LuauField, Documentation("If defined, this will override the gacha this creature appears in (overrides its default gacha). If this creature has paid content limits, this will override it and cause it to show in this gacha anyway.", "Gachas")]
+				[LuauField(CustomValidationBehavior = ValidatorBehavior.ManageGachaAttributes), Documentation("If defined, this will override the gacha this creature appears in (overrides its default gacha). If this creature has paid content limits, this will override it and cause it to show in this gacha anyway.", "Gachas")]
 				public string ForcedGachaList { get; set; } = string.Empty;
 
-				[LuauField, PluginNumericLimit(1, 100), Documentation("If the gacha this is being placed into supports weighted selections, this is the chance that this, <b>as an individual item</b>, will be selected. <b>100 should be used if this is not randomized.</b>", "Gachas")]
+				[LuauField, PluginNumericLimit(1, 100), Documentation("If the gacha this is being placed into supports weighted selections, this is the chance that this, <b>as an individual item</b>, will be selected (not as a % relative to the amount of other items!). <b>100 should be used if the chances of all items in the gacha are equal.</b>", "Gachas")]
 				public double WeightedGachaChance { get; set; } = 100;
 
-				[LuauField, PluginStringLimit(true, false, true), Documentation("If defined, this is a list of ranks (or ranges of ranks) that that are allowed to trade this group. Entries are separated by semicolons (;). To include many ranks at once, a range can be used. An example: <font color=\"#88ffff\">2;127-192;254;255</font> allows rank 2, all ranks 127 through 192, rank 254, and rank 255 to trade this creature.", "Ownership")]
-				public string LimitTradingToGroupRanks { get; set; } = string.Empty;
+				[LuauField(CustomValidationBehavior = ValidatorBehavior.HolidayCurrency), PluginNumericLimit(0), Documentation($"If the Holiday is set (see {nameof(ForShow)}), this is the price that the creature costs in that holiday's shop. The actual currency correlations are elsewhere in a registry. <b>Set this to 0 to DISABLE purchasing this creature in the shop.</b>")]
+				public double HolidayCurrencyAmount { get; set; } = 0;
+
+				// n.b. this has its own "None", do NOT set AllowNone = true.
+				[LuauField(ValueAsLiteral = "SonariaConstants.ObjectRarity.None"), PluginCustomEnum(Key = "ObjectRarity", ReferencesSonariaConstants = true), Documentation("A value representing the rarity of this creature in the Limited shop. If this is not set to \"None\", then the creature will display that it has this rarity.")]
+				public string Rarity { get; set; } = string.Empty;
+
+				#region Group Info
+
+				public class GroupRanks : LuauRepresentable {
+
+					private const ValidatorBehavior VALIDATOR = ValidatorBehavior.GroupRankSelector;
+					private const string DOCS = "If true, this rank can trade this creature. If false, they cannot. Whether or not \"this creature\" means species vs. stored depends on whatever you have selected right now.";
+
+					// TO FUTURE ME: GroupRankSelector.lua in VSProject/Lua/ValidationBehaviors
+
+					[LuauField(CustomValidationBehavior = VALIDATOR), PluginStringLimit(true, false, true), Documentation("A composite value used by the game which is a list of rank values that are allowed to trade this creature. This is automatically generated as ranks below are set on or off. Entries are separated by semicolons (;).", "Composite Value")]
+					public string GroupRankArray { get; set; } = string.Empty;
+
+					[LuauField(PluginOnly = true, CustomValidationBehavior = VALIDATOR), Documentation(DOCS, "Ranks")]
+					public bool NonMember { get; set; } = true;
+
+					[LuauField(PluginOnly = true, CustomValidationBehavior = VALIDATOR), Documentation(DOCS, "Ranks")]
+					public bool Player { get; set; } = true;
+
+					[LuauField(PluginOnly = true, CustomValidationBehavior = VALIDATOR), Documentation(DOCS, "Ranks")]
+					public bool Tester { get; set; } = true;
+
+					[LuauField(PluginOnly = true, CustomValidationBehavior = VALIDATOR), Documentation(DOCS, "Ranks")]
+					public bool ContentCreator { get; set; } = true;
+
+					[LuauField(PluginOnly = true, CustomValidationBehavior = VALIDATOR), Documentation(DOCS, "Ranks")]
+					public bool FriendsAndFamily { get; set; } = true;
+
+					[LuauField(PluginOnly = true, CustomValidationBehavior = VALIDATOR), Documentation(DOCS, "Ranks")]
+					public bool Contributor { get; set; } = true;
+
+					[LuauField(PluginOnly = true, CustomValidationBehavior = VALIDATOR), Documentation(DOCS, "Ranks")]
+					public bool Staff { get; set; } = true;
+
+					[LuauField(PluginOnly = true, CustomValidationBehavior = VALIDATOR), Documentation(DOCS, "Ranks")]
+					public bool Testing { get; set; } = true;
+
+					[LuauField(PluginOnly = true, CustomValidationBehavior = VALIDATOR), Documentation(DOCS, "Ranks")]
+					public bool Administrator { get; set; } = true;
+
+					[LuauField(PluginOnly = true, CustomValidationBehavior = VALIDATOR), Documentation(DOCS, "Ranks")]
+					public bool OtherDeveloper { get; set; } = true;
+
+					[LuauField(PluginOnly = true, CustomValidationBehavior = VALIDATOR), Documentation(DOCS, "Ranks")]
+					public bool SonarDeveloper { get; set; } = true;
+
+					[LuauField(PluginOnly = true, CustomValidationBehavior = VALIDATOR), Documentation(DOCS, "Ranks")]
+					public bool CoOwner { get; set; } = true;
+
+					[LuauField(PluginOnly = true, CustomValidationBehavior = VALIDATOR), Documentation(DOCS, "Ranks")]
+					public bool Owner { get; set; } = true;
+
+				}
+
+				#endregion
 
 			}
 
@@ -105,7 +185,6 @@ When stacking, the effect will have this value brought up to be <i>at least</i> 
 			[LuauField, RepresentedByInstance]
 			public CapabilitiesInfo Capabilities { get; set; } = new CapabilitiesInfo();
 
-
 			#region Class Defs
 
 			public class DietInfo : LuauRepresentable {
@@ -122,10 +201,10 @@ When stacking, the effect will have this value brought up to be <i>at least</i> 
 				[LuauField, Documentation("Whether or not this creature is able to eat rotten food without the negative side effects.", "Dietary Extras")]
 				public bool CanEatRotten { get; set; } = false;
 
-				[LuauField, PluginNumericLimit(1, AdvisedMinimum = 1, AdvisedMaximum = 5), Documentation("The amount of food this creature loses every food tick.", "Resource Management")]
+				[LuauField, PluginNumericLimit(1, AdvisedMinimum = 1, AdvisedMaximum = 5), Documentation("The amount of food this creature loses every minute.", "Resource Management")]
 				public double HungerDrain { get; set; }
 
-				[LuauField, PluginNumericLimit(1, AdvisedMinimum = 1, AdvisedMaximum = 5), Documentation("The amount of water this creature loses every food tick.", "Resource Management")]
+				[LuauField, PluginNumericLimit(1, AdvisedMinimum = 1, AdvisedMaximum = 5), Documentation("The amount of water this creature loses every minute.", "Resource Management")]
 				public double ThirstDrain { get; set; }
 
 				[LuauField, CopyFromV0("Appetite"), PluginNumericLimit(1, AdvisedMinimum = 15), Documentation("The maximum amount of food this creature is able to eat.", "Resource Management")]
@@ -169,7 +248,6 @@ When stacking, the effect will have this value brought up to be <i>at least</i> 
 
 				[LuauField, RepresentedByInstance]
 				public AttackInfo Attack { get; set; } = new AttackInfo();
-
 				
 				[LuauField("CreatureAreaAilmentStats"), RepresentedByInstance, PluginIsSpecialAilmentTemplate]
 				public AoEAilmentsInfo[] AreaAilments { get; set; } = Util.One<AoEAilmentsInfo>();
@@ -183,21 +261,6 @@ When stacking, the effect will have this value brought up to be <i>at least</i> 
 				[LuauField("CreatureResistanceStats"), RepresentedByInstance, PluginIsSpecialAilmentTemplate]
 				public AilmentResistancesInfo[] AilmentResistances { get; set; } = Util.One<AilmentResistancesInfo>();
 				
-
-				/*
-				[LuauField("CreatureAoEAilmentStats"), RepresentedByInstance]
-				public AoEAilmentsInfo AreaAilments { get; set; } = new AoEAilmentsInfo();
-
-				[LuauField("CreatureOffensiveAilmentStats"), RepresentedByInstance]
-				public OffensiveAilmentsInfo MeleeAilments { get; set; } = new OffensiveAilmentsInfo();
-
-				[LuauField("CreatureDefensiveAilmentStats"), RepresentedByInstance]
-				public DefensiveAilmentsInfo DefensiveAilments { get; set; } = new DefensiveAilmentsInfo();
-
-				[LuauField("CreatureResistanceStats"), RepresentedByInstance]
-				public AilmentResistancesInfo AilmentResistances { get; set; } = new AilmentResistancesInfo();
-				*/
-
 				[LuauField, RepresentedByInstance]
 				public UniversalResistancesInfo UniversalAttackTypeResistances { get; set; } = new UniversalResistancesInfo();
 
@@ -243,6 +306,12 @@ When stacking, the effect will have this value brought up to be <i>at least</i> 
 					[LuauField, PluginNumericLimit(1, AdvisedMinimum = 20, AdvisedMaximum = 175), Documentation("The maximum reach of this effect.", "Behavior")]
 					public double Range { get; set; } = 0;
 
+					[LuauField, PluginNumericLimit(0, AdvisedMaximum = 1.5), Documentation("The level that is added per second by this AoE.")]
+					public double LevelPerSecond { get; set; } = 0;
+
+					[LuauField, PluginNumericLimit(0, AdvisedMaximum = 2.5), Documentation("The duration that is added per second by this AoE.")]
+					public double DurationPerSecond { get; set; } = 0;
+
 					[LuauField, Documentation("The level stack limits when a victim is at the exact closest possible range of this AoE. Should generally have high values." + LIMIT_DESC, "Behavior")]
 					public StatLimit StackLevelsAtClosest { get; set; } = new StatLimit(0, 0);
 
@@ -258,8 +327,11 @@ When stacking, the effect will have this value brought up to be <i>at least</i> 
 					[LuauField, PluginCustomEnum(ReferencesSonariaConstants = false, Key = "StatusEffectRegistry", AllowNone = false), Documentation("The effect that this creature must have in order for this AoE to activate. This is usually a status effect for the state of the ability.", "Behavior")]
 					public string RequiredSelfEffect { get; set; } = string.Empty;
 
-					[LuauField, Documentation("Whether or not this AoE effect applies to the user as well as nearby players.", "Behavior")]
+					[LuauField, Documentation("Whether or not this AoE effect applies to the user.", "Behavior")]
 					public bool AffectSelf { get; set; } = false;
+
+					[LuauField, PluginCustomEnum(Key = "AoERemotePlayerTarget", ReferencesSonariaConstants = true, AllowNone = true), Documentation("Whether or not this AoE effect applies to nearby players.", "Behavior")]
+					public string AffectOthersType { get; set; } = string.Empty;
 
 				}
 
@@ -305,22 +377,25 @@ When stacking, the effect will have this value brought up to be <i>at least</i> 
 					[LuauField, Documentation("If true, this effect will apply when this creature is hurt by an ability.", "Methodology")]
 					public bool ApplyWhenDamagedByAbility { get; set; } = false;
 
+					[LuauField, Documentation($"If true, this effect will apply when this creature is hurt by environmental or scripted damage. Of course, this does nothing if {nameof(ApplyTo)} is not Self.", "Methodology")]
+					public bool ApplyWhenDamagedByEnvironment { get; set; } = false;
+
 				}
 
 				public class AilmentResistancesInfo : StatusEffectBase {
 					public AilmentResistancesInfo() { }
 
-					[LuauField, PluginNumericLimit(-1000, 100, IsPercent = true), Documentation("The resistance to incoming levels, by percentage. A value of -1 doubles the level, a value of 0 does nothing, and a value of 1 completely reduces it to 0.", "Resistance")]
-					public double LevelResistance { get; set; } = 0;
+					[LuauField, PluginNumericLimit(-1000, 100, IsPercent = true), Documentation("The resistance to incoming levels, by percentage, at the start of this creature's life. A value of -1 doubles the level, a value of 0 does nothing, and a value of 1 completely reduces it to 0.", "Resistance")]
+					public double InitialLevelResistance { get; set; } = 0;
 
-					[LuauField, PluginNumericLimit(-1000, 100, IsPercent = true), Documentation("The resistance to incoming duration, by percentage. A value of -1 doubles the duration, a value of 0 does nothing, and a value of 1 completely reduces it to 0.", "Resistance")]
-					public double DurationResistance { get; set; } = 0;
+					[LuauField, PluginNumericLimit(-1000, 100, IsPercent = true), Documentation("The resistance to incoming duration, by percentage, at the start of this creature's life. A value of -1 doubles the duration, a value of 0 does nothing, and a value of 1 completely reduces it to 0.", "Resistance")]
+					public double InitialDurationResistance { get; set; } = 0;
 
-					[LuauField, Documentation("If true, this resistance scales from 0 to its given value as the creature ages to 100. If false, the given value applies at all ages.", "Methodology")]
-					public bool ScaleWithAge { get; set; } = false;
+					[LuauField, PluginNumericLimit(-1000, 100, IsPercent = true), Documentation("The resistance to incoming levels, by percentage, at the end of this creature's life. A value of -1 doubles the level, a value of 0 does nothing, and a value of 1 completely reduces it to 0.", "Resistance")]
+					public double EndLevelResistance { get; set; } = 0;
 
-					[LuauField, Documentation("If true, and if ScaleWithAge is true, then the resistance starts at the given value at age 0, and slowly goes away as the creature ages to 100. This is good for weaknesses where the weakness is reduced as age goes up.", "Methodology")]
-					public bool InverseScale { get; set; } = false;
+					[LuauField, PluginNumericLimit(-1000, 100, IsPercent = true), Documentation("The resistance to incoming duration, by percentage, at the end of this creature's life. A value of -1 doubles the duration, a value of 0 does nothing, and a value of 1 completely reduces it to 0.", "Resistance")]
+					public double EndDurationResistance { get; set; } = 0;
 
 				}
 
@@ -329,10 +404,10 @@ When stacking, the effect will have this value brought up to be <i>at least</i> 
 					[LuauField(KeyAsLiteral = "[SonariaConstants.PlayerDamageType.Melee]"), PluginNumericLimit(-1000, 100, IsPercent = true), Documentation("All damage from melee is reduced by this amount no matter the context. Negative values introduce weakness (additional damage).", "Core Overrides")]
 					public double Melee { get; set; } = 0;
 
-					[LuauField(KeyAsLiteral = "[SonariaConstants.PlayerDamageType.Breath]"), PluginNumericLimit(-1000, 100, IsPercent = true), Documentation("All damage from breaths is reduced by this amount no matter the context. Negative values introduce weakness (addiitonal damage).", "Core Overrides")]
+					[LuauField(KeyAsLiteral = "[SonariaConstants.PlayerDamageType.Breath]"), PluginNumericLimit(-1000, 100, IsPercent = true), Documentation("All damage from breaths is reduced by this amount no matter the context. Negative values introduce weakness (additional damage).", "Core Overrides")]
 					public double Breath { get; set; } = 0;
 
-					[LuauField(KeyAsLiteral = "[SonariaConstants.PlayerDamageType.Ability]"), PluginNumericLimit(-1000, 100, IsPercent = true), Documentation("All damage from abilities is reduced by this amount no matter the context. Negative values introduce weakness (addiitonal damage).", "Core Overrides")]
+					[LuauField(KeyAsLiteral = "[SonariaConstants.PlayerDamageType.Ability]"), PluginNumericLimit(-1000, 100, IsPercent = true), Documentation("All damage from abilities is reduced by this amount no matter the context. Negative values introduce weakness (additional damage).", "Core Overrides")]
 					public double Ability { get; set; } = 0;
 
 				}
@@ -354,13 +429,13 @@ When stacking, the effect will have this value brought up to be <i>at least</i> 
 					[LuauField, PluginCustomEnum(ReferencesSonariaConstants = false, Key = "AbilityRegistry", AllowNone = true), Documentation("The name of the ability this creature has. It should be one of the registered abilities.", "Ability Information")]
 					public string AbilityName { get; set; } = string.Empty;
 
-					[LuauField, CopyFromV0("DefensiveParalyze", Percentage = PercentType.Scale0To100), PluginNumericLimit(0, 100, IsPercent = true), Documentation("If this ability makes use of RNG, it will index this value to determine the chance to apply in whichever way it sees appropriate.", "Ability Overrides")]
+					[LuauField, CopyFromV0("DefensiveParalyze", Percentage = PercentType.Scale0To100), PluginNumericLimit(0, 100, IsPercent = true), Documentation("If this ability makes use of RNG, it will index this value to determine the chance to apply in whichever way it sees appropriate. Naturally, this varies between abilities.", "Ability Overrides")]
 					public double ChanceIfApplicable { get; set; }
 
 					[LuauField, PluginNumericLimit(0, 100, IsPercent = true), Documentation("If this ability is an area of effect, this is its range. The way the ability uses this range value may change based on the ability.", "Ability Overrides")]
 					public double RangeIfApplicable { get; set; }
 
-					[LuauField, PluginNumericLimit(0, AdvisedMaximum = 180), Documentation("If this value is not 0, this will override the cooldown time (in seconds) for the creature using this ability.", "Ability Overrides")]
+					[LuauField, PluginNumericLimit(0, AdvisedMaximum = 180), Documentation("If this value is not 0, this will override the cooldown time (in seconds) for this species specifically when it uses this ability. Set to 0 to use the default as defined by the ability itself.", "Ability Overrides")]
 					public double CooldownOverride { get; set; }
 
 					[LuauField, Documentation("If this ability does damage, then this value is used to determine the damage. Whether or not this damage is absolute or percentage based, let alone even used in the first place, depends on the ability this exists for and how it chooses to use this value.", "Ability Overrides")]
@@ -370,25 +445,25 @@ When stacking, the effect will have this value brought up to be <i>at least</i> 
 
 				public class PassiveInfo : LuauRepresentable {
 
-					[LuauField(ValueAsLiteral = "SonariaConstants.AquaAffinity.Terrestrial"), CopyFromV0(null, CustomConversionCallback = CopyBehavior.GetAquaAffinity), PluginCustomEnum(ReferencesSonariaConstants = true, Key = "AquaAffinity", AllowNone = false), Documentation("The affinity to water that this creature has, which determines where it can live.", "Capabilities")]
+					[LuauField(ValueAsLiteral = "SonariaConstants.AquaAffinity.Terrestrial", CustomValidationBehavior = ValidatorBehavior.ManageAquaAffinity), CopyFromV0(null, CustomConversionCallback = CopyBehavior.GetAquaAffinity), PluginCustomEnum(ReferencesSonariaConstants = true, Key = "AquaAffinity", AllowNone = false, HideKeys = new[] {"AllTerrain"}), Documentation("The affinity to water that this creature has, which determines where it can live.", "Capabilities")]
 					public string AquaAffinity { get; set; } = "Terrestrial";
 
 					[LuauField, CopyFromV0("Glider", true), Documentation("If true, then this creature is is only capable of gliding, not powered flight. Does nothing if the creature is not a flier.", "Capabilities")]
 					public bool OnlyGlide { get; set; } = false;
 
-					[LuauField, Documentation("If greater than zero, this creature is a passive healer.", "Passive Healing")]
+					[LuauField(CustomValidationBehavior = ValidatorBehavior.HealRadiusValues), Documentation("The range of this species's passive healing (that heals other, nearby creatures). <b>Set this to 0 to disable the passive heal ability.</b>", "Passive Healing")]
 					public double PassiveHealingRange { get; set; } = 0;
 
-					[LuauField, PluginNumericLimit(0, AdvisedMaximum = 100, IsPercent = true), Documentation("This is the percentage of nearby players' health that increases per second.", "Passive Healing")]
+					[LuauField(CustomValidationBehavior = ValidatorBehavior.HealRadiusValues), PluginNumericLimit(0, AdvisedMaximum = 100, IsPercent = true), Documentation("This is the percentage of nearby players' health that increases per second.", "Passive Healing")]
 					public double PassiveHealingPerSecond { get; set; } = 0;
 
-					[LuauField, Documentation("If true, the passive healing will only work if this creature is resting. If false, it works always (where allowed).", "Passive Healing")]
+					[LuauField(CustomValidationBehavior = ValidatorBehavior.HealRadiusValues), Documentation("If true, the passive healing will only work if this creature is resting. If false, it works always (where allowed).", "Passive Healing")]
 					public bool PassiveHealWhenSelfRest { get; set; } = true;
 
-					[LuauField, Documentation("If true, the passive healing will only work if the person being healed is resting. If false, it works always (where allowed).", "Passive Healing")]
+					[LuauField(CustomValidationBehavior = ValidatorBehavior.HealRadiusValues), Documentation("If true, the passive healing will only work if the person being healed is resting. If false, it works always (where allowed).", "Passive Healing")]
 					public bool PassiveHealWhenOthersRest { get; set; } = true;
 
-					[LuauField, Documentation("If true, the passive healing only applies to packmates.", "Passive Healing")]
+					[LuauField(CustomValidationBehavior = ValidatorBehavior.HealRadiusValues), Documentation("If true, the passive healing only applies to packmates.", "Passive Healing")]
 					public bool PassiveHealingPackOnly { get; set; } = true;
 
 					[LuauField, CopyFromV0("KeenObserver", true), Documentation("If true, players using this species can see a healthbar over other creatures at all times, as well as some status effects.", "Capabilities")]
@@ -406,8 +481,11 @@ When stacking, the effect will have this value brought up to be <i>at least</i> 
 					[LuauField, PluginNumericLimit(0, 100, AdvisedMaximum = 65, IsPercent = true), Documentation("If this creature bites a creature whose weight is less than this % of this creature's weight, they will receive a bone break, otherwise they will receive a ligament tear.", "Bone Break and Ligament Tear")]
 					public double BoneBreakLessThanWeight { get; set; } = 0;
 
-					[LuauField, Documentation("The minimum and maximum duration (in seconds) of a bone break or a ligament tear, granted this creature causes either of the two. Weights very close to their limits will be less severe than a huge weight difference.")]
+					[LuauField, Documentation("The minimum and maximum duration (in seconds) of a bone break or a ligament tear, granted this creature causes either of the two. Weights very close to their limits will be less severe than a huge weight difference.", "Bone Break and Ligament Tear")]
 					public StatLimit BreakMinMaxDuration { get; set; } = new StatLimit(10, 60);
+
+					[LuauField, PluginNumericLimit(0, 100, AdvisedMaximum = 65, IsPercent = true), Documentation("Whenever this creature would normally be inflicted with a ligament tear, this value is the percent chance that it will upgrade into a bone break.", "Bone Break and Ligament Tear")]
+					public double BoneBreakSusceptibility { get; set; } = 0;
 
 				}
 				#endregion

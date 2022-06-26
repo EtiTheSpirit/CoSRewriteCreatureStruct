@@ -39,42 +39,49 @@
 	if stats:FindFirstChild("Bleed") then
 		-- Offensive
 		local level = stats.Bleed.Value
+		if level == 0 then return end
 		local fx = CreateOffensiveAilment("Bleed", true, level)
 		fx.Parent = offensiveCtr
 	end
 	if stats:FindFirstChild("PoisonAttack") then
 		-- Offensive
 		local level = stats.PoisonAttack.Value
+		if level == 0 then return end
 		local fx = CreateOffensiveAilment("Poison", true, level)
 		fx.Parent = offensiveCtr
 	end
 	if stats:FindFirstChild("NecroPoison") then
 		-- Defensive
-		local level = stats.PoisonAttack.Value
+		local level = stats.NecroPoison.Value
+		if level == 0 then return end
 		local fx = CreateDefensiveAilment("NecroPoison", true, level)
 		fx.Parent = defensiveCtr
 	end
 	if stats:FindFirstChild("BleedDefense") then
 		-- Resistance
 		local resist = stats.BleedDefense.Value -- will be from 0 to 100.
+		if resist == 0 then return end
 		local fx = CreateAilmentResistance("Bleed", resist, resist, true, false)
 		fx.Parent = resistanceCtr
 	end
 	if stats:FindFirstChild("PoisonDefense") then
 		-- Defensive (not resistance like bleed, this is not a mistake)
-		local level = stats.PoisonAttack.Value
+		local level = stats.PoisonDefense.Value
+		if level == 0 then return end
 		local fx = CreateDefensiveAilment("Poison", true, level)
 		fx.Parent = defensiveCtr
 	end
 	if stats:FindFirstChild("PoisonResistance") then
 		-- Resistance		
 		local resist = stats.PoisonResistance.Value -- will be from 0 to 100.
+		if resist == 0 then return end
 		local fx = CreateAilmentResistance("Poison", resist, resist, true, false)
 		fx.Parent = resistanceCtr
 	end
 	if stats:FindFirstChild("NecroPoisonResistance") then
 		-- Resistance
 		local resist = stats.NecroPoisonResistance.Value -- will be from 0 to 100.
+		if resist == 0 then return end
 		local fx = CreateAilmentResistance("NecroPoison", resist, resist, true, false)
 		fx.Parent = resistanceCtr
 	end
@@ -96,6 +103,7 @@
 	if stats:FindFirstChild("BurnAttack") then
 		-- Offensive
 		local level = stats.BurnAttack.Value
+		if level == 0 then return end
 		local fx = CreateOffensiveAilment("Burn", true, level)
 		fx.Parent = offensiveCtr
 	end
@@ -105,19 +113,20 @@
 	end
 	if stats:FindFirstChild("StickyTeeth") then
 		-- Defensive, applies StuckTeeth, 6s
-		local level = stats.BurnAttack.Value
 		local fx = CreateDefensiveAilment("StuckTeeth", false, 0, 6, Vector2.new(), Vector2.new(6, 6))
 		fx.Parent = defensiveCtr
 	end
 	if stats:FindFirstChild("BleedBlock") then
 		-- Defensive
 		local level = stats.BleedBlock.Value
+		if level == 0 then return end
 		local fx = CreateDefensiveAilment("Bleed", true, level)
 		fx.Parent = defensiveCtr
 	end
 	if stats:FindFirstChild("BurnDefense") then
 		-- Defensive
 		local level = stats.BurnDefense.Value
+		if level == 0 then return end
 		local fx = CreateDefensiveAilment("Burn", true, level)
 		fx.Parent = defensiveCtr
 	end
@@ -125,5 +134,18 @@
 		-- Defensive, always 5s
 		local fx = CreateDefensiveAilment("Paralyzed", false, 0, 5, Vector2.new(), Vector2.new(5, 5))
 		fx.Parent = defensiveCtr
+	end
+
+	local holidays = {
+		Valentines = SonariaConstants.Holidays.Valentines;
+		Easter = SonariaConstants.Holidays.Easter;
+		Christmas = SonariaConstants.Holidays.Christmas;
+		Christmas2021 = SonariaConstants.Holidays.Christmas;
+	}
+	for key, sc in pairs(holidays) do
+		if stats.Parent:FindFirstChild(key) then
+			(newCreature::any).Specifications.MainInfo.Attributes.ForShow:SetAttribute("Holiday", sc)
+			break
+		end
 	end
 end;

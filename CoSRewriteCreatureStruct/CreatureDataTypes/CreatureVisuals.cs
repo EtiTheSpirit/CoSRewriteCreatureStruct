@@ -28,16 +28,16 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 
 		public class ModelsInfo : LuauRepresentable {
 
-			[LuauField("Model")]
+			[LuauField("Model", ValueAsLiteral = "(nil::any)")]
 			public Instance Child { get; set; } = new Instance();
 
-			[LuauField("Model")]
+			[LuauField("Model", ValueAsLiteral = "(nil::any)")]
 			public Instance Teen { get; set; } = new Instance();
 
-			[LuauField("Model")]
+			[LuauField("Model", ValueAsLiteral = "(nil::any)")]
 			public Instance Adult { get; set; } = new Instance();
 
-			[LuauField("Model")]
+			[LuauField("Model", ValueAsLiteral = "(nil::any)")]
 			public Instance AdultCustomizer { get; set; } = new Instance();
 
 		}
@@ -178,10 +178,10 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 
 			public class SettingsInfo : LuauRepresentable {
 
-				[LuauField, PluginNumericLimit(0, AdvisedMaximum = 3), CopyFromV0("WalkAnimationSpeed"), Documentation("The base speed multiplier for the walk animation, which can be used to sync it with the world.", "Animation Settings")]
+				[LuauField, PluginNumericLimit(1 / 128, AdvisedMaximum = 3), CopyFromV0("WalkAnimationSpeed"), Documentation("The base speed multiplier for the walk animation, which can be used to sync it with the world.", "Animation Settings")]
 				public double WalkAnimationSpeed { get; set; } = 1;
 
-				[LuauField, PluginNumericLimit(0, AdvisedMaximum = 3), CopyFromV0("RunAnimationSpeed"), Documentation("The base speed multiplier for the run animation, which can be used to sync it with the world.", "Animation Settings")]
+				[LuauField, PluginNumericLimit(1 / 128, AdvisedMaximum = 3), CopyFromV0("RunAnimationSpeed"), Documentation("The base speed multiplier for the run animation, which can be used to sync it with the world.", "Animation Settings")]
 				public double RunAnimationSpeed { get; set; } = 1;
 
 			}
@@ -213,10 +213,10 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 				[LuauField, PluginNumericLimit(1, 10000, false, AdvisedMinimum = 50, AdvisedMaximum = 700), Documentation("The distance this sound can travel. It should generally be a high number (above 200) even for small creatures.", "Sound")]
 				public double Range { get; set; }
 
-				[LuauField, PluginNumericLimit(0.01, 10, false, AdvisedMaximum = 2), Documentation("The volume of this sound. <b>Volumes larger than 1 will attenuate other sounds (make them quieter) rather than making this louder.</b>", "Sound")]
+				[LuauField, PluginNumericLimit(1/128, 10, false, AdvisedMaximum = 2), Documentation("The volume of this sound. <b>Volumes larger than 1 will attenuate other sounds (make them quieter) rather than making this louder.</b>", "Sound")]
 				public double Volume { get; set; }
 
-				[LuauField, PluginNumericLimit(0.05, 30, false, AdvisedMinimum = 0.2, AdvisedMaximum = 7), Documentation("The base pitch of this sound.", "Sound")]
+				[LuauField, PluginNumericLimit(1/64, 30, false, AdvisedMinimum = 0.2, AdvisedMaximum = 7), Documentation("The base pitch of this sound.", "Sound")]
 				public double Pitch { get; set; }
 
 			}

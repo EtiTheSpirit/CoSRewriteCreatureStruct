@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,7 +14,14 @@ namespace CoSRewriteCreatureStruct.Attributes {
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
 	public class IntrinsicAttribute : Attribute {
 
-		// TODO: Figure out how to include code. Should it be by some named reference, or by including it in another data package?
+		/// <summary>
+		/// The function this uses to determine this field's displayed value.
+		/// </summary>
+		public IntrinsicCallback Callback { get; }
+
+		public IntrinsicAttribute(IntrinsicCallback callback) {
+			Callback = callback;
+		}
 
 	}
 }

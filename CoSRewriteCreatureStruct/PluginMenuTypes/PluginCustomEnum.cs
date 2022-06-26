@@ -14,12 +14,12 @@ namespace CoSRewriteCreatureStruct.PluginMenuTypes {
 		/// <summary>
 		/// If <see langword="true"/>, this enum will sample from a list of elements in some SonariaConstants value. If <see langword="false"/>, it samples from a registry.
 		/// </summary>
-		public bool ReferencesSonariaConstants { get; set; }
+		public bool ReferencesSonariaConstants { get; set; } = false;
 
 		/// <summary>
 		/// If <see langword="true"/>, this enum is a representation of a Roblox enum. The key should be the enum key, such that Enum[key] can be resolved.
 		/// </summary>
-		public bool IsRobloxEnum { get; set; }
+		public bool IsRobloxEnum { get; set; } = false;
 
 		/// <summary>
 		/// The key for this dropdown menu. If <see cref="ReferencesSonariaConstants"/> is <see langword="true"/>, this is the key in <c>SonariaConstants</c> (may include dots).
@@ -30,7 +30,12 @@ namespace CoSRewriteCreatureStruct.PluginMenuTypes {
 		/// <summary>
 		/// If true, a "None" option is included in the dropdown menu.
 		/// </summary>
-		public bool AllowNone { get; set; }
+		public bool AllowNone { get; set; } = false;
+
+		/// <summary>
+		/// Any keys in this array will be hidden from the dropdown menu.
+		/// </summary>
+		public string[] HideKeys { get; set; } = Array.Empty<string>();
 
 		public PluginCustomEnum(bool consts, string key, bool allowNone) {
 			ReferencesSonariaConstants = consts;
@@ -49,6 +54,7 @@ namespace CoSRewriteCreatureStruct.PluginMenuTypes {
 			tbl.Add("IsRobloxEnum", IsRobloxEnum);
 			tbl.Add("AllowNone", AllowNone);
 			tbl.Add("Key", Key);
+			tbl.Add("HideKeys", HideKeys);
 			return tbl;
 			/*
 			if (includeDocsLiteral == null) {

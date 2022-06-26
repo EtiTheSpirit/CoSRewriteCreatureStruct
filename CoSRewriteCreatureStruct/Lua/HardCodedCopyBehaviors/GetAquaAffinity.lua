@@ -3,7 +3,10 @@
 	local data = data:FindFirstChild("Stats") :: Instance
 	local isAquatic = data:FindFirstChild("Aquatic") ~= nil
 	local isSemi = data:FindFirstChild("SemiAquatic") ~= nil
-	if isAquatic then
+	local flierInfo = data:FindFirstChild("FlySpeed")
+	if flierInfo and (flierInfo::any).Value > 0 and isSemi then
+		(newCreature::any).Specifications.MainInfo.Capabilities.Passive:SetAttribute("AquaAffinity", SonariaConstants.AquaAffinity.AllTerrain)
+	elseif isAquatic then
 		(newCreature::any).Specifications.MainInfo.Capabilities.Passive:SetAttribute("AquaAffinity", SonariaConstants.AquaAffinity.Aquatic)
 	elseif isSemi then
 		(newCreature::any).Specifications.MainInfo.Capabilities.Passive:SetAttribute("AquaAffinity", SonariaConstants.AquaAffinity.SemiAquatic)

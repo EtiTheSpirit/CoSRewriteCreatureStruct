@@ -63,7 +63,8 @@ namespace CoSRewriteCreatureStruct {
 		}
 
 		/// <summary>
-		/// Calls the <see langword="string"/>, <see langword="double"/>, <see langword="bool"/>, or <see cref="StringKeyTable"/> Add method based on the input. Supports <see langword="null"/>.
+		/// Calls the <see langword="string"/>, <see langword="double"/>, <see langword="bool"/>, or <see cref="StringKeyTable"/> Add method based on the input. 
+		/// Additionally supoorts <see cref="DumbColorSequence"/>, <see cref="StatLimit"/>, <see cref="Color3"/>, <see langword="string"/>[], and <see langword="null"/>.
 		/// </summary>
 		/// <param name="key"></param>
 		/// <param name="value"></param>
@@ -83,6 +84,8 @@ namespace CoSRewriteCreatureStruct {
 				Add(key, table);
 			} else if (value is DumbColorSequence || value is StatLimit || value is Color3) {
 				AddLiteral(key, value.ToString()!);
+			} else if (value is string[] stringArray) {
+				AddLiteral(key, stringArray.ToLuaTable());
 			} else {
 				if (!lazySkip) throw new NotSupportedException($"The given value type ({value.GetType().FullName}) cannot be added to a Lua table.");
 			}

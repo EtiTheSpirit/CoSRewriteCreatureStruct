@@ -23,7 +23,10 @@
     <None Remove="Lua\HardCodedCopyBehaviors\ConvertDiet.lua" />
     <None Remove="Lua\HardCodedCopyBehaviors\CopyCharacterModels.lua" />
     <None Remove="Lua\HardCodedCopyBehaviors\StatusEffects.lua" />
+    <None Remove="Lua\IntrinsicProperties\Gacha.lua" />
+    <None Remove="Lua\IntrinsicProperties\IsFlier.lua" />
     <None Remove="Lua\IntrinsicProperties\IsWarden.lua" />
+    <None Remove="Lua\IntrinsicProperties\OverridesWardensRage.lua" />
     <None Remove="Lua\Templates\AniSpecialBreathLimit.lua" />
     <None Remove="Lua\Templates\CreatureTypeDefsBase.lua" />
     <None Remove="Lua\Templates\IntrinsicCommon.lua" />
@@ -32,8 +35,37 @@
     <None Remove="Lua\Templates\ProcGenCloser.lua" />
     <None Remove="Lua\TypeGenerators\GenerateCharacterType.lua" />
     <None Remove="Lua\TypeGenerators\GenerateSpeciesType.lua" />
-    <None Remove="Lua\TypeGenerators\Resources\CharacterInfoProvider.lua" />
-    <None Remove="Lua\TypeGenerators\Resources\SpeciesInfoProvider.lua" />
+    <None Remove="Lua\ValidationBehaviors\HealRadiusValues.lua" />
+    <None Remove="Lua\ValidationBehaviors\HolidayCurrency.lua" />
+    <None Remove="Lua\ValidationBehaviors\ManageAquaAffinity.lua" />
+    <None Remove="Lua\ValidationBehaviors\ManageGachaAttributes.lua" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Lua\IntrinsicProperties\IsFlier.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Lua\IntrinsicProperties\OverridesWardensRage.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Lua\IntrinsicProperties\Gacha.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Lua\ValidationBehaviors\HealRadiusValues.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Lua\ValidationBehaviors\HolidayCurrency.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Lua\ValidationBehaviors\ManageAquaAffinity.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Lua\ValidationBehaviors\ManageGachaAttributes.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -122,12 +154,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Lua\TypeGenerators\GenerateSpeciesType.lua">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Lua\TypeGenerators\Resources\CharacterInfoProvider.lua">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Lua\TypeGenerators\Resources\SpeciesInfoProvider.lua">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

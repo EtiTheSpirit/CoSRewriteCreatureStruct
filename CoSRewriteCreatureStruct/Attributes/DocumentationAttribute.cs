@@ -15,7 +15,7 @@ namespace CoSRewriteCreatureStruct.Attributes {
 		public string Documentation { get; }
 
 		/// <summary>
-		/// The category of this property.
+		/// The category of this property. This is overridden by <see cref="IntrinsicAttribute"/>, if said attribute is present, such that it is always <c>"Intrinsic"</c>.
 		/// </summary>
 		public string? Category { get; }
 

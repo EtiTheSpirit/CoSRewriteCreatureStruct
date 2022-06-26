@@ -94,16 +94,33 @@ namespace CoSRewriteCreatureStruct {
 			return typeDefsModule.ToString();
 		}
 
+		private static void AppendLua(FileInfo lua, StringBuilder builder) {
+			string[] data = File.ReadAllLines(lua.FullName);
+			if (!data[^1].EndsWith(";")) {
+				data[^1] = data[^1] + ";";
+			}
+
+			foreach (string line in data) {
+				builder.Append('\t');
+				builder.AppendLine(line);
+			}
+		}
+
 		public static string GetPluginBehaviors(Creature creature) {
 			StringBuilder copyBehaviors = new StringBuilder();
 			StringBuilder hardCodedBehaviors = new StringBuilder();
+			StringBuilder intrinsicProperties = new StringBuilder();
+			StringBuilder validators = new StringBuilder();
 
 			DirectoryInfo copy = new DirectoryInfo("./Lua/CopyBehaviors");
 			DirectoryInfo hard = new DirectoryInfo("./Lua/HardCodedCopyBehaviors");
+			DirectoryInfo intrinsicProps = new DirectoryInfo("./Lua/IntrinsicProperties");
+			DirectoryInfo validationBehaviors = new DirectoryInfo("./Lua/ValidationBehaviors");
 
 			Console.WriteLine("Generating agnostic upgrade information...");
 			foreach (FileInfo copyBehavior in copy.GetFiles()) {
 				if (copyBehavior.Extension.ToLower() != ".lua") continue;
+				/*
 				string[] data = File.ReadAllLines(copyBehavior.FullName);
 				if (!data[^1].EndsWith(";")) {
 					data[^1] = data[^1] + ";";
@@ -112,12 +129,14 @@ namespace CoSRewriteCreatureStruct {
 				foreach (string line in data) {
 					copyBehaviors.Append('\t');
 					copyBehaviors.AppendLine(line);
-				}
+				}*/
+				AppendLua(copyBehavior, copyBehaviors);
 			}
 
 			Console.WriteLine("Generating hard-coded upgrade information...");
 			foreach (FileInfo hardcopyBehavior in hard.GetFiles()) {
 				if (hardcopyBehavior.Extension.ToLower() != ".lua") continue;
+				/*
 				string[] data = File.ReadAllLines(hardcopyBehavior.FullName);
 				if (!data[^1].EndsWith(";")) {
 					data[^1] = data[^1] + ";";
@@ -127,9 +146,28 @@ namespace CoSRewriteCreatureStruct {
 					hardCodedBehaviors.Append('\t');
 					hardCodedBehaviors.AppendLine(line);
 				}
+				*/
+				AppendLua(hardcopyBehavior, hardCodedBehaviors);
 			}
 
-			return PLUGIN_BEHAVIOR_BASE.Replace("%%CS_AGNOSTIC_COPY%%", copyBehaviors.ToString()).Replace("%%CS_HARDCODE_COPY%%", hardCodedBehaviors.ToString());
+			Console.WriteLine("Generating intrinsic properties...");
+			foreach (FileInfo intrinsic in intrinsicProps.GetFiles()) {
+				if (intrinsic.Extension.ToLower() != ".lua") continue;
+				AppendLua(intrinsic, intrinsicProperties);
+			}
+
+			Console.WriteLine("Generating validation behaviors...");
+			foreach (FileInfo validator in validationBehaviors.GetFiles()) {
+				if (validator.Extension.ToLower() != ".lua") continue;
+				AppendLua(validator, validators);
+			}
+
+
+			return PLUGIN_BEHAVIOR_BASE
+				.Replace("%%CS_AGNOSTIC_COPY%%", copyBehaviors.ToString())
+				.Replace("%%CS_HARDCODE_COPY%%", hardCodedBehaviors.ToString())
+				.Replace("%%CS_INTRINSIC_COPY%%", intrinsicProperties.ToString())
+				.Replace("%%CS_VALIDATION_COPY%%", validators.ToString());
 		}
 
 		public static void Main() {

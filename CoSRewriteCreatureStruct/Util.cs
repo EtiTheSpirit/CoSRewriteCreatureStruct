@@ -24,6 +24,20 @@ namespace CoSRewriteCreatureStruct {
 			return "\"" + EscapeString(str.ToString()) + "\"";
 		}
 
+		public static string ToLuaTable(this string[] array) {
+			StringBuilder result = new StringBuilder("{");
+			bool appendComma = false;
+			foreach (string element in array) {
+				if (appendComma) result.Append(", ");
+				result.Append('\"');
+				result.Append(EscapeString(element));
+				result.Append('\"');
+				appendComma = true;
+			}
+			result.Append('}');
+			return result.ToString();
+		}
+
 		[DllImport("Shlwapi.dll", CharSet = CharSet.Unicode)]
 		private static extern uint AssocQueryString(int flags, int str, string pszAssoc, string? pszExtra, [Out] StringBuilder? pszOut, ref uint pcchOut);
 

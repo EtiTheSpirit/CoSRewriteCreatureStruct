@@ -17,7 +17,7 @@ namespace CoSRewriteCreatureStruct {
 	public abstract class LuauRepresentable {
 
 		/// <summary>
-		/// A singleton anonymous luau-representable object
+		/// A singleton anonymous luau-representable object.
 		/// </summary>
 		public static readonly LuauRepresentable ANONYMOUS = new @Anonymous();
 
@@ -48,9 +48,7 @@ namespace CoSRewriteCreatureStruct {
 
 					if (second != null) {
 						if (first is PluginNumericLimit && second is PluginStringLimit) {
-							PluginMenuLimiterAttribute buf = second;
-							second = first;
-							first = buf;
+							(first, second) = (second, first);
 						}
 					}
 
@@ -96,14 +94,6 @@ namespace CoSRewriteCreatureStruct {
 			foreach (ExportableField field in GetExportableFields()) {
 				field.AppendToInstanceType(sb, indents);
 			}
-			/*
-			if (!noHeader) sb.AppendLine(
-@"	Runtime: Instance & {
-		State: Instance;
-		StatusEffects: {[string]: Instance};
-	};"
-			);
-			*/
 			sb.AppendLine("}");
 			return sb.ToString();
 		}
@@ -124,6 +114,16 @@ namespace CoSRewriteCreatureStruct {
 			/// Information about the field itself as a Luau type.
 			/// </summary>
 			public LuauFieldAttribute FieldInfo { get; }
+
+			/// <summary>
+			/// Whether or not this property is intrinsic.
+			/// </summary>
+			public bool IsIntrinsic => Intrinsic != null;
+
+			/// <summary>
+			/// The intrinsic attribute, if it exists.
+			/// </summary>
+			public IntrinsicAttribute? Intrinsic { get; }
 
 			/// <summary>
 			/// The primary applying limit to this field, which can be used to manage its value in the editor plugin.
@@ -151,7 +151,15 @@ namespace CoSRewriteCreatureStruct {
 			public CopyFromV0Attribute? CopyFromV0 { get; }
 
 			/// <summary>
-			/// If defined, this is the category of the property in the plugin. If not defined, the plugin's default will be used.
+			/// If not None, this is the validation behavior of this field, which operates after default limits.
+			/// It is used to do contextual validation to a specific value that has more nuanced edge cases.
+			/// It can also be used to enable or disable fields (readonly vs. editable)
+			/// </summary>
+			public ValidatorBehavior CustomValidationBehavior { get; }
+
+			/// <summary>
+			/// If defined, this is the category of the property in the plugin. 
+			/// If not defined, the plugin's default will be used, which is just "Properties".
 			/// </summary>
 			public string? Category { get; }
 
@@ -160,6 +168,17 @@ namespace CoSRewriteCreatureStruct {
 			/// </summary>
 			public bool IsSpecialEffectContainer { get; }
 
+			/// <summary>
+			/// Whether or not this member should be considered plugin only, either due to explicitly setting as true, or due
+			/// to the presence of the intrinsic attribute.
+			/// </summary>
+			public bool IsPluginOnly => FieldInfo.PluginOnly || IsIntrinsic;
+
+			/// <summary>
+			/// Returns the closest Luau type available for the given class, or <c>any</c> if the class is not recognized.
+			/// </summary>
+			/// <param name="value"></param>
+			/// <returns></returns>
 			private static string GetLuauTypeOf(object? value) {
 				if (value == null) return "nil";
 				if (value.GetType() == typeof(double)) return "number";
@@ -178,6 +197,7 @@ namespace CoSRewriteCreatureStruct {
 				FieldInfo = attr;
 				PrimaryLimit = limiter;
 				SecondaryLimit = secondLimiter;
+				CustomValidationBehavior = attr.CustomValidationBehavior;
 
 				string? msg = PrimaryLimit?.ValidateData();
 				if (msg != null) {
@@ -188,17 +208,38 @@ namespace CoSRewriteCreatureStruct {
 				Documentation = doc?.Documentation;
 				IsInstanceObject = prop.GetCustomAttribute<RepresentedByInstanceAttribute>() != null;
 				CopyFromV0 = prop.GetCustomAttribute<CopyFromV0Attribute>();
-				Category = doc?.Category;
+				Intrinsic = prop.GetCustomAttribute<IntrinsicAttribute>();
+				Category = IsIntrinsic ? "<font color=\"#aaffff\">Intrinsic Properties</font>" : doc?.Category;
 				IsSpecialEffectContainer = prop.GetCustomAttribute<PluginIsSpecialAilmentTemplate>() != null;
 
-				if (attr.RuntimeOnly && attr.PluginOnly) {
+				if (attr.PluginOnly && IsIntrinsic) {
+					ConsoleColor old = Console.ForegroundColor;
+					Console.ForegroundColor = ConsoleColor.Yellow;
+					Console.WriteLine($"Notice: Property {Name} is explicitly set to PluginOnly=true, but also has the Intrinsic attribute. Intrinsic implicitly makes the field plugin only.");
+					Console.ForegroundColor = old;
+				}
+
+				if (doc?.Category != null && IsIntrinsic) {
+					ConsoleColor old = Console.ForegroundColor;
+					Console.ForegroundColor = ConsoleColor.Yellow;
+					Console.WriteLine($"Notice: Property {Name} defined category {doc?.Category} in its Documentation attribute, but this category is discarded because the property is intrinsic (its category is always \"Intrinsic\")!");
+					Console.ForegroundColor = old;
+				}
+
+				if (attr.RuntimeOnly && IsPluginOnly) {
 					throw new InvalidOperationException("The LuauField attribute on " + prop.Name + " mandates both Runtime Only and Plugin Only, which contradict eachother. Ensure that at most only one of the two are enabled.");
 				}
 			}
 
+			/// <summary>
+			/// Appends this field to the table of code that defines a template creature.
+			/// </summary>
+			/// <param name="builder"></param>
+			/// <param name="indents"></param>
+			/// <exception cref="InvalidOperationException"></exception>
 			public void AppendToCodeTable(StringBuilder builder, int indents = 1) {
 				if (FieldInfo.RuntimeOnly) return;
-				if (FieldInfo.PluginOnly) return;
+				if (IsPluginOnly) return;
 
 				string prefix = string.Empty;
 				if (indents > 0) {
@@ -234,31 +275,13 @@ namespace CoSRewriteCreatureStruct {
 					} else if (DefaultValue is bool boolean) {
 						builder.Append(boolean.ToString().ToLower());
 					} else if (DefaultValue is StatLimit limit) {
-						builder.Append($"Vector2.new({limit.Min}, {limit.Max})");
+						builder.Append(limit);
 
 					} else if (DefaultValue is Instance) {
 						builder.Append("nil");
 
-					} else if (DefaultValue is Array array) {
-						/*
-						object? v = array.GetValue(0);
-						if (v is LuauRepresentable representable) {
-							builder.AppendLine("{");
-							builder.Append(prefix);
-							builder.Append('\t');
-							builder.AppendLine("__TEMPLATE = {");
-							foreach (ExportableField subField in representable.GetExportableFields()) {
-								if (subField.FieldInfo.RuntimeOnly) continue;
-								subField.AppendToCodeTable(builder, indents + 2);
-							}
-							builder.Append(prefix);
-							builder.Append('\t');
-							builder.AppendLine("}");
-							builder.Append(prefix);
-							builder.Append('}');
-						} else {*/
-							builder.Append("{}");
-						//}
+					} else if (DefaultValue is Array) {
+						builder.Append("{}");
 
 					} else if (DefaultValue is Color3 color) {
 						builder.Append(color);
@@ -275,6 +298,12 @@ namespace CoSRewriteCreatureStruct {
 				builder.AppendLine(";");
 			}
 
+			/// <summary>
+			/// Appends this field as data readable to the plugin's menu.
+			/// </summary>
+			/// <param name="builder"></param>
+			/// <param name="indents"></param>
+			/// <exception cref="InvalidOperationException"></exception>
 			public void AppendToPluginData(StringBuilder builder, int indents = 1) {
 				if (FieldInfo.RuntimeOnly) return;
 
@@ -289,7 +318,7 @@ namespace CoSRewriteCreatureStruct {
 
 				StringKeyTable data = new StringKeyTable();
 				data.Add("Type", GetLuauTypeOf(DefaultValue));
-				data.Add("DefaultValue", DefaultValue, lazySkip: true);
+				if (!IsIntrinsic) data.Add("DefaultValue", DefaultValue, lazySkip: true);
 				if (FieldInfo.PluginReflectToProperty != null) {
 					data.Add("ReflectTo", FieldInfo.PluginReflectToProperty);
 				}
@@ -310,6 +339,8 @@ namespace CoSRewriteCreatureStruct {
 						if (Documentation != null) data.GetOrCreateTable("PluginInfo").Add("Documentation", Documentation);
 						if (Category != null) data.GetOrCreateTable("PluginInfo").Add("Category", Category);
 						if (IsSpecialEffectContainer) data.GetOrCreateTable("PluginInfo").Add("IsStatusContainer", true);
+						if (CustomValidationBehavior != ValidatorBehavior.None) data.GetOrCreateTable("PluginInfo").Add("CustomValidationBehavior", CustomValidationBehavior.ToString());
+						if (IsIntrinsic) data.GetOrCreateTable("PluginInfo").Add("Intrinsic", Intrinsic!.Callback.ToString());
 						
 						if (!data.Empty) {
 							data.AppendToBuilder(builder, indents);
@@ -328,6 +359,8 @@ namespace CoSRewriteCreatureStruct {
 						if (Documentation != null) data.GetOrCreateTable("PluginInfo").Add("Documentation", Documentation);
 						if (Category != null) data.GetOrCreateTable("PluginInfo").Add("Category", Category);
 						if (IsSpecialEffectContainer) data.GetOrCreateTable("PluginInfo").Add("IsStatusContainer", true);
+						if (CustomValidationBehavior != ValidatorBehavior.None) data.GetOrCreateTable("PluginInfo").Add("CustomValidationBehavior", CustomValidationBehavior.ToString());
+						if (IsIntrinsic) data.GetOrCreateTable("PluginInfo").Add("Intrinsic", Intrinsic!.Callback.ToString());
 
 						if (PrimaryLimit is PluginStringLimit strLim && strLim.IsList) {
 							if (SecondaryLimit is PluginNumericLimit numLimit) {
@@ -349,6 +382,8 @@ namespace CoSRewriteCreatureStruct {
 						if (Documentation != null) data.GetOrCreateTable("PluginInfo").Add("Documentation", Documentation);
 						if (Category != null) data.GetOrCreateTable("PluginInfo").Add("Category", Category);
 						if (IsSpecialEffectContainer) data.GetOrCreateTable("PluginInfo").Add("IsStatusContainer", true);
+						if (CustomValidationBehavior != ValidatorBehavior.None) data.GetOrCreateTable("PluginInfo").Add("CustomValidationBehavior", CustomValidationBehavior.ToString());
+						if (IsIntrinsic) data.GetOrCreateTable("PluginInfo").Add("Intrinsic", Intrinsic!.Callback.ToString());
 						data.AppendToBuilder(builder, indents);
 
 					} else {
@@ -378,8 +413,13 @@ namespace CoSRewriteCreatureStruct {
 				builder.AppendLine(";");
 			}
 
+			/// <summary>
+			/// Appends this field as a type for Roblox Studio when developing for Sonaria.
+			/// </summary>
+			/// <param name="builder"></param>
+			/// <param name="indents"></param>
 			public void AppendToType(StringBuilder builder, int indents = 1) {
-				if (FieldInfo.PluginOnly) return;
+				if (IsPluginOnly) return;
 
 				string prefix = string.Empty;
 				if (indents > 0) {
@@ -428,7 +468,7 @@ namespace CoSRewriteCreatureStruct {
 			}
 
 			public void AppendToInstanceType(StringBuilder builder, int indents = 1) {
-				if (FieldInfo.PluginOnly) return;
+				if (IsPluginOnly) return;
 
 				LuauRepresentable? luauObject = DefaultValue as LuauRepresentable;
 				if ((DefaultValue is Array || luauObject != null) && IsInstanceObject) {

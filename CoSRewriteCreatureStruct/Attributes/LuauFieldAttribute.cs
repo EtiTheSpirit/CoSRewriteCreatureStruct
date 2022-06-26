@@ -16,7 +16,8 @@ namespace CoSRewriteCreatureStruct.Attributes {
 		public string? LuauType { get; } = null;
 
 		/// <summary>
-		/// Whether or not this field is defined during runtime. If true, this will not be included in the template data for the plugin,
+		/// Whether or not this field (in Luau) only gets defined during runtime. 
+		/// If true, this will <em>not</em> be included in the template data for the plugin,
 		/// but will be included in the type definition.
 		/// </summary>
 		public bool RuntimeOnly { get; set; } = false;
@@ -44,6 +45,15 @@ namespace CoSRewriteCreatureStruct.Attributes {
 		/// this is being left open ended.
 		/// </summary>
 		public string? PluginReflectToProperty { get; set; }
+
+		/// <summary>
+		/// If defined, this will override the validator of this field such that it uses custom lua code.
+		/// It <strong>is</strong> possible for a built in validator (like <see cref="PluginNumericLimit"/>) to still be defined.
+		/// If this is the case, then the message returned by the validator will only be used if the validator's error level is
+		/// greater than to the error level of the built in limit. If it is equal, the validator's message will be appended to the
+		/// end of the default limit's message.
+		/// </summary>
+		public ValidatorBehavior CustomValidationBehavior { get; set; } = ValidatorBehavior.None;
 
 		/// <summary>
 		/// Create a new packet of information for a Luau field.

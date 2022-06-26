@@ -3,6 +3,8 @@
 #1: Go to View -> Properties Window so that it is visible.
 #2: Click on your .lua file, look at its properties
 #3: Make sure Build Action is set to "Content".
-#4: Make sure Copy to Output Directory is set to "Always Copy".
+#4: Make sure Copy to Output Directory is set to "Copy Always".
 
 Not doing this will cause the files to not be included in the generated code.
+
+Files that have these properties set will automatically be included in the code.

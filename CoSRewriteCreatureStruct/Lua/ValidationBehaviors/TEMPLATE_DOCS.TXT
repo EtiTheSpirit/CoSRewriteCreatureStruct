@@ -1,0 +1,21 @@
+﻿Validation Behaviors:
+These functions determine how to handle the value of a field in the creature structure.
+It is intended that one validator is used on more than one field.
+
+For example: if a few different fields get disabled based on if one is true or false, then each of the fields that gets disabled (or enabled)
+should have this validator attached to it, and the code should handle it based on which attribute it's running on.
+
+Function signature:
+
+function(creature: Instance, attributeContainer: Instance, attrName: string, attrValue: any): (boolean, number?, string?)
+
+Where the input is...
+creature: The Configuration object of the whole creature, the root object.
+attributeContainer: The instance that contains the attribute representing the field this validator is operating on
+attrName: The name of the attribute that this validator is running for
+attrValue: The current value of the attribute that this validator is running for
+
+And the return values are...
+boolean #1: The state of this field, true means enabled and editable, false means readonly (grayed out)
+number #1: The error or warning level for a notice to display, or nil for no notice. Will error if no message is associated (See below)
+string #1: The message to display with the warning. MUST be defined if the number is defined, will error if number is not nil and this is.

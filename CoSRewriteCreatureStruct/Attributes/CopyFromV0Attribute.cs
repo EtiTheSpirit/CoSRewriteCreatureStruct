@@ -30,7 +30,7 @@ namespace CoSRewriteCreatureStruct.Attributes {
 		public CopyBehavior CustomConversionCallback { get; set; } = CopyBehavior.None;
 
 		/// <summary>
-		/// How this valie, as a percentage, should be handled.
+		/// How this value, as a percentage, should be handled.
 		/// </summary>
 		public PercentType Percentage { get; set; } = PercentType.NotPercentage;
 
@@ -39,6 +39,8 @@ namespace CoSRewriteCreatureStruct.Attributes {
 		/// </summary>
 		public string? Container { get; set; }
 
+		/// <param name="valueName">The name of the value object to search for. May be null if this exclusively uses custom code.</param>
+		/// <param name="byPresence">If true, then this should be on a boolean property, from which true/false will be set based on whether or not the object exists.</param>
 		public CopyFromV0Attribute(string? valueName, bool byPresence = false) {
 			ValueName = valueName;
 			ByPresence = byPresence;
