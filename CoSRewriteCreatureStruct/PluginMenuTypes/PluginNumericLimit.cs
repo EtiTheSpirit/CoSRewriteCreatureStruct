@@ -41,6 +41,18 @@ namespace CoSRewriteCreatureStruct.PluginMenuTypes {
 		/// </summary>
 		public bool IsPercent { get; set; }
 
+		/// <summary>
+		/// If <see langword="true"/>, then the minimum value is inclusive, so a value equal to the minimum is acceptible.<br/>
+		/// If this is <see langword="false"/>, then the minimum value is exclusive, and a value equal to the minimum will result in an error.
+		/// </summary>
+		public bool IncludeMinimum { get; set; } = false;
+
+		/// <summary>
+		/// If <see langword="true"/>, then the maximum value is inclusive, so a value equal to the maximum is acceptible.<br/>
+		/// If this is <see langword="false"/>, then the maximum value is exclusive, and a value equal to the maximum will result in an error.
+		/// </summary>
+		public bool IncludeMaximum { get; set; } = false;
+
 		public PluginNumericLimit(double min, double max, bool @int = false) {
 			AbsoluteMaximum = max;
 			AdvisedMaximum = AbsoluteMaximum;
@@ -88,6 +100,8 @@ namespace CoSRewriteCreatureStruct.PluginMenuTypes {
 			tbl.AddLiteral("AbsoluteLimit", Vector2(AbsoluteMinimum, AbsoluteMaximum));
 			tbl.Add("IsInt", IsInteger);
 			tbl.Add("IsPercentage", IsPercent);
+			tbl.Add("IncludeMinimum", IncludeMinimum);
+			tbl.Add("IncludeMaximum", IncludeMaximum);
 			return tbl;
 		}
 

@@ -24,6 +24,11 @@ namespace CoSRewriteCreatureStruct {
 			return "\"" + EscapeString(str.ToString()) + "\"";
 		}
 
+		/// <summary>
+		/// Converts this string array to a lua table on one line. This should be used in the <see cref="StringKeyTable.AddLiteral(string, string)"/> method.
+		/// </summary>
+		/// <param name="array"></param>
+		/// <returns></returns>
 		public static string ToLuaTable(this string[] array) {
 			StringBuilder result = new StringBuilder("{");
 			bool appendComma = false;

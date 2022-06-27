@@ -3,7 +3,11 @@
 	-- TEMP: Mimic values
 	if legacyObject then
 		-- May be nil (mainly for FlySpeed)
-		(newObject::Instance):SetAttribute(attrName::string, (legacyObject::NumberValue).Value)
+		if attrName and attrName:find("Swim") then
+			(newObject::Instance):SetAttribute(attrName::string, (legacyObject::NumberValue).Value / 2)
+		else
+			(newObject::Instance):SetAttribute(attrName::string, (legacyObject::NumberValue).Value)
+		end
 	else
 		(newObject::Instance):SetAttribute(attrName::string, 0)
 	end

@@ -7,7 +7,7 @@ should have this validator attached to it, and the code should handle it based o
 
 Function signature:
 
-function(creature: Instance, attributeContainer: Instance, attrName: string, attrValue: any): (boolean, number?, string?)
+function(creature: Instance, attributeContainer: Instance, attrName: string, attrValue: any): (boolean, string?, number?)
 
 Where the input is...
 creature: The Configuration object of the whole creature, the root object.
@@ -17,5 +17,5 @@ attrValue: The current value of the attribute that this validator is running for
 
 And the return values are...
 boolean #1: The state of this field, true means enabled and editable, false means readonly (grayed out)
-number #1: The error or warning level for a notice to display, or nil for no notice. Will error if no message is associated (See below)
 string #1: The message to display with the warning. MUST be defined if the number is defined, will error if number is not nil and this is.
+number #1: The error or warning level for a notice to display, or nil for no notice. Will error if no message is associated (See below)

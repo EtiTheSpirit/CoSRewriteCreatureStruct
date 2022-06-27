@@ -19,6 +19,11 @@ namespace CoSRewriteCreatureStruct.Attributes {
 		/// </summary>
 		public IntrinsicCallback Callback { get; }
 
+		/// <summary>
+		/// What affects this intrinsic property? This is for humans to read and is not used by code.
+		/// </summary>
+		public string[]? AffectedBy { get; set; }
+
 		public IntrinsicAttribute(IntrinsicCallback callback) {
 			Callback = callback;
 		}

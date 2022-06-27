@@ -26,6 +26,7 @@
     <None Remove="Lua\IntrinsicProperties\Gacha.lua" />
     <None Remove="Lua\IntrinsicProperties\IsFlier.lua" />
     <None Remove="Lua\IntrinsicProperties\IsWarden.lua" />
+    <None Remove="Lua\IntrinsicProperties\MobilityClass.lua" />
     <None Remove="Lua\IntrinsicProperties\OverridesWardensRage.lua" />
     <None Remove="Lua\Templates\AniSpecialBreathLimit.lua" />
     <None Remove="Lua\Templates\CreatureTypeDefsBase.lua" />
@@ -39,6 +40,13 @@
     <None Remove="Lua\ValidationBehaviors\HolidayCurrency.lua" />
     <None Remove="Lua\ValidationBehaviors\ManageAquaAffinity.lua" />
     <None Remove="Lua\ValidationBehaviors\ManageGachaAttributes.lua" />
+    <None Remove="Lua\ValidationBehaviors\UniversalResistances.lua" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Lua\IntrinsicProperties\MobilityClass.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -154,6 +162,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Lua\TypeGenerators\GenerateSpeciesType.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Lua\ValidationBehaviors\UniversalResistances.lua">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

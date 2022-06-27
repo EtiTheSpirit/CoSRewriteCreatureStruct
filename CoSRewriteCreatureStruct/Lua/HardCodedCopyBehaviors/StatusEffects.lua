@@ -14,21 +14,28 @@
 		ailment:SetAttribute("RandomChance", 100)
 		return ailment
 	end
-	local function CreateDefensiveAilment(name: string, stack: boolean, level: number?, duration: number?, levelLimit: Vector2?, durationLimit: Vector2?, applyTo: string?, onMelee: boolean?, onBreath: boolean?, onAbility: boolean?)
+	local function CreateDefensiveAilment(name: string, stack: boolean, level: number?, duration: number?, levelLimit: Vector2?, durationLimit: Vector2?, applyTo: string?, onMelee: boolean?, onBreath: boolean?, onAbility: boolean?, onEnv: boolean?)
 		local ailment = CreateOffensiveAilment(name, stack, level, duration, levelLimit, durationLimit)
 		ailment:SetAttribute("ApplyTo", applyTo or SonariaConstants.DefensiveEffectApplicationTarget.Attacker)
 		ailment:SetAttribute("ApplyWhenDamagedByMelee", if onMelee ~= nil then onMelee else true)
 		ailment:SetAttribute("ApplyWhenDamagedByBreath", if onBreath ~= nil then onBreath else false)
 		ailment:SetAttribute("ApplyWhenDamagedByAbility", if onAbility ~= nil then onAbility else false)
+		ailment:SetAttribute("ApplyWhenDamagedByEnvironment", if onEnv ~= nil then onEnv else false)
 		return ailment
 	end
 	local function CreateAilmentResistance(name: string, levelReduction: number?, durationReduction: number?, scaleWithAge: boolean?, inverseScale: boolean?)
 		local ailment = Instance.new("Configuration")
 		ailment.Name = name
-		ailment:SetAttribute("LevelResistance", levelReduction or 0)
-		ailment:SetAttribute("DurationResistance", durationReduction or 0)
-		ailment:SetAttribute("ScaleWithAge", scaleWithAge == true)
-		ailment:SetAttribute("InverseScale", inverseScale == true)
+
+		local levelReduction = levelReduction or 0
+		local durationReduction = durationReduction or 0
+		local scaledLevelReduction = if scaleWithAge then 0 else levelReduction
+		local scaledDurationReduction = if scaleWithAge then 0 else durationReduction
+
+		ailment:SetAttribute("AdultLevelResistance", if inverseScale then scaledLevelReduction else levelReduction)
+		ailment:SetAttribute("AdultDurationResistance", if inverseScale then scaledDurationReduction else durationReduction)
+		ailment:SetAttribute("BabyLevelResistance", if inverseScale then levelReduction else scaledLevelReduction)
+		ailment:SetAttribute("BabyDurationResistance", if inverseScale then durationReduction else scaledDurationReduction)
 		return ailment
 	end
 
@@ -109,7 +116,7 @@
 	end
 	if stats:FindFirstChild("Guilt") then
 		-- Not a defensive effect, but instead an attribute.
-		(newCreature::any).Specifications.MainInfo.Capabilities.Passive.CauseGuiltDuration = 30
+		(newCreature::any).Specifications.MainInfo.Capabilities.Passive:SetAttribute("CauseGuiltDuration", 30)
 	end
 	if stats:FindFirstChild("StickyTeeth") then
 		-- Defensive, applies StuckTeeth, 6s
@@ -144,7 +151,7 @@
 	}
 	for key, sc in pairs(holidays) do
 		if stats.Parent:FindFirstChild(key) then
-			(newCreature::any).Specifications.MainInfo.Attributes.ForShow:SetAttribute("Holiday", sc)
+			(newCreature::any).Specifications.Attributes.ForShow:SetAttribute("Holiday", sc)
 			break
 		end
 	end

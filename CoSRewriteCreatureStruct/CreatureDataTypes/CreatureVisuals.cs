@@ -210,13 +210,13 @@ namespace CoSRewriteCreatureStruct.CreatureDataTypes {
 				[LuauField, PluginStringLimit(false, true, false), Documentation("The ID of this sound. Ensure this ID is owned by the group.", "Sound")]
 				public string ID { get; set; } = string.Empty;
 
-				[LuauField, PluginNumericLimit(1, 10000, false, AdvisedMinimum = 50, AdvisedMaximum = 700), Documentation("The distance this sound can travel. It should generally be a high number (above 200) even for small creatures.", "Sound")]
+				[LuauField, PluginNumericLimit(1, 10000, false, AdvisedMinimum = 50, AdvisedMaximum = 2000), Documentation("The distance this sound can travel. It should generally be a high number (above 200) even for small creatures.", "Sound")]
 				public double Range { get; set; }
 
-				[LuauField, PluginNumericLimit(1/128, 10, false, AdvisedMaximum = 2), Documentation("The volume of this sound. <b>Volumes larger than 1 will attenuate other sounds (make them quieter) rather than making this louder.</b>", "Sound")]
+				[LuauField, PluginNumericLimit(0, 10, false, AdvisedMinimum = 0.05, AdvisedMaximum = 2), Documentation("The volume of this sound. <b>Volumes larger than 1 will attenuate other sounds (make them quieter) rather than making this louder.</b>", "Sound")]
 				public double Volume { get; set; }
 
-				[LuauField, PluginNumericLimit(1/64, 30, false, AdvisedMinimum = 0.2, AdvisedMaximum = 7), Documentation("The base pitch of this sound.", "Sound")]
+				[LuauField, PluginNumericLimit(0, 30, false, AdvisedMinimum = 0.2, AdvisedMaximum = 7), Documentation("The base pitch of this sound.", "Sound")]
 				public double Pitch { get; set; }
 
 			}

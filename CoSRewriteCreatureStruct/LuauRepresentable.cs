@@ -340,7 +340,10 @@ namespace CoSRewriteCreatureStruct {
 						if (Category != null) data.GetOrCreateTable("PluginInfo").Add("Category", Category);
 						if (IsSpecialEffectContainer) data.GetOrCreateTable("PluginInfo").Add("IsStatusContainer", true);
 						if (CustomValidationBehavior != ValidatorBehavior.None) data.GetOrCreateTable("PluginInfo").Add("CustomValidationBehavior", CustomValidationBehavior.ToString());
-						if (IsIntrinsic) data.GetOrCreateTable("PluginInfo").Add("Intrinsic", Intrinsic!.Callback.ToString());
+						if (IsIntrinsic) {
+							data.GetOrCreateTable("Intrinsic").Add("Callback", Intrinsic!.Callback.ToString());
+							data.GetOrCreateTable("Intrinsic").AddLiteral("AffectedBy", Intrinsic!.AffectedBy?.ToLuaTable() ?? "{}");
+						}
 						
 						if (!data.Empty) {
 							data.AppendToBuilder(builder, indents);
@@ -360,7 +363,10 @@ namespace CoSRewriteCreatureStruct {
 						if (Category != null) data.GetOrCreateTable("PluginInfo").Add("Category", Category);
 						if (IsSpecialEffectContainer) data.GetOrCreateTable("PluginInfo").Add("IsStatusContainer", true);
 						if (CustomValidationBehavior != ValidatorBehavior.None) data.GetOrCreateTable("PluginInfo").Add("CustomValidationBehavior", CustomValidationBehavior.ToString());
-						if (IsIntrinsic) data.GetOrCreateTable("PluginInfo").Add("Intrinsic", Intrinsic!.Callback.ToString());
+						if (IsIntrinsic) {
+							data.GetOrCreateTable("Intrinsic").Add("Callback", Intrinsic!.Callback.ToString());
+							data.GetOrCreateTable("Intrinsic").AddLiteral("AffectedBy", Intrinsic!.AffectedBy?.ToLuaTable() ?? "{}");
+						}
 
 						if (PrimaryLimit is PluginStringLimit strLim && strLim.IsList) {
 							if (SecondaryLimit is PluginNumericLimit numLimit) {
@@ -383,7 +389,10 @@ namespace CoSRewriteCreatureStruct {
 						if (Category != null) data.GetOrCreateTable("PluginInfo").Add("Category", Category);
 						if (IsSpecialEffectContainer) data.GetOrCreateTable("PluginInfo").Add("IsStatusContainer", true);
 						if (CustomValidationBehavior != ValidatorBehavior.None) data.GetOrCreateTable("PluginInfo").Add("CustomValidationBehavior", CustomValidationBehavior.ToString());
-						if (IsIntrinsic) data.GetOrCreateTable("PluginInfo").Add("Intrinsic", Intrinsic!.Callback.ToString());
+						if (IsIntrinsic) {
+							data.GetOrCreateTable("Intrinsic").Add("Callback", Intrinsic!.Callback.ToString());
+							data.GetOrCreateTable("Intrinsic").AddLiteral("AffectedBy", Intrinsic!.AffectedBy?.ToLuaTable() ?? "{}");
+						}
 						data.AppendToBuilder(builder, indents);
 
 					} else {

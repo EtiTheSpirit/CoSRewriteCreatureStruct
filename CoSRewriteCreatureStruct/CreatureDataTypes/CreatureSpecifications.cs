@@ -88,7 +88,7 @@ When stacking, the effect will have this value brought up to be <i>at least</i> 
 				[LuauField(CustomValidationBehavior = ValidatorBehavior.ManageGachaAttributes), CopyFromV0("DevOnly", true), Documentation("If true, this species is only usable by developers. Attempting to spawn as this species without being a developer will result in the spawn attempt being rejected.", "Ownership")]
 				public bool DeveloperUseOnly { get; set; }
 
-				[LuauField(CustomValidationBehavior = ValidatorBehavior.ManageGachaAttributes), CopyFromV0("Limited", true), Documentation("If true, this species goes in the limited gacha. Overrides ForcedGachaList.", "Gachas")]
+				[LuauField(CustomValidationBehavior = ValidatorBehavior.ManageGachaAttributes), CopyFromV0("Limited", true), Documentation("If true, this species goes in the limited gacha. Overrides ForcedGachaList.", "Gachas and Stores")]
 				public bool InLimitedGacha { get; set; }
 
 				[LuauField(CustomValidationBehavior = ValidatorBehavior.ManageGachaAttributes), CopyFromV0("GamepassCreature", true), Documentation("If true, the game enforces that players who do not own this species are male, increases the cost in the Shoom shop by 50%, prevents trading stored versions unless the species is owned, and prevents it from showing in gachas.", "Limitations")]
@@ -97,18 +97,18 @@ When stacking, the effect will have this value brought up to be <i>at least</i> 
 				[LuauField, Documentation("If true, this creature is not allowed to use any plushies that change its breath.", "Limitations")]
 				public bool PreventPlushieBreathSwaps { get; set; }
 
-				[LuauField(CustomValidationBehavior = ValidatorBehavior.ManageGachaAttributes), Documentation("If defined, this will override the gacha this creature appears in (overrides its default gacha). If this creature has paid content limits, this will override it and cause it to show in this gacha anyway.", "Gachas")]
+				[LuauField(CustomValidationBehavior = ValidatorBehavior.ManageGachaAttributes), Documentation("If defined, this will override the gacha this creature appears in (overrides its default gacha). If this creature has paid content limits, this will override it and cause it to show in this gacha anyway.", "Gachas and Stores")]
 				public string ForcedGachaList { get; set; } = string.Empty;
 
-				[LuauField, PluginNumericLimit(1, 100), Documentation("If the gacha this is being placed into supports weighted selections, this is the chance that this, <b>as an individual item</b>, will be selected (not as a % relative to the amount of other items!). <b>100 should be used if the chances of all items in the gacha are equal.</b>", "Gachas")]
+				[LuauField, PluginNumericLimit(1, 100), Documentation("If the gacha this is being placed into supports weighted selections, this is the chance that this, <b>as an individual item</b>, will be selected (not as a % relative to the amount of other items!). <b>100 should be used if the chances of all items in the gacha are equal.</b>", "Gachas and Stores")]
 				public double WeightedGachaChance { get; set; } = 100;
 
-				[LuauField(CustomValidationBehavior = ValidatorBehavior.HolidayCurrency), PluginNumericLimit(0), Documentation($"If the Holiday is set (see {nameof(ForShow)}), this is the price that the creature costs in that holiday's shop. The actual currency correlations are elsewhere in a registry. <b>Set this to 0 to DISABLE purchasing this creature in the shop.</b>")]
+				[LuauField(CustomValidationBehavior = ValidatorBehavior.HolidayCurrency), PluginNumericLimit(0), Documentation($"If the Holiday is set (see {nameof(ForShow)}), this is the price that the creature costs in that holiday's shop. The actual currency correlations are elsewhere in a registry. <b>Set this to 0 to DISABLE purchasing this creature in the shop.</b>", "Gachas and Stores")]
 				public double HolidayCurrencyAmount { get; set; } = 0;
 
 				// n.b. this has its own "None", do NOT set AllowNone = true.
-				[LuauField(ValueAsLiteral = "SonariaConstants.ObjectRarity.None"), PluginCustomEnum(Key = "ObjectRarity", ReferencesSonariaConstants = true), Documentation("A value representing the rarity of this creature in the Limited shop. If this is not set to \"None\", then the creature will display that it has this rarity.")]
-				public string Rarity { get; set; } = string.Empty;
+				[LuauField(ValueAsLiteral = "SonariaConstants.ObjectRarity.None"), PluginCustomEnum(Key = "ObjectRarity", ReferencesSonariaConstants = true), Documentation("A value representing the rarity of this creature in the Limited shop. If this is not set to \"None\", then the creature will display that it has this rarity.", "Ownership")]
+				public string Rarity { get; set; } = "None";
 
 				#region Group Info
 
@@ -202,10 +202,10 @@ When stacking, the effect will have this value brought up to be <i>at least</i> 
 				public bool CanEatRotten { get; set; } = false;
 
 				[LuauField, PluginNumericLimit(1, AdvisedMinimum = 1, AdvisedMaximum = 5), Documentation("The amount of food this creature loses every minute.", "Resource Management")]
-				public double HungerDrain { get; set; }
+				public double HungerDrain { get; set; } = 2;
 
 				[LuauField, PluginNumericLimit(1, AdvisedMinimum = 1, AdvisedMaximum = 5), Documentation("The amount of water this creature loses every minute.", "Resource Management")]
-				public double ThirstDrain { get; set; }
+				public double ThirstDrain { get; set; } = 2;
 
 				[LuauField, CopyFromV0("Appetite"), PluginNumericLimit(1, AdvisedMinimum = 15), Documentation("The maximum amount of food this creature is able to eat.", "Resource Management")]
 				public double Appetite { get; set; }
@@ -237,8 +237,8 @@ When stacking, the effect will have this value brought up to be <i>at least</i> 
 				[LuauField, CopyFromV0("Health"), PluginNumericLimit(1, AdvisedMinimum = 100, AdvisedMaximum = 75000), Documentation("The amount of health this creature has at age 100. It is scaled uniformly as they age up, starting at 15% of this value at age 1.", "Vitality")]
 				public double Health { get; set; } = 100;
 
-				[LuauField, CopyFromV0("HealPercent", CustomConversionCallback = CopyBehavior.ConvHealRate, Percentage = PercentType.Scale0To100), PluginNumericLimit(0.01, 100, AdvisedMaximum = 12), Documentation("How much health this creature regains in a second. <b>PROGRAMMER NOTE: This is a percentage in the range of 0 to 100, but will tend to have values &lt;1!</b>", "Vitality")]
-				public double HealPercentPerSecond { get; set; } = 10;
+				[LuauField, CopyFromV0("HealPercent", CustomConversionCallback = CopyBehavior.ConvHealRate, Percentage = PercentType.Scale0To100), PluginNumericLimit(0.01, 100, AdvisedMaximum = 4), Documentation("How much health this creature regains in a second. <b>PROGRAMMER NOTE: This is a percentage in the range of 0 to 100, but will tend to have values &lt;1!</b>", "Vitality")]
+				public double HealPercentPerSecond { get; set; } = 1;
 
 				[LuauField, CopyFromV0("AmbushMultiplier", Percentage = PercentType.Scale0To1), PluginNumericLimit(100, 1000, IsPercent = true, AdvisedMaximum = 200), Documentation("If this value is over 100%, this creature can ambush, which causes it to run in a straight line at this % of its normal speed.", "Capabilities")]
 				public double AmbushSpeedMultiplier { get; set; } = 100;
@@ -385,29 +385,29 @@ When stacking, the effect will have this value brought up to be <i>at least</i> 
 				public class AilmentResistancesInfo : StatusEffectBase {
 					public AilmentResistancesInfo() { }
 
-					[LuauField, PluginNumericLimit(-1000, 100, IsPercent = true), Documentation("The resistance to incoming levels, by percentage, at the start of this creature's life. A value of -1 doubles the level, a value of 0 does nothing, and a value of 1 completely reduces it to 0.", "Resistance")]
-					public double InitialLevelResistance { get; set; } = 0;
+					[LuauField, PluginNumericLimit(-1000, 100, IsPercent = true), Documentation("The resistance to incoming levels, by percentage, at the start of this creature's life. A value of -100 doubles the level, a value of 0 does nothing, and a value of 100 completely reduces it to 0.", "Resistance")]
+					public double BabyLevelResistance { get; set; } = 0;
 
-					[LuauField, PluginNumericLimit(-1000, 100, IsPercent = true), Documentation("The resistance to incoming duration, by percentage, at the start of this creature's life. A value of -1 doubles the duration, a value of 0 does nothing, and a value of 1 completely reduces it to 0.", "Resistance")]
-					public double InitialDurationResistance { get; set; } = 0;
+					[LuauField, PluginNumericLimit(-1000, 100, IsPercent = true), Documentation("The resistance to incoming duration, by percentage, at the start of this creature's life. A value of -100 doubles the duration, a value of 0 does nothing, and a value of 100 completely reduces it to 0.", "Resistance")]
+					public double BabyDurationResistance { get; set; } = 0;
 
-					[LuauField, PluginNumericLimit(-1000, 100, IsPercent = true), Documentation("The resistance to incoming levels, by percentage, at the end of this creature's life. A value of -1 doubles the level, a value of 0 does nothing, and a value of 1 completely reduces it to 0.", "Resistance")]
-					public double EndLevelResistance { get; set; } = 0;
+					[LuauField, PluginNumericLimit(-1000, 100, IsPercent = true), Documentation("The resistance to incoming levels, by percentage, at the end of this creature's life. A value of -100 doubles the level, a value of 0 does nothing, and a value of 100 completely reduces it to 0.", "Resistance")]
+					public double AdultLevelResistance { get; set; } = 0;
 
-					[LuauField, PluginNumericLimit(-1000, 100, IsPercent = true), Documentation("The resistance to incoming duration, by percentage, at the end of this creature's life. A value of -1 doubles the duration, a value of 0 does nothing, and a value of 1 completely reduces it to 0.", "Resistance")]
-					public double EndDurationResistance { get; set; } = 0;
+					[LuauField, PluginNumericLimit(-1000, 100, IsPercent = true), Documentation("The resistance to incoming duration, by percentage, at the end of this creature's life. A value of -100 doubles the duration, a value of 0 does nothing, and a value of 100 completely reduces it to 0.", "Resistance")]
+					public double AdultDurationResistance { get; set; } = 0;
 
 				}
 
 				public class UniversalResistancesInfo : LuauRepresentable {
 
-					[LuauField(KeyAsLiteral = "[SonariaConstants.PlayerDamageType.Melee]"), PluginNumericLimit(-1000, 100, IsPercent = true), Documentation("All damage from melee is reduced by this amount no matter the context. Negative values introduce weakness (additional damage).", "Core Overrides")]
+					[LuauField(KeyAsLiteral = "[SonariaConstants.PlayerDamageType.Melee]", CustomValidationBehavior = ValidatorBehavior.UniversalResistances), PluginNumericLimit(-1000, 100, IsPercent = true), Documentation("All damage from melee is reduced by this amount no matter the context. Negative values introduce weakness (additional damage).", "Core Overrides")]
 					public double Melee { get; set; } = 0;
 
-					[LuauField(KeyAsLiteral = "[SonariaConstants.PlayerDamageType.Breath]"), PluginNumericLimit(-1000, 100, IsPercent = true), Documentation("All damage from breaths is reduced by this amount no matter the context. Negative values introduce weakness (additional damage).", "Core Overrides")]
+					[LuauField(KeyAsLiteral = "[SonariaConstants.PlayerDamageType.Breath]", CustomValidationBehavior = ValidatorBehavior.UniversalResistances), PluginNumericLimit(-1000, 100, IsPercent = true), Documentation("All damage from breaths is reduced by this amount no matter the context. Negative values introduce weakness (additional damage).", "Core Overrides")]
 					public double Breath { get; set; } = 0;
 
-					[LuauField(KeyAsLiteral = "[SonariaConstants.PlayerDamageType.Ability]"), PluginNumericLimit(-1000, 100, IsPercent = true), Documentation("All damage from abilities is reduced by this amount no matter the context. Negative values introduce weakness (additional damage).", "Core Overrides")]
+					[LuauField(KeyAsLiteral = "[SonariaConstants.PlayerDamageType.Ability]", CustomValidationBehavior = ValidatorBehavior.UniversalResistances), PluginNumericLimit(-1000, 100, IsPercent = true), Documentation("All damage from abilities is reduced by this amount no matter the context. Negative values introduce weakness (additional damage).", "Core Overrides")]
 					public double Ability { get; set; } = 0;
 
 				}
@@ -521,7 +521,7 @@ When stacking, the effect will have this value brought up to be <i>at least</i> 
 				[LuauField, CopyFromV0("SprintSpeed", CustomConversionCallback = CopyBehavior.GetDegradedSpeedForClass), PluginNumericLimit(0, AdvisedMaximum = 100), Documentation("The speed, measured in studs per second, at which this creature swims whilst sprinting in water.", "Swimming Speed")]
 				public double SwimFastSpeed { get; set; } = 20;
 
-				[LuauField, CopyFromV0("TurnRadius", CustomConversionCallback = CopyBehavior.GetStudTurnRadius), PluginNumericLimit(0, 250, AdvisedMaximum = 200), Documentation("A value representing the turn radius of this creature measured in studs. The old largest seen turn radius (9, an elder Lmako is a good example) had a stud radius of approximately 230.", "Misc. Speed")]
+				[LuauField, CopyFromV0("TurnRadius", CustomConversionCallback = CopyBehavior.GetStudTurnRadius), PluginNumericLimit(0, 250, AdvisedMinimum = 2, AdvisedMaximum = 200), Documentation("<b>THIS IS NOT LIKE OLD TURN RADIUS!</b> This is a value representing the turn radius of this creature <i>measured in studs</i>. The old largest possible turn radius (9, like in an elder Lmako) had a stud radius of approximately 230.", "Misc. Speed")]
 				public double StudTurnRadius { get; set; } = 7;
 
 				[LuauField, PluginNumericLimit(0, 1000), Documentation("The upward velocity applied when this creature jumps. This determines its jump height.", "Misc. Speed")]
@@ -537,17 +537,17 @@ When stacking, the effect will have this value brought up to be <i>at least</i> 
 				[LuauField, CopyFromV0("StaminaRegen"), PluginNumericLimit(1, AdvisedMaximum = 100), Documentation("The <b>ABSOLUTE AMOUNT</b> of stamina that this creature regains per second.", "Stamina")]
 				public double StaminaRegenPerSecond { get; set; } = 3;
 
-				[LuauField, CopyFromV0("Stamina"), PluginNumericLimit(1, 1200, AdvisedMinimum = 15, AdvisedMaximum = 240), Documentation("The number of seconds that this creature can stay underwater before they begin to drown.", "Breath")]
+				[LuauField, CopyFromV0("Stamina"), PluginNumericLimit(1, 1200, AdvisedMinimum = 15, AdvisedMaximum = 240), Documentation("The number of seconds that this creature can stay underwater before they begin to drown. If this is an aquatic creature, then this is how long they can stay on land before suffocating.", "Breath")]
 				public double Air { get; set; } = 100;
 
 				[LuauField, CopyFromV0("StaminaRegen"), PluginNumericLimit(1, AdvisedMaximum = 5), Documentation("The <b>ABSOLUTE AMOUNT</b> of seconds this user regains whilst above water.", "Breath")]
 				public double AirRegenPerSecond { get; set; } = 1;
 
 				[LuauField, PluginNumericLimit(0), Documentation("The <b>ABSOLUTE</b> stamina drain per second when flying.", "Flight")]
-				public double FlightStaminaReductionRate { get; set; } = 0;
+				public double FlightStaminaReductionRate { get; set; } = 4;
 
 				[LuauField, PluginNumericLimit(0), Documentation("The <b>ABSOLUTE</b> stamina drain per second when gliding.", "Flight")]
-				public double GlideStaminaReductionRate { get; set; } = 0;
+				public double GlideStaminaReductionRate { get; set; } = 4;
 
 			}
 			#endregion
@@ -569,6 +569,9 @@ When stacking, the effect will have this value brought up to be <i>at least</i> 
 
 			[LuauField, RepresentedByInstance]
 			public LuauRepresentable CustomData { get; set; } = ANONYMOUS;
+
+			[LuauField, RepresentedByInstance]
+			public LuauRepresentable Stats { get; set; } = ANONYMOUS;
 
 
 			#region Class Defs

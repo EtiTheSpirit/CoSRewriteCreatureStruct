@@ -54,7 +54,9 @@ namespace CoSRewriteCreatureStruct.Attributes {
 
 		GroupRankSelector,
 
-		HolidayCurrency
+		HolidayCurrency,
+
+		UniversalResistances
 
 	}
 
@@ -91,7 +93,9 @@ namespace CoSRewriteCreatureStruct.Attributes {
 
 		IsWarden,
 
-		OverridesWardensRage
+		OverridesWardensRage,
+
+		MobilityClass
 
 	}
 

@@ -55,6 +55,9 @@ namespace CoSRewriteCreatureStruct.Attributes {
 			if (CustomConversionCallback != CopyBehavior.None) {
 				tbl.Add("CustomConverter", CustomConversionCallback.ToString());
 			}
+			if (Percentage != PercentType.NotPercentage) {
+				tbl.Add("PercentageHandling", Percentage.ToString());
+			}
 		}
 
 	}
