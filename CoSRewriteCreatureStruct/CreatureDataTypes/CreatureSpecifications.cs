@@ -48,8 +48,11 @@ When stacking, the effect will have this value brought up to be <i>at least</i> 
 				[LuauField, CopyFromV0("NowUnobtainable", true), Documentation($"If enabled, this creature is currently (as in \"right now at this exact moment in time\") unable to be acquired. Unless trading is disabled, this means the only way to get it is via trading. <b>THIS DOES NOT APPLY ANY LIMITS.</b> To actually enforce this, other settings (such as those in the {nameof(ForFunction)} container) should be changed.", "Menu Card Display")]
 				public bool NowUnobtainable { get; set; }
 
-				[LuauField, CopyFromV0("Mission"), Documentation("If enabled, this creature classifies as a reward for a mission or quest.", "Menu Card Display")]
+				[LuauField, CopyFromV0("Mission", true), Documentation("If enabled, this creature classifies as a reward for a mission or quest.", "Menu Card Display")]
 				public bool MissionReward { get; set; }
+
+				[LuauField, CopyFromV0("Exclusive", true), Documentation("If enabled, this creature classifies as exclusive. This property was originally created with CCs in mind, but it can be used for other reasons. <b>THIS DOES NOT APPLY ANY TRADE LIMITS.</b>", "Menu Card Display")]
+				public bool Exclusive { get; set; }
 
 				[LuauField, PluginCustomEnum(ReferencesSonariaConstants = true, Key = "Holidays", AllowNone = true), Documentation($"The holiday this creature is associated with. <b>THIS DOES NOT CONTROL WHETHER OR NOT IT APPEARS IN ANY SHOPS.</b> This is strictly for its themed card in the menu. To control its appearance in the shop, open the {nameof(ForFunction)} container.", "Menu Card Display")]
 				public string Holiday { get; set; } = string.Empty;
@@ -81,6 +84,12 @@ When stacking, the effect will have this value brought up to be <i>at least</i> 
 				[LuauField, PluginStringLimit(true, false, true), Documentation("If defined, this is a list of ranks (or ranges of ranks) in the group that that are allowed to trade this creature. Entries are separated by semicolons (;). To include many ranks at once, a range can be used. An example: <font color=\"#88ffff\">2;127-192;254;255</font> allows rank 2, all ranks 127 through 192, rank 254, and rank 255 to trade this creature.", "Ownership")]
 				public string LimitTradingToGroupRanks { get; set; } = string.Empty;
 				*/
+
+				[LuauField(CustomValidationBehavior = ValidatorBehavior.GroupRankSelector)]
+				public GroupRanks SpeciesTradeBlacklist { get; set; } = new GroupRanks();
+
+				[LuauField(CustomValidationBehavior = ValidatorBehavior.GroupRankSelector)]
+				public GroupRanks StoredTradeBlacklist { get; set; } = new GroupRanks();
 
 				[LuauField, CopyFromV0("ForceHideGlimmerComingSoon", true), Documentation("If true, this species will not receive glimmer. This can be used to hide the \"Glimmer Coming Soon!\" display tag.", "Limitations")]
 				public bool WillNeverGetGlimmer { get; set; }
@@ -115,51 +124,51 @@ When stacking, the effect will have this value brought up to be <i>at least</i> 
 				public class GroupRanks : LuauRepresentable {
 
 					private const ValidatorBehavior VALIDATOR = ValidatorBehavior.GroupRankSelector;
-					private const string DOCS = "If true, this rank can trade this creature. If false, they cannot. Whether or not \"this creature\" means species vs. stored depends on whatever you have selected right now.";
+					private const string DOCS = "If true, this rank <b>is NOT allowed</b> to trade this creature.";
 
 					// TO FUTURE ME: GroupRankSelector.lua in VSProject/Lua/ValidationBehaviors
 
 					[LuauField(CustomValidationBehavior = VALIDATOR), PluginStringLimit(true, false, true), Documentation("A composite value used by the game which is a list of rank values that are allowed to trade this creature. This is automatically generated as ranks below are set on or off. Entries are separated by semicolons (;).", "Composite Value")]
-					public string GroupRankArray { get; set; } = string.Empty;
+					public string DisallowedGroupRankArray { get; set; } = string.Empty;
 
 					[LuauField(PluginOnly = true, CustomValidationBehavior = VALIDATOR), Documentation(DOCS, "Ranks")]
-					public bool NonMember { get; set; } = true;
+					public bool DisallowNonMember { get; set; } = false;
 
 					[LuauField(PluginOnly = true, CustomValidationBehavior = VALIDATOR), Documentation(DOCS, "Ranks")]
-					public bool Player { get; set; } = true;
+					public bool DisallowPlayer { get; set; } = false;
 
 					[LuauField(PluginOnly = true, CustomValidationBehavior = VALIDATOR), Documentation(DOCS, "Ranks")]
-					public bool Tester { get; set; } = true;
+					public bool DisallowTester { get; set; } = false;
 
 					[LuauField(PluginOnly = true, CustomValidationBehavior = VALIDATOR), Documentation(DOCS, "Ranks")]
-					public bool ContentCreator { get; set; } = true;
+					public bool DisallowContentCreator { get; set; } = false;
 
 					[LuauField(PluginOnly = true, CustomValidationBehavior = VALIDATOR), Documentation(DOCS, "Ranks")]
-					public bool FriendsAndFamily { get; set; } = true;
+					public bool DisallowFriendsAndFamily { get; set; } = false;
 
 					[LuauField(PluginOnly = true, CustomValidationBehavior = VALIDATOR), Documentation(DOCS, "Ranks")]
-					public bool Contributor { get; set; } = true;
+					public bool DisallowContributor { get; set; } = false;
 
 					[LuauField(PluginOnly = true, CustomValidationBehavior = VALIDATOR), Documentation(DOCS, "Ranks")]
-					public bool Staff { get; set; } = true;
+					public bool DisallowStaff { get; set; } = false;
 
 					[LuauField(PluginOnly = true, CustomValidationBehavior = VALIDATOR), Documentation(DOCS, "Ranks")]
-					public bool Testing { get; set; } = true;
+					public bool DisallowTesting { get; set; } = false;
 
 					[LuauField(PluginOnly = true, CustomValidationBehavior = VALIDATOR), Documentation(DOCS, "Ranks")]
-					public bool Administrator { get; set; } = true;
+					public bool DisallowAdministrator { get; set; } = false;
 
 					[LuauField(PluginOnly = true, CustomValidationBehavior = VALIDATOR), Documentation(DOCS, "Ranks")]
-					public bool OtherDeveloper { get; set; } = true;
+					public bool DisallowOtherDeveloper { get; set; } = false;
 
 					[LuauField(PluginOnly = true, CustomValidationBehavior = VALIDATOR), Documentation(DOCS, "Ranks")]
-					public bool SonarDeveloper { get; set; } = true;
+					public bool DisallowSonarDeveloper { get; set; } = false;
 
 					[LuauField(PluginOnly = true, CustomValidationBehavior = VALIDATOR), Documentation(DOCS, "Ranks")]
-					public bool CoOwner { get; set; } = true;
+					public bool DisallowCoOwner { get; set; } = false;
 
 					[LuauField(PluginOnly = true, CustomValidationBehavior = VALIDATOR), Documentation(DOCS, "Ranks")]
-					public bool Owner { get; set; } = true;
+					public bool DisallowOwner { get; set; } = false;
 
 				}
 
@@ -295,7 +304,7 @@ When stacking, the effect will have this value brought up to be <i>at least</i> 
 
 				public class StatusEffectBase : LuauRepresentable {
 
-					[LuauField(PluginOnly = true, PluginReflectToProperty = "Name"), PluginCustomEnum(AllowNone = false, IsRobloxEnum = false, Key = "StatusEffectRegistry", ReferencesSonariaConstants = false), Documentation("The status effect that this represents.", "Attributes")]
+					[LuauField(PluginOnly = true, PluginReflectToProperty = "Name", CustomValidationBehavior = ValidatorBehavior.StatusEffect), PluginCustomEnum(AllowNone = false, IsRobloxEnum = false, Key = "StatusEffectRegistry", ReferencesSonariaConstants = false), Documentation("The status effect that this represents.", "Attributes")]
 					public string Effect { get; set; } = string.Empty;
 
 				}
@@ -330,8 +339,8 @@ When stacking, the effect will have this value brought up to be <i>at least</i> 
 					[LuauField, Documentation("Whether or not this AoE effect applies to the user.", "Behavior")]
 					public bool AffectSelf { get; set; } = false;
 
-					[LuauField, PluginCustomEnum(Key = "AoERemotePlayerTarget", ReferencesSonariaConstants = true, AllowNone = true), Documentation("Whether or not this AoE effect applies to nearby players.", "Behavior")]
-					public string AffectOthersType { get; set; } = string.Empty;
+					[LuauField, PluginCustomEnum(Key = "AoERemotePlayerTarget", ReferencesSonariaConstants = true, AllowNone = false), Documentation("Whether or not this AoE effect applies to nearby players.", "Behavior")]
+					public string AffectOthersType { get; set; } = "OnlyNotPackmates";
 
 				}
 
@@ -357,7 +366,10 @@ When stacking, the effect will have this value brought up to be <i>at least</i> 
 
 					[LuauField, PluginNumericLimit(0, 100), Documentation("The chance that this has to apply, or 0 or 100 to always apply.", "Behavior")]
 					public double RandomChance { get; set; } = 0;
-					
+
+					[LuauField, PluginCustomEnum(ReferencesSonariaConstants = true, Key = "EffectApplicationContext", AllowNone = false), Documentation($"This determines when to give this status effect (either when damage is caused, when healing is caused, or both).", "Methodology")]
+					public string ApplicationContext { get; set; } = "Both";
+
 				}
 
 				// Inherit offensive!
@@ -380,6 +392,10 @@ When stacking, the effect will have this value brought up to be <i>at least</i> 
 					[LuauField, Documentation($"If true, this effect will apply when this creature is hurt by environmental or scripted damage. Of course, this does nothing if {nameof(ApplyTo)} is not Self.", "Methodology")]
 					public bool ApplyWhenDamagedByEnvironment { get; set; } = false;
 
+					/*
+					[LuauField(CustomValidationBehavior = ValidatorBehavior.DefensiveEffectApplyExtension), Documentation("A very specific and niche use case: If this creature has ReflectAttacks or ReflectStatusEffects enabled, then this property determines if this effect, granted it <b>applies to Self</b>, will be switched to apply to the attacker instead. Generally this should be false, because it's not really \"reflecting\" the effect (it isn't coming from the attacker).", "Methodology")]
+					public bool GiveToAttackerWhenReflecting { get; set; } = false;
+					*/
 				}
 
 				public class AilmentResistancesInfo : StatusEffectBase {
@@ -472,17 +488,17 @@ When stacking, the effect will have this value brought up to be <i>at least</i> 
 					[LuauField, PluginNumericLimit(0, AdvisedMaximum = 30), Documentation("If this value is not zero, this is the duration of Guilty that this creature applies, granted the person who bit this creature was not provoked.", "Capabilities")]
 					public double CauseGuiltDuration { get; set; } = 0;
 
-					[LuauField, Documentation("Whether or not this creature causes bone break or ligament tear based on its Damage Weight in melee attacks.", "Bone Break and Ligament Tear")]
+					[LuauField(CustomValidationBehavior = ValidatorBehavior.BoneBreakLigamentTear), Documentation("Whether or not this creature causes bone break or ligament tear based on its Damage Weight in melee attacks.", "Bone Break and Ligament Tear")]
 					public bool BoneBreaker { get; set; } = false;
 
-					[LuauField, PluginNumericLimit(0, 100, AdvisedMaximum = 90, IsPercent = true), Documentation("If this creature bites a creature whose weight is greater than or equal to this % of this creature's weight, then they cannot be broken by this creature.", "Bone Break and Ligament Tear")]
+					[LuauField(CustomValidationBehavior = ValidatorBehavior.BoneBreakLigamentTear), PluginNumericLimit(0, 100, AdvisedMaximum = 90, IsPercent = true), Documentation("If this creature bites a creature whose weight is greater than or equal to this % of this creature's weight, then they cannot be broken by this creature.", "Bone Break and Ligament Tear")]
 					public double MaxBreakOrTearWeight { get; set; } = 0;
 
-					[LuauField, PluginNumericLimit(0, 100, AdvisedMaximum = 65, IsPercent = true), Documentation("If this creature bites a creature whose weight is less than this % of this creature's weight, they will receive a bone break, otherwise they will receive a ligament tear.", "Bone Break and Ligament Tear")]
+					[LuauField(CustomValidationBehavior = ValidatorBehavior.BoneBreakLigamentTear), PluginNumericLimit(0, 100, AdvisedMaximum = 65, IsPercent = true), Documentation("If this creature bites a creature whose weight is less than this % of this creature's weight, they will receive a bone break, otherwise they will receive a ligament tear.", "Bone Break and Ligament Tear")]
 					public double BoneBreakLessThanWeight { get; set; } = 0;
 
-					[LuauField, Documentation("The minimum and maximum duration (in seconds) of a bone break or a ligament tear, granted this creature causes either of the two. Weights very close to their limits will be less severe than a huge weight difference.", "Bone Break and Ligament Tear")]
-					public StatLimit BreakMinMaxDuration { get; set; } = new StatLimit(10, 60);
+					[LuauField, Documentation("The minimum and maximum duration (in seconds) of a bone break or a ligament tear. Weights very close to their limits will be less severe than a huge weight difference. <b>THIS APPLIES WHEN <i>THIS</i> CREATURE GETS ATTACKED BY SOMEONE ELSE.</b> It allows this creature to specify how quickly it tends to heal bone break and ligament tear!", "Bone Break and Ligament Tear")]
+					public StatLimit MyBreakMinMaxDuration { get; set; } = new StatLimit(10, 60);
 
 					[LuauField, PluginNumericLimit(0, 100, AdvisedMaximum = 65, IsPercent = true), Documentation("Whenever this creature would normally be inflicted with a ligament tear, this value is the percent chance that it will upgrade into a bone break.", "Bone Break and Ligament Tear")]
 					public double BoneBreakSusceptibility { get; set; } = 0;

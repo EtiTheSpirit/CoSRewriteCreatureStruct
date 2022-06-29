@@ -56,7 +56,13 @@ namespace CoSRewriteCreatureStruct.Attributes {
 
 		HolidayCurrency,
 
-		UniversalResistances
+		UniversalResistances,
+
+		StatusEffect,
+
+		BoneBreakLigamentTear,
+
+		DefensiveEffectApplyExtension
 
 	}
 

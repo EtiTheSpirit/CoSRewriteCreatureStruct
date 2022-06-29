@@ -36,10 +36,14 @@
     <None Remove="Lua\Templates\ProcGenCloser.lua" />
     <None Remove="Lua\TypeGenerators\GenerateCharacterType.lua" />
     <None Remove="Lua\TypeGenerators\GenerateSpeciesType.lua" />
+    <None Remove="Lua\ValidationBehaviors\BoneBreakLigamentTear.lua" />
+    <None Remove="Lua\ValidationBehaviors\DefensiveEffectApplyExtension.lua" />
+    <None Remove="Lua\ValidationBehaviors\GroupRankSelector.lua" />
     <None Remove="Lua\ValidationBehaviors\HealRadiusValues.lua" />
     <None Remove="Lua\ValidationBehaviors\HolidayCurrency.lua" />
     <None Remove="Lua\ValidationBehaviors\ManageAquaAffinity.lua" />
     <None Remove="Lua\ValidationBehaviors\ManageGachaAttributes.lua" />
+    <None Remove="Lua\ValidationBehaviors\StatusEffect.lua" />
     <None Remove="Lua\ValidationBehaviors\UniversalResistances.lua" />
   </ItemGroup>
 
@@ -60,6 +64,15 @@
 
   <ItemGroup>
     <Content Include="Lua\IntrinsicProperties\Gacha.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Lua\ValidationBehaviors\BoneBreakLigamentTear.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Lua\ValidationBehaviors\DefensiveEffectApplyExtension.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Lua\ValidationBehaviors\GroupRankSelector.lua">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Lua\ValidationBehaviors\HealRadiusValues.lua">
@@ -162,6 +175,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Lua\TypeGenerators\GenerateSpeciesType.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Lua\ValidationBehaviors\StatusEffect.lua">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Lua\ValidationBehaviors\UniversalResistances.lua">
