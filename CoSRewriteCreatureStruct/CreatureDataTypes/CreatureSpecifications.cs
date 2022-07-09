@@ -464,7 +464,7 @@ When stacking, the effect will have this value brought up to be <i>at least</i> 
 					[LuauField(ValueAsLiteral = "SonariaConstants.AquaAffinity.Terrestrial", CustomValidationBehavior = ValidatorBehavior.ManageAquaAffinity), CopyFromV0(null, CustomConversionCallback = CopyBehavior.GetAquaAffinity), PluginCustomEnum(ReferencesSonariaConstants = true, Key = "AquaAffinity", AllowNone = false, HideKeys = new[] {"AllTerrain"}), Documentation("The affinity to water that this creature has, which determines where it can live.", "Capabilities")]
 					public string AquaAffinity { get; set; } = "Terrestrial";
 
-					[LuauField, CopyFromV0("Glider", true), Documentation("If true, then this creature is is only capable of gliding, not powered flight. Does nothing if the creature is not a flier.", "Capabilities")]
+					[LuauField(CustomValidationBehavior = ValidatorBehavior.EnableIfCanFly), CopyFromV0("Glider", true), Documentation("If true, then this creature is is only capable of gliding, not powered flight. Does nothing if the creature is not a flier.", "Capabilities")]
 					public bool OnlyGlide { get; set; } = false;
 
 					[LuauField(CustomValidationBehavior = ValidatorBehavior.HealRadiusValues), Documentation("The range of this species's passive healing (that heals other, nearby creatures). <b>Set this to 0 to disable the passive heal ability.</b>", "Passive Healing")]
@@ -484,6 +484,9 @@ When stacking, the effect will have this value brought up to be <i>at least</i> 
 
 					[LuauField, CopyFromV0("KeenObserver", true), Documentation("If true, players using this species can see a healthbar over other creatures at all times, as well as some status effects.", "Capabilities")]
 					public bool SeeHealth { get; set; } = false;
+
+					[LuauField(CustomValidationBehavior = ValidatorBehavior.SeeStatusEffects), Documentation("If true, the character can see certain status effects on the healthbar.", "Capabilities")]
+					public bool SeeHPStatusEffect { get; set; } = false;
 
 					[LuauField, PluginNumericLimit(0, AdvisedMaximum = 30), Documentation("If this value is not zero, this is the duration of Guilty that this creature applies, granted the person who bit this creature was not provoked.", "Capabilities")]
 					public double CauseGuiltDuration { get; set; } = 0;
@@ -542,6 +545,9 @@ When stacking, the effect will have this value brought up to be <i>at least</i> 
 
 				[LuauField, PluginNumericLimit(0, 1000), Documentation("The upward velocity applied when this creature jumps. This determines its jump height.", "Misc. Speed")]
 				public double JumpImpulsePower { get; set; } = 50;
+
+				[LuauField(CustomValidationBehavior = ValidatorBehavior.AirJumpCounter), PluginNumericLimit(0, true, AdvisedMaximum = 2), Documentation("The amount of jumps this creature can perform while in the air. This does <b>NOT</b> include jumping from the ground, so a value of 0 means the creature can only jump off of the ground, a value of 1 is a double jump, so on.", "Misc. Speed")]
+				public double NumberOfAirJumps { get; set; } = 0;
 
 			}
 

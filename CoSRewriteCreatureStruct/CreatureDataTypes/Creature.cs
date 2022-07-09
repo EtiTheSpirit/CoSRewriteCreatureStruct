@@ -12,7 +12,7 @@ namespace CoSRewriteCreatureStruct {
 
 		#region Creature Fields
 
-		[LuauField(PluginReflectToProperty = "Name")]
+		[LuauField(RuntimeOnly = true)]
 		public string Name { get; set; } = string.Empty;
 
 		[LuauField, CopyFromV0("Description"), PluginStringLimit(AllowEmpty = false), Documentation("The description of this creature, usually provided by its creator to briefly give insight into its backstory.")]
@@ -40,14 +40,17 @@ namespace CoSRewriteCreatureStruct {
 		[LuauField, Intrinsic(IntrinsicCallback.Gacha, AffectedBy = new[] { "<b>Creature:</b> Specifications.Attributes.ForFunction.ForcedGachaList", "<b>Creature:</b> Specifications.Attributes.ForFunction.InLimitedGacha", "<b>Creature:</b> Specifications.Attributes.ForFunction.HasPaidContentLimits", "<b>Creature:</b> Specifications.Attributes.ForFunction.DeveloperUseOnly", "<b>Intrinsic:</b> MobilityClass" }), Documentation("The gacha this creature is a part of when the game is published.")]
 		public string Gacha { get; set; } = string.Empty;
 
-		[LuauField, Intrinsic(IntrinsicCallback.IsFlier, AffectedBy = new[] { "<b>Creature:</b> Presence of CreatureVisuals.Animations.Aerial.FlyIdle", "<b>Creature:</b> Presence of CreatureVisuals.Animations.Aerial.Glide", "<b>Creature:</b> Specifications.MainInfo.Mobility.Agility.FlySpeed &gt; 0" }), Documentation("Whether or not this creature defines all of the data needed to allow it to fly.")]
-		public bool IsFlier { get; set; } = false;
+		[LuauField, Intrinsic(IntrinsicCallback.FlightType, AffectedBy = new[] { "<b>Creature:</b> Presence of CreatureVisuals.Animations.Aerial.FlyIdle", "<b>Creature:</b> Presence of CreatureVisuals.Animations.Aerial.Glide", "<b>Creature:</b> Specifications.MainInfo.Mobility.Agility.FlySpeed &gt; 0" }), Documentation("Whether or not this creature defines all of the data needed to allow it to fly.")]
+		public string FlightType { get; set; } = string.Empty;
 
 		[LuauField, Intrinsic(IntrinsicCallback.OverridesWardensRage, AffectedBy = new[] { "<b>Creature:</b> Presence of Specifications.MainInfo.Stats.DefensiveAilments => WardensRage" }), Documentation("If this is true, this creature - which may not even be a warden - manually defines a Warden's Rage defensive effect. If this creature <i>is</i> a warden, this will override the settings of the effect, such as its duration.")]
 		public bool OverridesWardensRage { get; set; } = false;
 
 		[LuauField, Intrinsic(IntrinsicCallback.MobilityClass, AffectedBy = new[] { "<b>Creature:</b> Specifications.MainInfo.Capabilities.Passive.AquaAffinity", "<b>Intrinsic:</b> IsFlier" })]
 		public string MobilityClass { get; set; } = string.Empty;
+
+		[LuauField, Intrinsic(IntrinsicCallback.CanJump, AffectedBy = new[] { "<b>Creature:</b> Specifications.Mobility.Agility.JumpImpulsePower" })]
+		public bool CanJump { get; set; } = false;
 
 		#endregion
 

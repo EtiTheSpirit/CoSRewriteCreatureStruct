@@ -62,7 +62,13 @@ namespace CoSRewriteCreatureStruct.Attributes {
 
 		BoneBreakLigamentTear,
 
-		DefensiveEffectApplyExtension
+		DefensiveEffectApplyExtension,
+
+		EnableIfCanFly,
+
+		AirJumpCounter,
+		
+		SeeStatusEffects
 
 	}
 
@@ -95,13 +101,15 @@ namespace CoSRewriteCreatureStruct.Attributes {
 
 		Gacha,
 
-		IsFlier,
+		FlightType,
 
 		IsWarden,
 
 		OverridesWardensRage,
 
-		MobilityClass
+		MobilityClass,
+
+		CanJump
 
 	}
 

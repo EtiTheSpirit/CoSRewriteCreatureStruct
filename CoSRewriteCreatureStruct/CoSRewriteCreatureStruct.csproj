@@ -23,8 +23,9 @@
     <None Remove="Lua\HardCodedCopyBehaviors\ConvertDiet.lua" />
     <None Remove="Lua\HardCodedCopyBehaviors\CopyCharacterModels.lua" />
     <None Remove="Lua\HardCodedCopyBehaviors\StatusEffects.lua" />
+    <None Remove="Lua\IntrinsicProperties\CanJump.lua" />
+    <None Remove="Lua\IntrinsicProperties\FlightType.lua" />
     <None Remove="Lua\IntrinsicProperties\Gacha.lua" />
-    <None Remove="Lua\IntrinsicProperties\IsFlier.lua" />
     <None Remove="Lua\IntrinsicProperties\IsWarden.lua" />
     <None Remove="Lua\IntrinsicProperties\MobilityClass.lua" />
     <None Remove="Lua\IntrinsicProperties\OverridesWardensRage.lua" />
@@ -36,25 +37,31 @@
     <None Remove="Lua\Templates\ProcGenCloser.lua" />
     <None Remove="Lua\TypeGenerators\GenerateCharacterType.lua" />
     <None Remove="Lua\TypeGenerators\GenerateSpeciesType.lua" />
+    <None Remove="Lua\ValidationBehaviors\AirJumpCounter.lua" />
     <None Remove="Lua\ValidationBehaviors\BoneBreakLigamentTear.lua" />
     <None Remove="Lua\ValidationBehaviors\DefensiveEffectApplyExtension.lua" />
+    <None Remove="Lua\ValidationBehaviors\EnableIfCanFly.lua" />
     <None Remove="Lua\ValidationBehaviors\GroupRankSelector.lua" />
     <None Remove="Lua\ValidationBehaviors\HealRadiusValues.lua" />
     <None Remove="Lua\ValidationBehaviors\HolidayCurrency.lua" />
     <None Remove="Lua\ValidationBehaviors\ManageAquaAffinity.lua" />
     <None Remove="Lua\ValidationBehaviors\ManageGachaAttributes.lua" />
+    <None Remove="Lua\ValidationBehaviors\SeeStatusEffects.lua" />
     <None Remove="Lua\ValidationBehaviors\StatusEffect.lua" />
     <None Remove="Lua\ValidationBehaviors\UniversalResistances.lua" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Lua\IntrinsicProperties\CanJump.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Lua\IntrinsicProperties\MobilityClass.lua">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Lua\IntrinsicProperties\IsFlier.lua">
+    <Content Include="Lua\IntrinsicProperties\FlightType.lua">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Lua\IntrinsicProperties\OverridesWardensRage.lua">
@@ -66,10 +73,16 @@
     <Content Include="Lua\IntrinsicProperties\Gacha.lua">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Lua\ValidationBehaviors\AirJumpCounter.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Lua\ValidationBehaviors\BoneBreakLigamentTear.lua">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Lua\ValidationBehaviors\DefensiveEffectApplyExtension.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Lua\ValidationBehaviors\EnableIfCanFly.lua">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Lua\ValidationBehaviors\GroupRankSelector.lua">
@@ -175,6 +188,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Lua\TypeGenerators\GenerateSpeciesType.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Lua\ValidationBehaviors\SeeStatusEffects.lua">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Lua\ValidationBehaviors\StatusEffect.lua">
